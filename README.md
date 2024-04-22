@@ -25,4 +25,5 @@ Este é um projeto que consiste em uma aplicação web para gerenciar um servido
 1. **Clonar o Repositório**:
 
    ```
-   git clone https://github.com/seu-usuario/samba-web-dashboard.git```
+   git clone https://github.com/seu-usuario/samba-web-dashboard.git
+   ```
