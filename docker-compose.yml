@@ -2,12 +2,11 @@ version: '3'
 
 services:
   samba:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "139:139"
       - "445:445"
     volumes:
-      #      - ./samba_config/smb.conf:/etc/samba/smb.conf
-      - ./compartilhamento:/compartilhamento
-    restart: always
-
+      - ./SambaWebAPI:/SambaWeb/SambaWebAPI
