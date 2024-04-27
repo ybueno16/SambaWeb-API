@@ -1,4 +1,4 @@
-package com.br.SambaWebAPI.models;
+package com.br.SambaWebAPI.SambaConfig.models;
 
 import java.util.List;
 

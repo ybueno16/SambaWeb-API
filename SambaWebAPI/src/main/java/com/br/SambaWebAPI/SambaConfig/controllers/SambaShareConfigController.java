@@ -1,7 +1,7 @@
-package com.br.SambaWebAPI.controllers;
+package com.br.SambaWebAPI.SambaConfig.controllers;
 
 import com.br.SambaWebAPI.config.Global;
-import com.br.SambaWebAPI.models.SambaConfig;
+import com.br.SambaWebAPI.SambaConfig.models.SambaConfig;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileWriter;
@@ -11,13 +11,15 @@ import java.util.stream.Collectors;
 import static com.br.SambaWebAPI.config.Global.API_URL_SAMBA;
 
 @RestController
-@RequestMapping(API_URL_SAMBA + "/samba-share-config/{usuario}/{senha}")
-public class SambaShareConfig {
+@RequestMapping(API_URL_SAMBA + "/samba-share-config")
+public class SambaShareConfigController {
     SambaConfig sambaConfig = new SambaConfig();
     private static final String SMB_CONF_FILE = "smb.conf";
-    @PostMapping
+    @PostMapping(path = "/global/{usuario}/{senha}")
     public void InitialSambaShare(@PathVariable String usuario, @PathVariable String senha) throws IOException {
+
         FileWriter writer = new FileWriter(Global.SMB_CONF_PATH);
+
         writer.write("workgroup = " + String.join(", ", sambaConfig.getWorkgroups()) + "\n");
         writer.write("server string = " + String.join(", ", sambaConfig.getServerStrings()) + "\n");
         writer.write("security = " + String.join(", ", sambaConfig.getSecurities()) + "\n");
