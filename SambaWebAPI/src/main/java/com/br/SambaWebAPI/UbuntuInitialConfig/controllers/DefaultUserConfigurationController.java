@@ -21,6 +21,7 @@ public class UserConfigurationController {
 
         try {
             userConfigurationService.cadastrarUsuario(user);
+            userConfigurationService.cadastrarSenha(user);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
