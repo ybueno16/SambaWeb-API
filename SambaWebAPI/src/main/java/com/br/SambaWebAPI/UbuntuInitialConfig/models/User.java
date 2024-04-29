@@ -1,6 +1,4 @@
-package com.br.SambaWebAPI.UbuntuConfig.models;
-
-import java.util.List;
+package com.br.SambaWebAPI.UbuntuInitialConfig.models;
 
 public class User {
     private String user;
