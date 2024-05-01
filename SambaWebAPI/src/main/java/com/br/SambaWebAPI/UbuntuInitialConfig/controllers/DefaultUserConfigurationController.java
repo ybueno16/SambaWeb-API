@@ -6,7 +6,6 @@ import com.br.SambaWebAPI.SambaConfig.models.SambaConfig;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntity;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.exceptions.UserCreationExceptions;
-import com.br.SambaWebAPI.utils.enums.UserCreationErrorCodeEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +25,7 @@ public class DefaultUserConfigurationController {
     public ResponseEntity<?> InitialSambaShare(@RequestBody User user) {
         try {
             userConfigurationService.cadastrarUsuario(user);
-
-//            TODO Validar motivo de não cadastrar a senha
-//            userConfigurationService.cadastrarSenha(user);
+            userConfigurationService.cadastrarSenha(user);
 
             return DefaultResponseEntityFactory.create("Usuario criado com sucesso!", null, HttpStatus.OK);
         } catch (UserCreationExceptions e) {
