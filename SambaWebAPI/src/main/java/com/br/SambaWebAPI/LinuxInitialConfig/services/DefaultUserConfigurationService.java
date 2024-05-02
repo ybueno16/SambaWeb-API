@@ -1,6 +1,8 @@
-package com.br.SambaWebAPI.UbuntuInitialConfig.services;
+package com.br.SambaWebAPI.LinuxInitialConfig.services;
 
-import com.br.SambaWebAPI.UbuntuInitialConfig.models.User;
+import com.br.SambaWebAPI.LinuxInitialConfig.models.Group;
+import com.br.SambaWebAPI.LinuxInitialConfig.models.SudoAuthentication;
+import com.br.SambaWebAPI.LinuxInitialConfig.models.User;
 import com.br.SambaWebAPI.exceptions.PasswordCreationException;
 import com.br.SambaWebAPI.exceptions.UserCreationExceptions;
 import com.br.SambaWebAPI.utils.enums.UserManagent.PasswordCreationErrorCode;
@@ -21,7 +23,7 @@ public class DefaultUserConfigurationService {
         processBuilder = new ProcessBuilder();
     }
 
-    public boolean cadastrarUsuario(User user) throws UserCreationExceptions, InterruptedException, IOException {
+    public boolean cadastrarUsuario(User user, SudoAuthentication sudoAuthentication) throws UserCreationExceptions, InterruptedException, IOException {
 
         processBuilder.command("sudo", "-S", "useradd", "-m", user.getUser());
         processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
@@ -29,7 +31,7 @@ public class DefaultUserConfigurationService {
         Process process = processBuilder.start();
 
         OutputStream outputStream = process.getOutputStream();
-        outputStream.write((user.getSenhaSudo() + "\n").getBytes());
+        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
         outputStream.flush();
         outputStream.close();
         process.waitFor();
@@ -39,6 +41,8 @@ public class DefaultUserConfigurationService {
             switch (exitCode) {
                 case 2:
                     throw new UserCreationExceptions(UserCreationErrorCode.GROUP_DOES_NOT_EXIST);
+                case 3:
+                    throw new UserCreationExceptions(UserCreationErrorCode.DIR_CANT_BE_CREATED);
                 case 4:
                     throw new UserCreationExceptions(UserCreationErrorCode.USR_CANT_BE_CREATED);
                 case 10:
@@ -80,6 +84,17 @@ public class DefaultUserConfigurationService {
             }
         }
 
+        return true;
+    }
+
+    public boolean criarGrupo(Group group, SudoAuthentication sudoAuthentication) throws IOException {
+        processBuilder.command("sudo","-S", "groupadd", group.getName());
+        processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
+
+        Process process = processBuilder.start();
+
+        OutputStream outputStream = process.getOutputStream();
+        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
         return true;
     }
 }

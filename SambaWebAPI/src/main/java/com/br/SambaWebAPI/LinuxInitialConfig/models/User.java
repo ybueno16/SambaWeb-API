@@ -1,16 +1,18 @@
-package com.br.SambaWebAPI.UbuntuInitialConfig.models;
+package com.br.SambaWebAPI.LinuxInitialConfig.models;
+
+import java.util.List;
 
 public class User {
     private String user;
     private String password;
-    private String senhaSudo;
+    private List<Group> groupList;
 
-    public String getSenhaSudo() {
-        return senhaSudo;
+    public List<Group> getGroupList() {
+        return groupList;
     }
 
-    public void setSenhaSudo(String senhaSudo) {
-        this.senhaSudo = senhaSudo;
+    public void setGroupList(List<Group> groupList) {
+        this.groupList = groupList;
     }
 
     public String getUser() {
