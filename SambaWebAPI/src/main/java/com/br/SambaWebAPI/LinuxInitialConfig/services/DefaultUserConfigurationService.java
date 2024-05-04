@@ -3,8 +3,10 @@ package com.br.SambaWebAPI.LinuxInitialConfig.services;
 import com.br.SambaWebAPI.LinuxInitialConfig.models.Group;
 import com.br.SambaWebAPI.LinuxInitialConfig.models.SudoAuthentication;
 import com.br.SambaWebAPI.LinuxInitialConfig.models.User;
+import com.br.SambaWebAPI.exceptions.GroupCreationException;
+import com.br.SambaWebAPI.exceptions.UserCreationException;
 import com.br.SambaWebAPI.exceptions.PasswordCreationException;
-import com.br.SambaWebAPI.exceptions.UserCreationExceptions;
+import com.br.SambaWebAPI.utils.enums.UserManagent.GroupCreationErrorCode;
 import com.br.SambaWebAPI.utils.enums.UserManagent.PasswordCreationErrorCode;
 import com.br.SambaWebAPI.utils.enums.UserManagent.UserCreationErrorCode;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,7 @@ public class DefaultUserConfigurationService {
         processBuilder = new ProcessBuilder();
     }
 
-    public boolean cadastrarUsuario(User user, SudoAuthentication sudoAuthentication) throws UserCreationExceptions, InterruptedException, IOException {
+    public boolean registerUser(User user, SudoAuthentication sudoAuthentication) throws InterruptedException, IOException, UserCreationException {
 
         processBuilder.command("sudo", "-S", "useradd", "-m", user.getUser());
         processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
@@ -40,22 +42,22 @@ public class DefaultUserConfigurationService {
         if (exitCode != 0) {
             switch (exitCode) {
                 case 2:
-                    throw new UserCreationExceptions(UserCreationErrorCode.GROUP_DOES_NOT_EXIST);
+                    throw new UserCreationException(UserCreationErrorCode.GROUP_DOES_NOT_EXIST);
                 case 3:
-                    throw new UserCreationExceptions(UserCreationErrorCode.DIR_CANT_BE_CREATED);
+                    throw new UserCreationException(UserCreationErrorCode.DIR_CANT_BE_CREATED);
                 case 4:
-                    throw new UserCreationExceptions(UserCreationErrorCode.USR_CANT_BE_CREATED);
+                    throw new UserCreationException(UserCreationErrorCode.USR_CANT_BE_CREATED);
                 case 10:
-                    throw new UserCreationExceptions(UserCreationErrorCode.CANT_UPDT_PASSWD);
+                    throw new UserCreationException(UserCreationErrorCode.CANT_UPDT_PASSWD);
                 default:
-                    throw new UserCreationExceptions(UserCreationErrorCode.GENERIC_ERROR);
+                    throw new UserCreationException(UserCreationErrorCode.GENERIC_ERROR);
             }
         }
 
         return true;
     }
 
-    public boolean cadastrarSenha(User user) throws Exception {
+    public boolean registerPassword(User user) throws Exception {
         processBuilder.command("sudo", "-S", "passwd", user.getUser());
         processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
 
@@ -87,14 +89,49 @@ public class DefaultUserConfigurationService {
         return true;
     }
 
-    public boolean criarGrupo(Group group, SudoAuthentication sudoAuthentication) throws IOException {
-        processBuilder.command("sudo","-S", "groupadd", group.getName());
+    public boolean registerGroup(Group group, SudoAuthentication sudoAuthentication) throws InterruptedException, IOException, GroupCreationException {
+
+        processBuilder.command("sudo", "-S", "groupadd", group.getName());
         processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
 
         Process process = processBuilder.start();
 
         OutputStream outputStream = process.getOutputStream();
         outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+        outputStream.flush();
+        outputStream.close();
+        process.waitFor();
+
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+            switch (exitCode) {
+                case 2:
+                    throw new GroupCreationException(GroupCreationErrorCode.GROUP_ALREADY_EXISTS);
+                case 3:
+                    throw new GroupCreationException(GroupCreationErrorCode.INVALID_NAME_GROUP);
+                case 5:
+                    throw new GroupCreationException(GroupCreationErrorCode.SYSTEM_ERROR);
+                case 6:
+                    throw new GroupCreationException(GroupCreationErrorCode.PERMISSION_DENIED);
+                default:
+                    throw new GroupCreationException(GroupCreationErrorCode.GENERIC_ERROR);
+            }
+        }
+
         return true;
     }
+
+    public boolean addUserToGroup(Group group, User user, SudoAuthentication sudoAuthentication) throws IOException {
+        processBuilder.command("sudo", "-S", "usermod -aG",group.getName()," ", user.getUser());
+        processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
+
+        Process process = processBuilder.start();
+
+        OutputStream outputStream = process.getOutputStream();
+        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+
+
+        return true;
+    }
+    
 }
