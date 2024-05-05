@@ -41,7 +41,7 @@ public class DefaultUserConfigurationController {
 
     @PostMapping(path = "/cadastro-grupo")
     public ResponseEntity<?> InitialGroupCreation(@RequestBody Map<String, Object> json) {
-//        User user = objectMapper.convertValue(json.get("user"), User.class);
+        User user = objectMapper.convertValue(json.get("user"), User.class);
         Group group = objectMapper.convertValue(json.get("group"), Group.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
         try {

@@ -41,14 +41,22 @@ public class DefaultUserConfigurationService {
         int exitCode = process.waitFor();
         if (exitCode != 0) {
             switch (exitCode) {
-                case 2:
-                    throw new UserCreationException(UserCreationErrorCode.GROUP_DOES_NOT_EXIST);
-                case 3:
-                    throw new UserCreationException(UserCreationErrorCode.DIR_CANT_BE_CREATED);
+                case 1:
+                    throw new UserCreationException(UserCreationErrorCode.CANT_UPDT_PASSWD_FILE);
                 case 4:
-                    throw new UserCreationException(UserCreationErrorCode.USR_CANT_BE_CREATED);
+                    throw new UserCreationException(UserCreationErrorCode.USR_ALREADY_EXISTS);
+                case 6:
+                    throw new UserCreationException(UserCreationErrorCode.SPECIFIED_GROUP_DONT_EXIST);
+                case 9:
+                    throw new UserCreationException(UserCreationErrorCode.USR_ALREADY_IN_USE);
                 case 10:
-                    throw new UserCreationException(UserCreationErrorCode.CANT_UPDT_PASSWD);
+                    throw new UserCreationException(UserCreationErrorCode.CANT_UPDT_GROUP_FILE);
+                case 12:
+                    throw new UserCreationException(UserCreationErrorCode.CANT_CREATE_HOME_DIR);
+                case 13:
+                    throw new UserCreationException(UserCreationErrorCode.CANT_CREATE_MAIL_SPOOL);
+                case 14:
+                    throw new UserCreationException(UserCreationErrorCode.CANT_UPDATE_SELINUX);
                 default:
                     throw new UserCreationException(UserCreationErrorCode.GENERIC_ERROR);
             }
@@ -73,14 +81,10 @@ public class DefaultUserConfigurationService {
         int exitCode = process.waitFor();
         if (exitCode!= 0) {
             switch (exitCode) {
-                case 3:
-                    throw new PasswordCreationException(PasswordCreationErrorCode.CANT_READ_PASSWD_FILE);
-                case 4:
-                    throw new PasswordCreationException(PasswordCreationErrorCode.CANT_WRITE_PASSWD_FILE);
-                case 5:
-                    throw new PasswordCreationException(PasswordCreationErrorCode.INVALID_PASSWD);
-                case 6:
-                    throw new PasswordCreationException(PasswordCreationErrorCode.ERROR_CONFIRMATION_PASSWD);
+                case 2:
+                    throw new PasswordCreationException(PasswordCreationErrorCode.UNKNOWN_USER);
+                case 252:
+                    throw new PasswordCreationException(PasswordCreationErrorCode.UNKNOWN_USERNAME);
                 default:
                     throw new PasswordCreationException(PasswordCreationErrorCode.GENERIC_ERROR);
             }
@@ -105,14 +109,12 @@ public class DefaultUserConfigurationService {
         int exitCode = process.waitFor();
         if (exitCode != 0) {
             switch (exitCode) {
-                case 2:
-                    throw new GroupCreationException(GroupCreationErrorCode.GROUP_ALREADY_EXISTS);
-                case 3:
-                    throw new GroupCreationException(GroupCreationErrorCode.INVALID_NAME_GROUP);
-                case 5:
-                    throw new GroupCreationException(GroupCreationErrorCode.SYSTEM_ERROR);
-                case 6:
-                    throw new GroupCreationException(GroupCreationErrorCode.PERMISSION_DENIED);
+                case 4:
+                    throw new GroupCreationException(GroupCreationErrorCode.GID_ALREADY_EXISTS);
+                case 9:
+                    throw new GroupCreationException(GroupCreationErrorCode.GROUP_NAME_NOT_UNIQUE);
+                case 10:
+                    throw new GroupCreationException(GroupCreationErrorCode.CANT_UPDT_GROUP_FILE);
                 default:
                     throw new GroupCreationException(GroupCreationErrorCode.GENERIC_ERROR);
             }

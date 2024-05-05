@@ -4,14 +4,20 @@ import com.br.SambaWebAPI.utils.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public class UserCreationErrorCode extends ErrorCode {
-    public static final UserCreationErrorCode GENERIC_ERROR = new UserCreationErrorCode(1, "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.", HttpStatus.INTERNAL_SERVER_ERROR);
-    public static final UserCreationErrorCode DIR_CANT_BE_CREATED = new UserCreationErrorCode(3, "O diretório home do usuário não pode ser criado, possivelmente devido a permissões insuficientes ou falta de espaço em disco.", HttpStatus.BAD_REQUEST);
-    public static final UserCreationErrorCode GROUP_DOES_NOT_EXIST = new UserCreationErrorCode(4, "O grupo especificado não existe. Você está tentando criar um usuário com um grupo que não existe no sistema.", HttpStatus.BAD_REQUEST);
-    public static final UserCreationErrorCode USR_CANT_BE_CREATED = new UserCreationErrorCode(5, "O usuário não pode ser criado no sistema, possivelmente devido a um erro interno do sistema ou falta de recursos.", HttpStatus.INTERNAL_SERVER_ERROR);
-    public static final UserCreationErrorCode CANT_UPDT_PASSWD = new UserCreationErrorCode(10, "O arquivo de senha não pode ser atualizado, possivelmente devido a permissões insuficientes ou um erro de sistema.", HttpStatus.BAD_REQUEST);
+    public static final UserCreationErrorCode CANT_UPDT_PASSWD_FILE = new UserCreationErrorCode("Não foi possível atualizar o arquivo de senha.", HttpStatus.BAD_REQUEST);
+    public static final UserCreationErrorCode USR_ALREADY_EXISTS = new UserCreationErrorCode("O User ID já está sendo utilizado por outro usuário.", HttpStatus.CONFLICT);
+    public static final UserCreationErrorCode SPECIFIED_GROUP_DONT_EXIST = new UserCreationErrorCode("O Grupo especificado não existe.", HttpStatus.BAD_REQUEST);
+    public static final UserCreationErrorCode USR_ALREADY_IN_USE = new UserCreationErrorCode("O usuario já está em uso", HttpStatus.BAD_REQUEST);
+    public static final UserCreationErrorCode CANT_UPDT_GROUP_FILE = new UserCreationErrorCode("O arquivo de grupos não pode ser atualizado.", HttpStatus.INTERNAL_SERVER_ERROR);
+    public static final UserCreationErrorCode CANT_CREATE_HOME_DIR = new UserCreationErrorCode("Não foi possível criar a pasta home", HttpStatus.INTERNAL_SERVER_ERROR);
+    public static final UserCreationErrorCode CANT_CREATE_MAIL_SPOOL = new UserCreationErrorCode("Não foi possível criar a poasta de correio.", HttpStatus.INTERNAL_SERVER_ERROR);
+    public static final UserCreationErrorCode CANT_UPDATE_SELINUX = new UserCreationErrorCode("Não foi possível atualizar o mapeamento de usuários do SELinux", HttpStatus.BAD_REQUEST);
+    public static final UserCreationErrorCode GENERIC_ERROR = new UserCreationErrorCode("Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.", HttpStatus.INTERNAL_SERVER_ERROR);
 
 
-    private UserCreationErrorCode(int code, String errorMessage, HttpStatus httpStatus) {
-        super(code, errorMessage, httpStatus);
+
+
+    private UserCreationErrorCode( String errorMessage, HttpStatus httpStatus) {
+        super(errorMessage, httpStatus);
     }
 }
