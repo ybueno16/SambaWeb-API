@@ -1,7 +1,7 @@
-package com.br.SambaWebAPI.utils.factorys;
+package com.br.SambaWebAPI.password.factory;
 
 import com.br.SambaWebAPI.exceptions.PasswordCreationException;
-import com.br.SambaWebAPI.utils.enums.UserManagent.PasswordCreationErrorCode;
+import com.br.SambaWebAPI.password.enums.PasswordCreationErrorCode;
 
 public class PasswordCreationFactory {
 

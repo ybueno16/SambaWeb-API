@@ -1,7 +1,7 @@
 package com.br.SambaWebAPI.exceptions;
 
 
-import com.br.SambaWebAPI.utils.enums.UserManagent.AddUserToGroupErrorCode;
+import com.br.SambaWebAPI.group.enums.AddUserToGroupErrorCode;
 
 public class AddUserToGroupException extends Exception {
     private final AddUserToGroupErrorCode errorCode;

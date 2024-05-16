@@ -1,8 +1,8 @@
-package com.br.SambaWebAPI.utils.factorys;
+package com.br.SambaWebAPI.user.factory;
 
 
 import com.br.SambaWebAPI.exceptions.UserCreationException;
-import com.br.SambaWebAPI.utils.enums.UserManagent.UserCreationErrorCode;
+import com.br.SambaWebAPI.user.enums.UserCreationErrorCode;
 
 public class UserCreationFactory extends Throwable {
     public static UserCreationException createException(int exitCode) {

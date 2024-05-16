@@ -1,4 +1,6 @@
-package com.br.SambaWebAPI.LinuxInitialConfig.models;
+package com.br.SambaWebAPI.user.models;
+
+import com.br.SambaWebAPI.group.models.Group;
 
 import java.util.List;
 

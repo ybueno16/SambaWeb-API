@@ -1,4 +1,4 @@
-package com.br.SambaWebAPI.utils.enums.UserManagent;
+package com.br.SambaWebAPI.user.enums;
 
 import com.br.SambaWebAPI.utils.ErrorCode;
 import org.springframework.http.HttpStatus;

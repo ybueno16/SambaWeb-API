@@ -1,7 +1,7 @@
-package com.br.SambaWebAPI.utils.factorys;
+package com.br.SambaWebAPI.group.factory;
 
 import com.br.SambaWebAPI.exceptions.AddUserToGroupException;
-import com.br.SambaWebAPI.utils.enums.UserManagent.AddUserToGroupErrorCode;
+import com.br.SambaWebAPI.group.enums.AddUserToGroupErrorCode;
 
 public class AddUserToGroupFactory {
     public static AddUserToGroupException createException (int exitCode) throws AddUserToGroupException {

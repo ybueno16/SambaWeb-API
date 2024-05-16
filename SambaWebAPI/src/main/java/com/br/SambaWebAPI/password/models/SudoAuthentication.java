@@ -1,4 +1,4 @@
-package com.br.SambaWebAPI.LinuxInitialConfig.models;
+package com.br.SambaWebAPI.password.models;
 
 public class SudoAuthentication {
     private String sudoPassword;

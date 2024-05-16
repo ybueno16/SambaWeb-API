@@ -1,7 +1,7 @@
-package com.br.SambaWebAPI.SambaConfig.controllers;
+package com.br.SambaWebAPI.sambaconfig.controllers;
 
 import com.br.SambaWebAPI.config.Global;
-import com.br.SambaWebAPI.SambaConfig.models.SambaConfig;
+import com.br.SambaWebAPI.sambaconfig.models.SambaConfig;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileWriter;

@@ -1,7 +1,7 @@
 package com.br.SambaWebAPI.exceptions;
 
 
-import com.br.SambaWebAPI.utils.enums.UserManagent.GroupCreationErrorCode;
+import com.br.SambaWebAPI.group.enums.GroupCreationErrorCode;
 
 public class GroupCreationException extends Exception{
     private final GroupCreationErrorCode errorCode;

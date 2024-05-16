@@ -1,7 +1,6 @@
 package com.br.SambaWebAPI.exceptions;
 
-import com.br.SambaWebAPI.utils.enums.UserManagent.PasswordCreationErrorCode;
-import com.br.SambaWebAPI.utils.enums.UserManagent.UserCreationErrorCode;
+import com.br.SambaWebAPI.user.enums.UserCreationErrorCode;
 
 public class UserCreationException extends Exception {
     private final UserCreationErrorCode errorCode;

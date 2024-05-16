@@ -1,53 +1,37 @@
-package com.br.SambaWebAPI.LinuxInitialConfig.controllers;
+package com.br.SambaWebAPI.group.controllers;
 
-import com.br.SambaWebAPI.LinuxInitialConfig.models.Group;
-import com.br.SambaWebAPI.LinuxInitialConfig.models.SudoAuthentication;
-import com.br.SambaWebAPI.LinuxInitialConfig.models.User;
-import com.br.SambaWebAPI.LinuxInitialConfig.services.DefaultUserConfigurationService;
+import com.br.SambaWebAPI.group.models.Group;
+import com.br.SambaWebAPI.group.services.GroupService;
+import com.br.SambaWebAPI.password.models.SudoAuthentication;
+import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.exceptions.AddUserToGroupException;
 import com.br.SambaWebAPI.exceptions.GroupCreationException;
-import com.br.SambaWebAPI.exceptions.UserCreationException;
-import com.br.SambaWebAPI.utils.factorys.AddUserToGroupFactory;
-import com.br.SambaWebAPI.utils.factorys.UserCreationFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
 import static com.br.SambaWebAPI.config.Global.API_URL_SAMBA;
 
 @RestController
-@RequestMapping(API_URL_SAMBA + "/user-config")
-public class DefaultUserConfigurationController {
+@RequestMapping(API_URL_SAMBA + "/group-config")
+public class GroupController {
 
     ObjectMapper objectMapper = new ObjectMapper();
-    DefaultUserConfigurationService defaultUserConfigurationService = new DefaultUserConfigurationService();
+    GroupService groupService = new GroupService();
 
-    @PostMapping(path = "/cadastro")
-    public ResponseEntity<?> InitialUserCreation(@RequestBody Map<String, Object> json) throws UserCreationFactory {
-        User user = objectMapper.convertValue(json.get("user"), User.class);
-        SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
-        try {
-            defaultUserConfigurationService.createUser(user,sudoAuthentication);
-            defaultUserConfigurationService.createPassword(user);
-
-            return DefaultResponseEntityFactory.create("Usuario criado com sucesso!", user, HttpStatus.OK);
-        } catch (UserCreationException e) {
-            return DefaultResponseEntityFactory.create(e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
-        } catch (Exception e) {
-            return DefaultResponseEntityFactory.create("Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.", null,HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping(path = "/cadastro-grupo")
+    @PostMapping(path = "/registerGroup")
     public ResponseEntity<?> InitialGroupCreation(@RequestBody Map<String, Object> json) {
         Group group = objectMapper.convertValue(json.get("group"), Group.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
         try {
-            defaultUserConfigurationService.createGroup(group,sudoAuthentication);
+            groupService.createGroup(group,sudoAuthentication);
 
             return DefaultResponseEntityFactory.create("Grupo criado com sucesso!", group, HttpStatus.OK);
         } catch (GroupCreationException e) {
@@ -57,14 +41,14 @@ public class DefaultUserConfigurationController {
         }
     }
 
-    @PostMapping(path = "/grupo-usuario")
+    @PostMapping(path = "/assignUserToGroup")
     public ResponseEntity<?> InitialGroupConfig(@RequestBody Map<String, Object> json) {
         User user = objectMapper.convertValue(json.get("user"), User.class);
         Group group = objectMapper.convertValue(json.get("group"), Group.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
 
         try {
-            defaultUserConfigurationService.addUserToGroup(group, user, sudoAuthentication);
+            groupService.addUserToGroup(group, user, sudoAuthentication);
 
             return DefaultResponseEntityFactory.create("Grupo associado ao usuario com sucesso!", user, HttpStatus.OK);
         } catch (AddUserToGroupException e) {
@@ -73,4 +57,5 @@ public class DefaultUserConfigurationController {
             return DefaultResponseEntityFactory.create("Erro genérico. Ocorreu um erro desconhecido durante a criação do grupo.", null,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
