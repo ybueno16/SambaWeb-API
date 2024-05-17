@@ -1,4 +1,4 @@
-package com.br.SambaWebAPI.exceptions;
+package com.br.SambaWebAPI.password.exceptions;
 
 import com.br.SambaWebAPI.password.enums.PasswordCreationErrorCode;
 

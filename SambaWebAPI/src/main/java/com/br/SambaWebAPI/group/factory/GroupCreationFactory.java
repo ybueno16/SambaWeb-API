@@ -1,6 +1,6 @@
 package com.br.SambaWebAPI.group.factory;
 
-import com.br.SambaWebAPI.exceptions.GroupCreationException;
+import com.br.SambaWebAPI.group.exceptions.GroupCreationException;
 import com.br.SambaWebAPI.group.enums.GroupCreationErrorCode;
 
 public class GroupCreationFactory {

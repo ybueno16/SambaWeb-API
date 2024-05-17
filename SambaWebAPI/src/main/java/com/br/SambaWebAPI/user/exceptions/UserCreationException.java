@@ -1,4 +1,4 @@
-package com.br.SambaWebAPI.exceptions;
+package com.br.SambaWebAPI.user.exceptions;
 
 import com.br.SambaWebAPI.user.enums.UserCreationErrorCode;
 

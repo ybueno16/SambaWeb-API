@@ -1,4 +1,4 @@
-package com.br.SambaWebAPI.exceptions;
+package com.br.SambaWebAPI.group.exceptions;
 
 
 import com.br.SambaWebAPI.group.enums.GroupCreationErrorCode;

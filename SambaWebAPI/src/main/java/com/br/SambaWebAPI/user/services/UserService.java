@@ -2,7 +2,7 @@ package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.models.User;
-import com.br.SambaWebAPI.exceptions.UserCreationException;
+import com.br.SambaWebAPI.user.exceptions.UserCreationException;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
 import org.springframework.stereotype.Service;
 
