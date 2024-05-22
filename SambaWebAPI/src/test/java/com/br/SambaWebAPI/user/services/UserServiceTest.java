@@ -27,7 +27,7 @@ class UserServiceTest {
 
         Field sudoPasswordField = sudoAuthentication.getClass().getDeclaredField("sudoPassword");
         sudoPasswordField.setAccessible(true);
-        sudoPasswordField.set(sudoAuthentication, "Isacreeper1");
+        sudoPasswordField.set(sudoAuthentication, "");
 
         UserService userService = new UserService();
 
