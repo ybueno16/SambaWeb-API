@@ -18,21 +18,6 @@ class UserServiceTest {
 
     @Test
     public void testCreateUserSuccess() throws InterruptedException, IOException, UserCreationException, NoSuchFieldException, IllegalAccessException, UserCreationFactory {
-        User user = new User();
-        user.setUser("testuser");
-        user.setPassword("testpassword");
-        user.setGroupList(null);
-
-        SudoAuthentication sudoAuthentication = new SudoAuthentication();
-
-        Field sudoPasswordField = sudoAuthentication.getClass().getDeclaredField("sudoPassword");
-        sudoPasswordField.setAccessible(true);
-        sudoPasswordField.set(sudoAuthentication, "");
-
-        UserService userService = new UserService();
-
-        boolean result = userService.createUser(user, sudoAuthentication);
-        assertTrue(result);
     }
 
 

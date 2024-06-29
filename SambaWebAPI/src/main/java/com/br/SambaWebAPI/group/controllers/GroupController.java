@@ -24,7 +24,7 @@ import static com.br.SambaWebAPI.config.Global.API_URL_SAMBA;
 public class GroupController {
 
     ObjectMapper objectMapper = new ObjectMapper();
-    GroupService groupService = new GroupService();
+    GroupService groupService = new GroupService(new ProcessBuilder());
 
     @PostMapping(path = "/registerGroup")
     public ResponseEntity<?> InitialGroupCreation(@RequestBody Map<String, Object> json) {

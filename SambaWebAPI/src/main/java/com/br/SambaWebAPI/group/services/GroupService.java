@@ -8,6 +8,7 @@ import com.br.SambaWebAPI.group.exceptions.GroupCreationException;
 import com.br.SambaWebAPI.password.exceptions.PasswordCreationException;
 import com.br.SambaWebAPI.group.factory.AddUserToGroupFactory;
 import com.br.SambaWebAPI.group.factory.GroupCreationFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,8 +17,9 @@ import java.io.OutputStream;
 @Service
 public class GroupService {
     private final ProcessBuilder processBuilder;
-    public GroupService() {
-        processBuilder = new ProcessBuilder();
+    @Autowired
+    public GroupService(ProcessBuilder processBuilder) {
+        this.processBuilder = processBuilder;
     }
 
     public boolean createGroup(Group group, SudoAuthentication sudoAuthentication) throws InterruptedException, IOException, GroupCreationException, PasswordCreationException {

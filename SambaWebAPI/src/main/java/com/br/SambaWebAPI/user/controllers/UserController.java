@@ -8,6 +8,7 @@ import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.user.exceptions.UserCreationException;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +23,16 @@ import static com.br.SambaWebAPI.config.Global.API_URL_SAMBA;
 @RestController
 @RequestMapping(API_URL_SAMBA + "/user-config")
 public class UserController {
-    ObjectMapper objectMapper = new ObjectMapper();
-    UserService userService = new UserService();
-    PasswordService passwordService = new PasswordService();
+    final private ObjectMapper objectMapper;
+    final private UserService userService;
+    final private PasswordService passwordService;
+
+    @Autowired
+    public UserController(ObjectMapper objectMapper, UserService userService, PasswordService passwordService){
+        this.objectMapper = objectMapper;
+        this.userService = userService;
+        this.passwordService = passwordService;
+    }
 
     @PostMapping(path = "/register")
     public ResponseEntity<?> InitialUserCreation(@RequestBody Map<String, Object> json) throws UserCreationFactory {

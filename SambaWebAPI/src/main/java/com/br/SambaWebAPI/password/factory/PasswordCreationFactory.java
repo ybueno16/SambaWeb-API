@@ -7,12 +7,9 @@ public class PasswordCreationFactory {
 
         public static PasswordCreationException createException(int exitCode) throws PasswordCreationException {
             switch (exitCode) {
-                case 2:
-                    throw new PasswordCreationException(PasswordCreationErrorCode.UNKNOWN_USER);
-                case 252:
-                    throw new PasswordCreationException(PasswordCreationErrorCode.UNKNOWN_USERNAME);
-                default:
-                    throw new PasswordCreationException(PasswordCreationErrorCode.GENERIC_ERROR);
+                case 2 -> throw new PasswordCreationException(PasswordCreationErrorCode.UNKNOWN_USER);
+                case 252 -> throw new PasswordCreationException(PasswordCreationErrorCode.UNKNOWN_USERNAME);
+                default -> throw new PasswordCreationException(PasswordCreationErrorCode.GENERIC_ERROR);
             }
         }
 

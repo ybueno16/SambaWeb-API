@@ -1,27 +1,34 @@
 package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.user.models.User;
-import com.br.SambaWebAPI.user.exceptions.UserCreationException;
+import com.br.SambaWebAPI.user.adapter.UserAdapter;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
+import com.br.SambaWebAPI.user.models.User;
+import com.br.SambaWebAPI.utils.CommandConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.io.OutputStream;
 
 @Service
 public class UserService {
-    private final ProcessBuilder processBuilder;
 
-    public UserService() {
+    private final UserAdapter userAdapter;
+    private final ProcessBuilder processBuilder;
+    @Autowired
+    public UserService(UserAdapter userAdapter ){
+       this.userAdapter = userAdapter;
         processBuilder = new ProcessBuilder();
     }
 
+    public void createUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
 
-
-    public boolean createUser(User user, SudoAuthentication sudoAuthentication) throws InterruptedException, IOException, UserCreationException, UserCreationFactory {
-
-        processBuilder.command("sudo", "-S", "useradd", "-m", user.getUser());
+        userAdapter.command(
+                CommandConstants.SUDO,
+                CommandConstants.ADD_USER,
+                CommandConstants.CREATE_HOME_DIR,
+                CommandConstants.SUDO_PASSWORD_OPTION,
+                user.getUser());
         processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
 
         Process process = processBuilder.start();
@@ -36,8 +43,6 @@ public class UserService {
         if (exitCode != 0) {
             throw UserCreationFactory.createException(exitCode);
         }
-
-        return true;
     }
 
 
