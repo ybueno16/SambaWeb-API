@@ -1,4 +1,4 @@
-package com.br.SambaWebAPI.user.adapter;
+package com.br.SambaWebAPI.adapter;
 
 
 import java.util.List;

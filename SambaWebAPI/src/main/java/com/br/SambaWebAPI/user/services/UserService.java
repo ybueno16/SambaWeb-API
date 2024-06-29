@@ -1,7 +1,7 @@
 package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.user.adapter.UserAdapter;
+import com.br.SambaWebAPI.adapter.UserAdapter;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
