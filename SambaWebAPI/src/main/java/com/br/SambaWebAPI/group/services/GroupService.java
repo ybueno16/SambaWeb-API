@@ -1,5 +1,6 @@
 package com.br.SambaWebAPI.group.services;
 
+import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.group.models.Group;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.models.User;
@@ -8,6 +9,7 @@ import com.br.SambaWebAPI.group.exceptions.GroupCreationException;
 import com.br.SambaWebAPI.password.exceptions.PasswordCreationException;
 import com.br.SambaWebAPI.group.factory.AddUserToGroupFactory;
 import com.br.SambaWebAPI.group.factory.GroupCreationFactory;
+import com.br.SambaWebAPI.utils.CommandConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +18,18 @@ import java.io.OutputStream;
 
 @Service
 public class GroupService {
-    private final ProcessBuilder processBuilder;
+    private final ProcessBuilderAdapter processBuilderAdapter;
     @Autowired
-    public GroupService(ProcessBuilder processBuilder) {
-        this.processBuilder = processBuilder;
+    public GroupService(ProcessBuilderAdapter processBuilderAdapter) {
+        this.processBuilderAdapter = processBuilderAdapter;
     }
 
     public boolean createGroup(Group group, SudoAuthentication sudoAuthentication) throws InterruptedException, IOException, GroupCreationException, PasswordCreationException {
 
-        processBuilder.command("sudo", "-S", "groupadd", group.getName());
-        processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
+        ProcessBuilder processBuilder = processBuilderAdapter.command(CommandConstants.SUDO,
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.GROUP_ADD,
+                group.getName()).redirectInput(ProcessBuilder.Redirect.PIPE);
 
         Process process = processBuilder.start();
 
@@ -45,8 +49,12 @@ public class GroupService {
     }
 
     public boolean addUserToGroup(Group group, User user, SudoAuthentication sudoAuthentication) throws IOException, InterruptedException, GroupCreationException, AddUserToGroupException {
-        processBuilder.command("sudo", "-S", "/usr/sbin/usermod", "-aG", group.getName(), user.getUser());
-        processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
+        ProcessBuilder processBuilder = processBuilderAdapter.command(CommandConstants.SUDO,
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.USER_MOD,
+                CommandConstants.ADD_GROUP_OPTION,
+                group.getName(),
+                user.getUser()).redirectInput(ProcessBuilder.Redirect.PIPE);
 
         Process process = processBuilder.start();
 

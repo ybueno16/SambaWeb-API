@@ -1,7 +1,7 @@
 package com.br.SambaWebAPI.config;
 
-import com.br.SambaWebAPI.adapter.UserAdapter;
-import com.br.SambaWebAPI.adapter.impl.UserAdapterImpl;
+import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
+import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,7 +14,7 @@ public class AppConfig {
     }
 
     @Bean
-    public UserAdapter userAdapter() {
-        return new UserAdapterImpl(); // or any other implementation
+    public ProcessBuilderAdapter userAdapter() {
+        return new ProcessBuilderAdapterImpl(); // or any other implementation
     }
 }

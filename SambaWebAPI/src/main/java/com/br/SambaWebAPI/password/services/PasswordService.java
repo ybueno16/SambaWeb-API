@@ -1,7 +1,9 @@
 package com.br.SambaWebAPI.password.services;
 
+import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.password.factory.PasswordCreationFactory;
+import com.br.SambaWebAPI.utils.CommandConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,15 +11,18 @@ import java.io.OutputStream;
 
 @Service
 public class PasswordService {
-    private final ProcessBuilder processBuilder;
+    private final ProcessBuilderAdapter processBuilderAdapter;
 
     @Autowired
-    public PasswordService(ProcessBuilder processBuilder){
-        this.processBuilder = processBuilder;
+    public PasswordService(ProcessBuilderAdapter processBuilderAdapter){
+        this.processBuilderAdapter = processBuilderAdapter;
     }
     public boolean createPassword(User user) throws Exception {
-        processBuilder.command("sudo", "-S", "passwd", user.getUser());
-        processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
+        ProcessBuilder  processBuilder = processBuilderAdapter.command(
+                CommandConstants.SUDO,
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.PASSWD_ADD,
+                user.getUser()).redirectInput(ProcessBuilder.Redirect.PIPE);
 
         Process process = processBuilder.start();
 

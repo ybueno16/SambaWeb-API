@@ -1,7 +1,7 @@
 package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.adapter.UserAdapter;
+import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
@@ -12,31 +12,28 @@ import java.io.OutputStream;
 
 @Service
 public class UserService {
+    private final ProcessBuilderAdapter processBuilderAdapter;
 
-    private final UserAdapter userAdapter;
-    private final ProcessBuilder processBuilder;
     @Autowired
-    public UserService(UserAdapter userAdapter ){
-       this.userAdapter = userAdapter;
-        processBuilder = new ProcessBuilder();
+    public UserService(ProcessBuilderAdapter processBuilderAdapter){
+        this.processBuilderAdapter = processBuilderAdapter;
     }
 
     public void createUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
 
-        userAdapter.command(
+        ProcessBuilder processBuilder = processBuilderAdapter.command(
                 CommandConstants.SUDO,
-                CommandConstants.ADD_USER,
-                CommandConstants.CREATE_HOME_DIR,
-                CommandConstants.SUDO_PASSWORD_OPTION,
-                user.getUser());
-        processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.USER_ADD,
+                user.getUser()
+        ).redirectInput(ProcessBuilder.Redirect.PIPE);
+
 
         Process process = processBuilder.start();
 
         OutputStream outputStream = process.getOutputStream();
         outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
         outputStream.flush();
-        outputStream.close();
         process.waitFor();
 
         int exitCode = process.waitFor();
