@@ -7,22 +7,21 @@ import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.group.exceptions.AddUserToGroupException;
 import com.br.SambaWebAPI.group.exceptions.GroupCreationException;
-import com.br.SambaWebAPI.user.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Map;
 
-import static com.br.SambaWebAPI.config.Global.API_URL_SAMBA;
 
 @RestController
-@RequestMapping(API_URL_SAMBA + "/group-config")
+@RequestMapping("${api.samba.baseurl}/group-config")
+@PropertySource("classpath:application.properties")
 public class GroupController {
 
     final private ObjectMapper objectMapper;

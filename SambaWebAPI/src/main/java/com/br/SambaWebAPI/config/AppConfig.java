@@ -5,6 +5,7 @@ import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
 @Configuration
 public class AppConfig {
 
@@ -14,7 +15,15 @@ public class AppConfig {
     }
 
     @Bean
-    public ProcessBuilderAdapter userAdapter() {
-        return new ProcessBuilderAdapterImpl(); // or any other implementation
+    public ProcessBuilderAdapter processBuilderAdapter() {
+        return new ProcessBuilderAdapterImpl();
     }
+
+    @Bean
+    public Global global() {
+        return new Global();
+    }
+
+
+
 }

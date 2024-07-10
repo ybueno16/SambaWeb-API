@@ -6,4 +6,9 @@ public class SudoAuthentication {
     public String getSudoPassword() {
         return sudoPassword;
     }
+
+    public void setSudoPassword(String sudoPassword) {
+        this.sudoPassword = sudoPassword;
+    }
+
 }

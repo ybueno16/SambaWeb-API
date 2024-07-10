@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  samba:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "139:139"
+      - "445:445"
+    volumes:
+      - ./SambaWebAPI:/SambaWeb/SambaWebAPI
