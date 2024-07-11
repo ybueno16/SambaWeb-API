@@ -1,8 +1,10 @@
 package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.SambaWebApiApplication;
+import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.models.User;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,11 @@ class UserServiceTest {
     void createUser() throws Exception {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
+        sudoAuthentication.setSudoPassword("sambawebapi!@#");
         user.setUser("samba");
         user.setPassword("senhamtforte123!@#");
         boolean succes = userService.createUser(user,sudoAuthentication);
-        assertEquals(true,succes);
+        assertTrue(succes);
 
     }
 }

@@ -1,1 +1,1 @@
-gradlew integrationTest
+./gradlew test

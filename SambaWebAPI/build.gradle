@@ -40,5 +40,9 @@ test {
 	useJUnitPlatform()
 }
 dockerCompose {
+	configure {
+		named("samba")
+	}
 	useComposeFiles = ['docker-compose.test.yml']
+	isRequiredBy(tasks.test)
 }
