@@ -23,7 +23,7 @@ class UserServiceTest {
     void createUser() throws Exception {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("sambawebapi!@#");
+        sudoAuthentication.setSudoPassword("sambawebapi123");
         user.setUser("samba");
         user.setPassword("senhamtforte123!@#");
         boolean succes = userService.createUser(user,sudoAuthentication);

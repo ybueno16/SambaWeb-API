@@ -2,7 +2,6 @@ version: '3'
 
 services:
   samba:
-    entrypoint: entrypoint.test.sh
     build:
       context: .
       dockerfile: Dockerfile.test
