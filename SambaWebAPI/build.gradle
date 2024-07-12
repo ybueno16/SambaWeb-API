@@ -39,7 +39,3 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
-dockerCompose {
-	useComposeFiles = ['docker-compose.test.yml']
-	isRequiredBy(tasks.test)
-}

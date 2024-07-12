@@ -39,7 +39,7 @@ public class UserService {
         // Executar o comando sudo
         ProcessBuilder processBuilder = processBuilderAdapter.command(
                 CommandConstants.SUDO,
-                "-u", "rootdd",
+                "-u", "root",
                 CommandConstants.SUDO_STDIN,
                 CommandConstants.USER_ADD,
                 user.getUser()

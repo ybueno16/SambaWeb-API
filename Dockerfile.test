@@ -1,0 +1,28 @@
+FROM ubuntu:latest
+
+RUN apt-get update && apt-get install -y samba
+
+RUN apt-get install -y sudo
+
+RUN mkdir -p /SambaWeb
+
+RUN apt-get install openjdk-17-jdk -y
+
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
+
+ENV PATH $PATH:$JAVA_HOME/bin
+
+RUN java -version
+
+# Copiar o script de entrypoint
+COPY entrypoint.test.sh /entrypoint.test.sh
+
+# Comando padrão (não será executado pois o entrypoint está definido)
+CMD ["smbd", "--foreground", "--no-process-group"]
+
+ADD SambaWebAPI /SambaWeb
+
+
+ENTRYPOINT ["/bin/sh", "entrypoint.test.sh"]
+
+
