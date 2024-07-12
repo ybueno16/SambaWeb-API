@@ -2,18 +2,14 @@ package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
+import com.br.SambaWebAPI.user.exceptions.UserCreationException;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -42,24 +38,53 @@ public class UserService {
         process.getOutputStream().flush();
         process.getOutputStream().close();
 
-        InputStream stderr = process.getErrorStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stderr));
-        String line;
-        while ((line = reader.readLine())!= null) {
-            System.err.println(line);
+        int exitCode = process.waitFor();
+        if (exitCode!= 0) {
+            throw UserCreationFactory.createException(exitCode);
         }
+        return true;
+    }
 
-        InputStream stdout = process.getInputStream();
-        BufferedReader stdoutReader = new BufferedReader(new InputStreamReader(stdout));
-        String stdoutLine;
-        while ((stdoutLine = stdoutReader.readLine())!= null) {
-            System.out.println(stdoutLine);
-        }
+    public boolean removeUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
+        ProcessBuilder processBuilder = processBuilderAdapter.command(
+                CommandConstants.SUDO,
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.USER_DEL,
+                user.getUser()
+        ).redirectInput(ProcessBuilder.Redirect.PIPE);
+
+        Process process = processBuilder.start();
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+        outputStream.flush();
+        process.getOutputStream().write(outputStream.toByteArray());
+        process.getOutputStream().flush();
+        process.getOutputStream().close();
 
         int exitCode = process.waitFor();
         if (exitCode!= 0) {
             throw UserCreationFactory.createException(exitCode);
         }
         return true;
+    }
+
+    public boolean getUser(User user) throws IOException, InterruptedException, UserCreationException {
+        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", "cat /etc/passwd | grep " + user.getUser());
+        Process process = processBuilder.start();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line;
+        int count = 0;
+        while ((line = reader.readLine())!= null) {
+            count++;
+        }
+        reader.close();
+
+        int exitCode = process.waitFor();
+        if (exitCode!= 0) {
+            throw UserCreationFactory.createException(exitCode);
+        }
+        return count == 1;
     }
 }

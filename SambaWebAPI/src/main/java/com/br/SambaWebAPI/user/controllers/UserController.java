@@ -11,11 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 import static com.br.SambaWebAPI.config.Global.API_URL_SAMBA;
@@ -43,6 +41,19 @@ public class UserController {
             passwordService.createPassword(user);
 
             return DefaultResponseEntityFactory.create("Usuario criado com sucesso!", user, HttpStatus.OK);
+        } catch (UserCreationException e) {
+            return DefaultResponseEntityFactory.create(e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+        } catch (Exception e) {
+            return DefaultResponseEntityFactory.create("Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.", null,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(path = "/user")
+    public ResponseEntity<?> getUser(@RequestBody User user) throws UserCreationFactory, UserCreationException, IOException, InterruptedException {
+        try{
+            userService.getUser(user);
+            return DefaultResponseEntityFactory.create("Usuario existe!", user, HttpStatus.OK);
+
         } catch (UserCreationException e) {
             return DefaultResponseEntityFactory.create(e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
         } catch (Exception e) {
