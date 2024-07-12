@@ -26,20 +26,8 @@ public class UserService {
     }
 
     public boolean createUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
-        // Imprimir o nome do usuário que está executando o comando
-        ProcessBuilder whoamiProcessBuilder = processBuilderAdapter.command("whoami").redirectOutput(ProcessBuilder.Redirect.PIPE);
-        Process whoamiProcess = whoamiProcessBuilder.start();
-        InputStream whoamiStdout = whoamiProcess.getInputStream();
-        BufferedReader whoamiReader = new BufferedReader(new InputStreamReader(whoamiStdout));
-        String whoamiLine;
-        while ((whoamiLine = whoamiReader.readLine())!= null) {
-            System.out.println("Running as user: " + whoamiLine);
-        }
-
-        // Executar o comando sudo
         ProcessBuilder processBuilder = processBuilderAdapter.command(
                 CommandConstants.SUDO,
-                "-u", "root",
                 CommandConstants.SUDO_STDIN,
                 CommandConstants.USER_ADD,
                 user.getUser()
