@@ -29,9 +29,9 @@ public class UserService {
         processBuilderAdapter.command("exit");
 
         ProcessBuilder processBuilder = processBuilderAdapter.command(
-                "bash",
-                "-c",
-                "echo \"" + sudoAuthentication.getSudoPassword() + "\" | sudo -S useradd " + user.getUser()
+                CommandConstants.BASH,
+                CommandConstants.EXECUTE_COMMAND,
+                CommandConstants.ECHO + " \"" + sudoAuthentication.getSudoPassword() + "\" | " + CommandConstants.SUDO + " " + CommandConstants.SUDO_STDIN + " " + CommandConstants.USER_ADD + " " + user.getUser()
         ).redirectInput(ProcessBuilder.Redirect.PIPE);
 
         Process process = processBuilder.start();
@@ -67,7 +67,11 @@ public class UserService {
     }
 
     public boolean getUser(User user) throws Exception {
-        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", "cat /etc/passwd | grep " + user.getUser());
+        ProcessBuilder processBuilder = new ProcessBuilder(
+                CommandConstants.BASH,
+                CommandConstants.EXECUTE_COMMAND,
+                CommandConstants.GET_USER
+                        + user.getUser());
         Process process = processBuilder.start();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
