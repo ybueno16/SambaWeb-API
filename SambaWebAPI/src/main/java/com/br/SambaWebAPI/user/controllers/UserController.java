@@ -38,7 +38,7 @@ public class UserController {
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
         try {
             userService.createUser(user,sudoAuthentication);
-            passwordService.createPassword(user);
+            passwordService.createPassword(user,sudoAuthentication);
 
             return DefaultResponseEntityFactory.create("Usuario criado com sucesso!", user, HttpStatus.OK);
         } catch (UserCreationException e) {

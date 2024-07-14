@@ -1,5 +1,6 @@
 package com.br.SambaWebAPI.user.services;
 
+import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.user.exceptions.UserCreationException;
@@ -10,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserService {
-    private final ProcessBuilderAdapter processBuilderAdapter;
+    private ProcessBuilderAdapter processBuilderAdapter;
 
     @Autowired
     public UserService(ProcessBuilderAdapter processBuilderAdapter){
@@ -22,26 +24,24 @@ public class UserService {
     }
 
     public boolean createUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
+        processBuilderAdapter = new ProcessBuilderAdapterImpl();
+
+        processBuilderAdapter.command("exit");
+
         ProcessBuilder processBuilder = processBuilderAdapter.command(
-                CommandConstants.SUDO,
-                CommandConstants.SUDO_STDIN,
-                CommandConstants.USER_ADD,
-                user.getUser()
+                "bash",
+                "-c",
+                "echo \"" + sudoAuthentication.getSudoPassword() + "\" | sudo -S useradd " + user.getUser()
         ).redirectInput(ProcessBuilder.Redirect.PIPE);
 
         Process process = processBuilder.start();
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
-        outputStream.flush();
-        process.getOutputStream().write(outputStream.toByteArray());
-        process.getOutputStream().flush();
-        process.getOutputStream().close();
-
         int exitCode = process.waitFor();
-        if (exitCode!= 0) {
+
+        if (exitCode != 0) {
             throw UserCreationFactory.createException(exitCode);
         }
+
         return true;
     }
 
@@ -55,36 +55,27 @@ public class UserService {
 
         Process process = processBuilder.start();
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        OutputStream outputStream = process.getOutputStream();
+
         outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
         outputStream.flush();
-        process.getOutputStream().write(outputStream.toByteArray());
-        process.getOutputStream().flush();
-        process.getOutputStream().close();
+        outputStream.close();
+        process.waitFor();
 
         int exitCode = process.waitFor();
-        if (exitCode!= 0) {
-            throw UserCreationFactory.createException(exitCode);
-        }
-        return true;
+        return exitCode == 0;
     }
 
-    public boolean getUser(User user) throws IOException, InterruptedException, UserCreationException {
+    public boolean getUser(User user) throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", "cat /etc/passwd | grep " + user.getUser());
         Process process = processBuilder.start();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line;
-        int count = 0;
-        while ((line = reader.readLine())!= null) {
-            count++;
-        }
+
+        reader.read();
         reader.close();
 
         int exitCode = process.waitFor();
-        if (exitCode!= 0) {
-            throw UserCreationFactory.createException(exitCode);
-        }
-        return count == 1;
+        return exitCode == 0;
     }
 }
