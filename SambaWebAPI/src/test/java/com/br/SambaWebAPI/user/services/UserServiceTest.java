@@ -37,7 +37,6 @@ class UserServiceTest {
 
 
     @Test
-    @Order(2)
     void createUser() throws Exception {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
@@ -48,7 +47,6 @@ class UserServiceTest {
     }
 
     @Test
-    @Order(1)
     void createUserWithError() {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
