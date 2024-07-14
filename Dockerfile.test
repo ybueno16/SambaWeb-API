@@ -20,9 +20,4 @@ COPY entrypoint.test.sh /entrypoint.test.sh
 # Comando padrão (não será executado pois o entrypoint está definido)
 CMD ["smbd", "--foreground", "--no-process-group"]
 
-ADD SambaWebAPI /SambaWeb
-
-
 ENTRYPOINT ["/bin/sh", "entrypoint.test.sh"]
-
-
