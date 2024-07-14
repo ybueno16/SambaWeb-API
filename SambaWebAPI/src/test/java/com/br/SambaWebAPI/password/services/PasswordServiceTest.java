@@ -1,22 +1,29 @@
-package com.br.SambaWebAPI.user.services;
+package com.br.SambaWebAPI.password.services;
 
 import com.br.SambaWebAPI.SambaWebApiApplication;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.user.exceptions.UserCreationException;
 import com.br.SambaWebAPI.user.models.User;
-import org.junit.jupiter.api.*;
+import com.br.SambaWebAPI.user.services.UserService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SambaWebApiApplication.class)
-class UserServiceTest {
+class PasswordServiceTest {
+String senha = "Isacreeper1";
 
     @Autowired
-    UserService userService;
+    private PasswordService passwordService;
+
+    @Autowired
+    private UserService userService;
 
     private boolean userCreated = false;
 
@@ -24,39 +31,24 @@ class UserServiceTest {
     public void tearDown() throws Exception {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("Isacreeper1");
+        sudoAuthentication.setSudoPassword(senha);
         user.setUser("sambauser");
         if (userService.getUser(user)) {
-            try {
-                userService.removeUser(user, sudoAuthentication);
-            }catch (Exception ignored){
-
-            }
+            userService.removeUser(user, sudoAuthentication);
         }
     }
 
-
     @Test
-    @Order(2)
-    void createUser() throws Exception {
+    void createPassword() throws Exception {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("Isacreeper1");
+        sudoAuthentication.setSudoPassword(senha);
         user.setUser("sambauser");
-        boolean sucess = userService.createUser(user, sudoAuthentication);
+        sudoAuthentication.setSudoPassword(senha);
+        userService.createUser(user,sudoAuthentication);
+        user.setPassword("senhaforte1234");
+        boolean sucess = passwordService.createPassword(user,sudoAuthentication);
         assertTrue(sucess);
-    }
-
-    @Test
-    @Order(1)
-    void createUserWithError() {
-        User user = new User();
-        SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("fafasfsa");
-        user.setUser("sambauser");
-
-        assertThrows(UserCreationException.class, () -> userService.createUser(user, sudoAuthentication));
-        userCreated = false;
-
+        userCreated = true;
     }
 }
