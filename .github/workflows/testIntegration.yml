@@ -1,0 +1,23 @@
+name: Integration Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Run integration tests
+        run: |
+         ./gradlew test
