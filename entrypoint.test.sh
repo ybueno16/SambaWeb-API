@@ -6,7 +6,7 @@ echo "root:senhaforte123" | chpasswd
 
 usermod -aG sudo root
 
-cd SambaWeb/
+cd SambaWebAPI/
 
 ./gradlew test
 
