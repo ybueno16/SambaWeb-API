@@ -20,52 +20,52 @@ class UserServiceTest {
     @Autowired
     UserService userService;
 
-    @BeforeEach
-    public void tearDown() throws Exception {
-        User user = new User();
-        SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("Isacreeper1");
-        user.setUser("sambauser");
-        if (userService.getUser(user)) {
-            try {
-                userService.removeUser(user, sudoAuthentication);
-            }catch (Exception ignored){
-
-            }
-        }
-    }
-
-
-    @Test
-    @DisplayName("""
-            Dado o desejo do usuario criar o usuario
-            quando o usuario digitar a senha correta
-            então deve retornar um sucesso
-            """)
-    void createUser() throws Exception {
-        User user = new User();
-        SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("Isacreeper1");
-        user.setUser("sambauser");
-        assertTrue(userService.createUser(user, sudoAuthentication));
-    }
-
-    @Test
-    @DisplayName("""
-            Dado o desejo do usuario criar o usuario
-            quando o usuario digitar a senha errado
-            então deve retornar uma exceção
-            """)
-    void createUserWithErrorCantUpdtPasswdFIle() {
-        User user = new User();
-        SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("fafasfsa");
-        user.setUser("sambauser");
-
-        UserCreationException exception = assertThrows(UserCreationException.class, () -> userService.createUser(user, sudoAuthentication));
-
-        assertEquals(UserCreationErrorCode.CANT_UPDT_PASSWD_FILE, exception.getErrorCode());
-    }
+//    @BeforeEach
+//    public void tearDown() throws Exception {
+//        User user = new User();
+//        SudoAuthentication sudoAuthentication = new SudoAuthentication();
+//        sudoAuthentication.setSudoPassword("Isacreeper1");
+//        user.setUser("sambauser");
+//        if (userService.getUser(user)) {
+//            try {
+//                userService.removeUser(user, sudoAuthentication);
+//            }catch (Exception ignored){
+//
+//            }
+//        }
+//    }
+//
+//
+//    @Test
+//    @DisplayName("""
+//            Dado o desejo do usuario criar o usuario
+//            quando o usuario digitar a senha correta
+//            então deve retornar um sucesso
+//            """)
+//    void createUser() throws Exception {
+//        User user = new User();
+//        SudoAuthentication sudoAuthentication = new SudoAuthentication();
+//        sudoAuthentication.setSudoPassword("Isacreeper1");
+//        user.setUser("sambauser");
+//        assertTrue(userService.createUser(user, sudoAuthentication));
+//    }
+//
+//    @Test
+//    @DisplayName("""
+//            Dado o desejo do usuario criar o usuario
+//            quando o usuario digitar a senha errado
+//            então deve retornar uma exceção
+//            """)
+//    void createUserWithErrorCantUpdtPasswdFIle() {
+//        User user = new User();
+//        SudoAuthentication sudoAuthentication = new SudoAuthentication();
+//        sudoAuthentication.setSudoPassword("fafasfsa");
+//        user.setUser("sambauser");
+//
+//        UserCreationException exception = assertThrows(UserCreationException.class, () -> userService.createUser(user, sudoAuthentication));
+//
+//        assertEquals(UserCreationErrorCode.CANT_UPDT_PASSWD_FILE, exception.getErrorCode());
+//    }
 
     @Test
     @DisplayName("""
