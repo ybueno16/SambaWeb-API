@@ -56,7 +56,7 @@ class UserServiceTest {
             quando o usuario digitar a senha errado
             então deve retornar uma exceção
             """)
-    void createUserWithErrorCantUpdtPasswdFIle() {
+    void createUserWithErrorCantUpdtPasswdFile() {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
         sudoAuthentication.setSudoPassword("fafasfsa");
