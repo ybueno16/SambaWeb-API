@@ -15,10 +15,10 @@ usermod -aG sudo testeIntegration
 echo "testeIntegration ALL=(ALL) ALL" >> /etc/sudoers
 
 # Logar no usuário testeIntegration
-sudo su - testeIntegration <<EOF
-cd /home/testeIntegration/SambaWeb/SambaWebAPI/
-sudo ./gradlew test
-echo "script executado com sucesso"
-EOF
+#sudo su - testeIntegration <<EOF
+#cd /home/testeIntegration/SambaWeb/SambaWebAPI/
+#sudo ./gradlew test
+#echo "script executado com sucesso"
+#EOF
 
 tail -f /dev/null

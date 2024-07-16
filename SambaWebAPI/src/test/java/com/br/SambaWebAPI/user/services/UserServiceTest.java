@@ -3,6 +3,7 @@ package com.br.SambaWebAPI.user.services;
 import com.br.SambaWebAPI.SambaWebApiApplication;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
+import com.br.SambaWebAPI.user.enums.UserCreationErrorCode;
 import com.br.SambaWebAPI.user.exceptions.UserCreationException;
 import com.br.SambaWebAPI.user.models.User;
 import org.junit.jupiter.api.*;
@@ -23,7 +24,7 @@ class UserServiceTest {
     public void tearDown() throws Exception {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("senhaforte123");
+        sudoAuthentication.setSudoPassword("Isacreeper1");
         user.setUser("sambauser");
         if (userService.getUser(user)) {
             try {
@@ -36,21 +37,56 @@ class UserServiceTest {
 
 
     @Test
+    @DisplayName("""
+            Dado o desejo do usuario criar o usuario
+            quando o usuario digitar a senha correta
+            então deve retornar um sucesso
+            """)
     void createUser() throws Exception {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("senhaforte123");
+        sudoAuthentication.setSudoPassword("Isacreeper1");
         user.setUser("sambauser");
-        boolean sucess = userService.createUser(user, sudoAuthentication);
-        assertTrue(sucess);
+        assertTrue(userService.createUser(user, sudoAuthentication));
     }
 
     @Test
-    void createUserWithError() {
+    @DisplayName("""
+            Dado o desejo do usuario criar o usuario
+            quando o usuario digitar a senha errado
+            então deve retornar uma exceção
+            """)
+    void createUserWithErrorCantUpdtPasswdFIle() {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        //sudoAuthentication.setSudoPassword("fafasfsa");
+        sudoAuthentication.setSudoPassword("fafasfsa");
         user.setUser("sambauser");
-        assertThrows(UserCreationException.class, () -> userService.createUser(user, sudoAuthentication));
+
+        UserCreationException exception = assertThrows(UserCreationException.class, () -> userService.createUser(user, sudoAuthentication));
+
+        assertEquals(UserCreationErrorCode.CANT_UPDT_PASSWD_FILE, exception.getErrorCode());
     }
+
+    @Test
+    @DisplayName("""
+        Dado o desejo do usuario criar o usuario
+        quando já tiver algum usuário com o mesmo nome
+        então deve retornar uma exceção
+        """)
+    void createUserWithErrorUsrAlreadyExists() throws Exception {
+        User user = new User();
+        SudoAuthentication sudoAuthentication = new SudoAuthentication();
+        sudoAuthentication.setSudoPassword("Isacreeper1");
+        user.setUser("sambauser");
+        userService.createUser(user, sudoAuthentication);
+        try {
+            userService.createUser(user, sudoAuthentication);
+            fail("Deveria ter lançado uma exceção UserCreationException");
+        } catch (UserCreationException e) {
+            assertEquals(UserCreationErrorCode.USR_ALREADY_EXISTS, e.getErrorCode());
+        }
+    }
+
+
+
 }

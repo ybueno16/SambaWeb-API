@@ -13,6 +13,4 @@ public class CommandConstants {
     public static final String EXECUTE_COMMAND = "-c";
     public static final String ECHO = "echo";
     public static final String GET_USER = "cat /etc/passwd | grep ";
-
-
 }
