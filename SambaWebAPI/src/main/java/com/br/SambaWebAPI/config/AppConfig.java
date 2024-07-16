@@ -2,6 +2,8 @@ package com.br.SambaWebAPI.config;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
+import com.br.SambaWebAPI.password.services.PasswordService;
+import com.br.SambaWebAPI.user.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,6 +26,15 @@ public class AppConfig {
         return new Global();
     }
 
+    @Bean
+    public PasswordService passwordService(ProcessBuilderAdapter processBuilderAdapter) {
+        return new PasswordService(processBuilderAdapter);
+    }
+
+    @Bean
+    public UserService userService(ProcessBuilderAdapter processBuilderAdapter) {
+        return new UserService(processBuilderAdapter);
+    }
 
 
 }

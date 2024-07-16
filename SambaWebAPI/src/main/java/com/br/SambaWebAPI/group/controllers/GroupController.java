@@ -1,5 +1,6 @@
 package com.br.SambaWebAPI.group.controllers;
 
+import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.group.models.Group;
 import com.br.SambaWebAPI.group.services.GroupService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -20,7 +21,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("${api.samba.baseurl}/group-config")
+@RequestMapping(Global.API_URL_SAMBA + "/group-config")
 @PropertySource("classpath:application.properties")
 public class GroupController {
 
