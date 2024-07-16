@@ -83,7 +83,7 @@ class UserServiceTest {
             userService.createUser(user, sudoAuthentication);
             fail("Deveria ter lançado uma exceção UserCreationException");
         } catch (UserCreationException e) {
-            assertEquals(UserCreationErrorCode.USR_ALREADY_EXISTS, e.getErrorCode());
+            assertEquals(UserCreationErrorCode.USR_ALREADY_IN_USE, e.getErrorCode());
         }
     }
 
