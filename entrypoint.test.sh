@@ -2,14 +2,23 @@
 
 apt update && apt install -y sudo
 
-echo "root:senhaforte123" | chpasswd
+# Criar usuário testeIntegration
+useradd -m -d /home/testeIntegration testeIntegration
 
-usermod -aG sudo root
+# Definir senha para o usuário testeIntegration
+echo "testeIntegration:senhaforte123" | chpasswd
 
-cd SambaWebAPI/
+# Adicionar usuário testeIntegration ao grupo sudo
+usermod -aG sudo testeIntegration
 
-./gradlew test
+# Configurar sudo para pedir senha do usuário testeIntegration
+echo "testeIntegration ALL=(ALL) ALL" >> /etc/sudoers
 
+# Logar no usuário testeIntegration
+sudo su - testeIntegration <<EOF
+cd /home/testeIntegration/SambaWeb/SambaWebAPI/
+sudo ./gradlew test
 echo "script executado com sucesso"
+EOF
 
 tail -f /dev/null

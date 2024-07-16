@@ -1,6 +1,7 @@
 package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.SambaWebApiApplication;
+import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.exceptions.UserCreationException;
 import com.br.SambaWebAPI.user.models.User;
@@ -18,13 +19,11 @@ class UserServiceTest {
     @Autowired
     UserService userService;
 
-    private boolean userCreated = false;
-
     @BeforeEach
     public void tearDown() throws Exception {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("Isacreeper1");
+        sudoAuthentication.setSudoPassword("senhaforte123");
         user.setUser("sambauser");
         if (userService.getUser(user)) {
             try {
@@ -40,7 +39,7 @@ class UserServiceTest {
     void createUser() throws Exception {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("Isacreeper1");
+        sudoAuthentication.setSudoPassword("senhaforte123");
         user.setUser("sambauser");
         boolean sucess = userService.createUser(user, sudoAuthentication);
         assertTrue(sucess);
@@ -50,11 +49,8 @@ class UserServiceTest {
     void createUserWithError() {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("fafasfsa");
+        //sudoAuthentication.setSudoPassword("fafasfsa");
         user.setUser("sambauser");
-
         assertThrows(UserCreationException.class, () -> userService.createUser(user, sudoAuthentication));
-        userCreated = false;
-
     }
 }
