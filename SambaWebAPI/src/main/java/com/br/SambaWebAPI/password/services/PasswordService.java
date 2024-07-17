@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 @Service
 public class PasswordService {
@@ -20,31 +21,12 @@ public class PasswordService {
         this.processBuilderAdapter = processBuilderAdapter;
     }
     public boolean createPassword(User user, SudoAuthentication sudoAuthentication) throws Exception {
-        ProcessBuilder processBuilder = processBuilderAdapter.command(
-                CommandConstants.BASH,
-                CommandConstants.EXECUTE_COMMAND,
-                CommandConstants.ECHO
-                        + " \""
-                        + sudoAuthentication.getSudoPassword()
-                        + "\" | "
-                        + CommandConstants.SUDO
-                        + " "
-                        + CommandConstants.SUDO_STDIN
-                        + " "
-                        + CommandConstants.BASH
-                        + " "
-                        + CommandConstants.EXECUTE_COMMAND
-                        + " \""
-                        + CommandConstants.ECHO
-                        + " '"
-                        + user.getUser()
-                        + ":"
-                        + user.getPassword()
-                        + "'"
-                        + " | "
-                        + CommandConstants.PASSWD_ADD
-                        + "\""
-        ).redirectInput(ProcessBuilder.Redirect.PIPE);
+        List<Process> processes = ProcessBuilder.startPipeline(List.of(
+                new ProcessBuilder("echo", sudoAuthentication.getSudoPassword())
+                        .inheritIO().redirectOutput(ProcessBuilder.Redirect.PIPE),
+                new ProcessBuilder("sudo", "-S", "bash","-c")
+                        .redirectError(ProcessBuilder.Redirect.INHERIT)
+        ));
 
 
         Process process = processBuilder.start();
