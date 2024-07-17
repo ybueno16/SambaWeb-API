@@ -1,7 +1,5 @@
 #!/bin/bash
 
-apt update && apt install -y sudo
-
 # Criar usuário testeIntegration
 useradd -m -d /home/testeIntegration testeIntegration
 
@@ -15,10 +13,8 @@ usermod -aG sudo testeIntegration
 echo "testeIntegration ALL=(ALL) ALL" >> /etc/sudoers
 
 # Logar no usuário testeIntegration
-#sudo su - testeIntegration <<EOF
-#cd /home/testeIntegration/SambaWeb/SambaWebAPI/
-#sudo ./gradlew test
-#echo "script executado com sucesso"
-#EOF
+cd SambaWebAPI/
+./gradlew test
+echo "script executado com sucesso"
 
 tail -f /dev/null

@@ -25,16 +25,4 @@ public class AppConfig {
     public Global global() {
         return new Global();
     }
-
-    @Bean
-    public PasswordService passwordService(ProcessBuilderAdapter processBuilderAdapter) {
-        return new PasswordService(processBuilderAdapter);
-    }
-
-    @Bean
-    public UserService userService(ProcessBuilderAdapter processBuilderAdapter) {
-        return new UserService(processBuilderAdapter);
-    }
-
-
 }
