@@ -43,6 +43,7 @@
 //        SudoAuthentication sudoAuthentication = new SudoAuthentication();
 //        sudoAuthentication.setSudoPassword("senhaforte123");
 //        user.setUser("sambauser");
+//        user.setPassword("senhamuitoforte123");
 //        boolean success = passwordService.createPassword(user,sudoAuthentication);
 //        assertTrue(success);
 //    }

@@ -20,22 +20,34 @@ public class PasswordService {
         this.processBuilderAdapter = processBuilderAdapter;
     }
     public boolean createPassword(User user, SudoAuthentication sudoAuthentication) throws Exception {
-        ProcessBuilder  processBuilder = processBuilderAdapter.command(
-                CommandConstants.SUDO,
-                CommandConstants.SUDO_STDIN,
-                CommandConstants.PASSWD_ADD,
-                user.getUser()).redirectInput(ProcessBuilder.Redirect.PIPE);
+        ProcessBuilder processBuilder = processBuilderAdapter.command(
+                CommandConstants.BASH,
+                CommandConstants.EXECUTE_COMMAND,
+                CommandConstants.ECHO
+                        + " \""
+                        + sudoAuthentication.getSudoPassword()
+                        + "\" | "
+                        + CommandConstants.SUDO
+                        + " "
+                        + CommandConstants.SUDO_STDIN
+                        + " "
+                        + CommandConstants.BASH
+                        + " "
+                        + CommandConstants.EXECUTE_COMMAND
+                        + " \""
+                        + CommandConstants.ECHO
+                        + " '"
+                        + user.getUser()
+                        + ":"
+                        + user.getPassword()
+                        + "'"
+                        + " | "
+                        + CommandConstants.PASSWD_ADD
+                        + "\""
+        ).redirectInput(ProcessBuilder.Redirect.PIPE);
+
 
         Process process = processBuilder.start();
-
-        OutputStream outputStream = process.getOutputStream();
-        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
-        outputStream.flush();
-        outputStream.write((user.getPassword() + "\n").getBytes());
-        outputStream.write((user.getPassword() + "\n").getBytes());
-        outputStream.flush();
-        outputStream.close();
-        process.waitFor();
 
         int exitCode = process.waitFor();
         if (exitCode!= 0) {
