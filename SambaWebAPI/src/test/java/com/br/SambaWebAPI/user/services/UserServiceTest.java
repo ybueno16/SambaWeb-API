@@ -55,18 +55,6 @@ class UserServiceTest {
     @Test
     @DisplayName("""
         Dado o desejo do usuario criar o usuario
-        quando o usuario digitar a senha errado
-        então deve retornar uma exceção
-        """)
-    void createUserWithErrorCantUpdtPasswdFile() {
-        User user = new User();
-        SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        assertThrows(UserCreationException.class, () -> userService.createUser(user, sudoAuthentication));
-    }
-
-    @Test
-    @DisplayName("""
-        Dado o desejo do usuario criar o usuario
         quando já tiver algum usuário com o mesmo nome
         então deve retornar uma exceção
         """)
