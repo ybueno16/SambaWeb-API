@@ -52,16 +52,20 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "/user")
-    public ResponseEntity<?> getUser(@RequestBody User user) throws UserCreationFactory, UserCreationException, IOException, InterruptedException {
+    @PostMapping(path = "/user")
+    public ResponseEntity<?> getUser(@RequestBody User user) throws UserCreationFactory, UserCreationException,
+            IOException, InterruptedException {
         try{
             userService.getUser(user);
             return DefaultResponseEntityFactory.create("Usuario existe!", user, HttpStatus.OK);
 
         } catch (UserCreationException e) {
-            return DefaultResponseEntityFactory.create(e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+            return DefaultResponseEntityFactory.create(e.getErrorCode().getErrorMessage(),
+                    null, e.getErrorCode().getHttpStatus());
         } catch (Exception e) {
-            return DefaultResponseEntityFactory.create("Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.", null,HttpStatus.INTERNAL_SERVER_ERROR);
+            return DefaultResponseEntityFactory.create(
+                    "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.",
+                    null,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
