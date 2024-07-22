@@ -26,7 +26,8 @@ public class GroupService {
 
     public boolean createGroup(Group group, SudoAuthentication sudoAuthentication) throws InterruptedException, IOException, GroupCreationException, PasswordCreationException {
 
-        ProcessBuilder processBuilder = processBuilderAdapter.command(CommandConstants.SUDO,
+        ProcessBuilder processBuilder = processBuilderAdapter.command(
+                CommandConstants.SUDO,
                 CommandConstants.SUDO_STDIN,
                 CommandConstants.GROUP_ADD,
                 group.getName()).redirectInput(ProcessBuilder.Redirect.PIPE);
