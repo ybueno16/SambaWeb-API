@@ -22,7 +22,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(Global.API_URL_SAMBA + "/group-config")
-@PropertySource("classpath:application.properties")
 public class GroupController {
 
     final private ObjectMapper objectMapper;
@@ -35,7 +34,7 @@ public class GroupController {
     }
 
     @PostMapping(path = "/registerGroup")
-    public ResponseEntity<?> InitialGroupCreation(@RequestBody Map<String, Object> json) {
+    public ResponseEntity<?> GroupCreation(@RequestBody Map<String, Object> json) {
         Group group = objectMapper.convertValue(json.get("group"), Group.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
         try {
@@ -50,7 +49,7 @@ public class GroupController {
     }
 
     @PostMapping(path = "/assignUserToGroup")
-    public ResponseEntity<?> InitialGroupConfig(@RequestBody Map<String, Object> json) {
+    public ResponseEntity<?> GroupConfig(@RequestBody Map<String, Object> json) {
         User user = objectMapper.convertValue(json.get("user"), User.class);
         Group group = objectMapper.convertValue(json.get("group"), Group.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);

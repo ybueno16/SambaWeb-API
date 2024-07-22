@@ -26,7 +26,15 @@ public class PasswordService {
         List<Process> processes = ProcessBuilder.startPipeline(List.of(
                 new ProcessBuilder(CommandConstants.ECHO, sudoAuthentication.getSudoPassword())
                         .redirectOutput(ProcessBuilder.Redirect.PIPE),
-                new ProcessBuilder(CommandConstants.SUDO, CommandConstants.SUDO_STDIN, CommandConstants.BASH, CommandConstants.EXECUTE_COMMAND, "echo '" + user.getUser() + ":" + user.getPassword() + "' | chpasswd")
+                new ProcessBuilder(CommandConstants.SUDO,
+                        CommandConstants.SUDO_STDIN,
+                        CommandConstants.BASH,
+                        CommandConstants.EXECUTE_COMMAND,
+                        "echo '"
+                                + user.getUser()
+                                + ":"
+                                + user.getPassword()
+                                + "' | chpasswd")
                         .redirectInput(ProcessBuilder.Redirect.PIPE)
                         .redirectError(ProcessBuilder.Redirect.INHERIT)
         ));
