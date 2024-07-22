@@ -120,14 +120,6 @@ public class UserService {
 
         );
 
-//        ProcessBuilder processBuilder =  processBuilderAdapter.command(
-//                CommandConstants.BASH,
-//                CommandConstants.EXECUTE_COMMAND,
-//                CommandConstants.SUDO,
-//                CommandConstants.USER_ADD_SMB,
-//                user.getUser()
-//        );
-
         Process process = processBuilder.start();
         OutputStream outputStream = process.getOutputStream();
         outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
