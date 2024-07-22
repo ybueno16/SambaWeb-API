@@ -13,4 +13,6 @@ public class CommandConstants {
     public static final String ECHO = "echo";
     public static final String GET_USER = "cat /etc/passwd | grep ";
     public static final String MKDIR = "mkdir";
+    public static final String USER_ADD_SMB = "smbpasswd -a";
+
 }

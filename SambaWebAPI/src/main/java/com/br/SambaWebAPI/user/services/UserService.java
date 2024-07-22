@@ -56,7 +56,12 @@ public class UserService {
     }
 
     public boolean removeUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
+        processBuilderAdapter.command("exit");
+
         ProcessBuilder processBuilder = processBuilderAdapter.command(
+                CommandConstants.ECHO,
+                sudoAuthentication.getSudoPassword(),
+                "\" | ",
                 CommandConstants.SUDO,
                 CommandConstants.SUDO_STDIN,
                 CommandConstants.USER_DEL,
@@ -81,7 +86,7 @@ public class UserService {
     }
 
     public boolean getUser(User user) throws Exception {
-        ProcessBuilder processBuilder = new ProcessBuilder(
+        ProcessBuilder processBuilder =  processBuilderAdapter.command(
                 CommandConstants.BASH,
                 CommandConstants.EXECUTE_COMMAND,
                 CommandConstants.GET_USER
@@ -95,5 +100,56 @@ public class UserService {
 
         int exitCode = process.waitFor();
         return exitCode == 0;
+    }
+
+    public boolean createSambaUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
+        processBuilderAdapter = new ProcessBuilderAdapterImpl();
+
+        createUser(user,sudoAuthentication);
+
+        ProcessBuilder processBuilder = processBuilderAdapter.command(
+                CommandConstants.BASH,
+                CommandConstants.EXECUTE_COMMAND,
+                CommandConstants.SUDO
+                        + " "
+                        + CommandConstants.SUDO_STDIN
+                        + " "
+                        + CommandConstants.USER_ADD_SMB
+                        + " "
+                        + user.getUser()
+
+        );
+
+//        ProcessBuilder processBuilder =  processBuilderAdapter.command(
+//                CommandConstants.BASH,
+//                CommandConstants.EXECUTE_COMMAND,
+//                CommandConstants.SUDO,
+//                CommandConstants.USER_ADD_SMB,
+//                user.getUser()
+//        );
+
+        Process process = processBuilder.start();
+        OutputStream outputStream = process.getOutputStream();
+        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+        outputStream.flush();
+
+
+        outputStream.write((user.getPassword() + "\n").getBytes());
+        outputStream.flush();
+
+
+        outputStream.write((user.getPassword() + "\n").getBytes());
+        outputStream.flush();
+        outputStream.close();
+
+        process.waitFor();
+
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+            throw UserCreationFactory.createException(exitCode);
+        }
+
+        return true;
+
     }
 }
