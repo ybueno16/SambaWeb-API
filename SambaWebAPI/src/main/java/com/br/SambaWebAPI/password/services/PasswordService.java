@@ -4,6 +4,7 @@ import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.password.factory.PasswordCreationFactory;
+import com.br.SambaWebAPI.utils.CommandConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,12 @@ public class PasswordService {
 
     public boolean createPassword(User user, SudoAuthentication sudoAuthentication) throws Exception {
         List<Process> processes = ProcessBuilder.startPipeline(List.of(
-                new ProcessBuilder("echo", sudoAuthentication.getSudoPassword())
+                new ProcessBuilder(CommandConstants.ECHO, sudoAuthentication.getSudoPassword())
                         .redirectOutput(ProcessBuilder.Redirect.PIPE),
-                new ProcessBuilder("sudo", "-S", "bash", "-c", "echo '" + user.getUser() + ":" + user.getPassword() + "' | chpasswd")
+                new ProcessBuilder(CommandConstants.SUDO, CommandConstants.SUDO_STDIN, CommandConstants.BASH, CommandConstants.EXECUTE_COMMAND, "echo '" + user.getUser() + ":" + user.getPassword() + "' | chpasswd")
                         .redirectInput(ProcessBuilder.Redirect.PIPE)
                         .redirectError(ProcessBuilder.Redirect.INHERIT)
         ));
-
         for (Process process : processes) {
             int exitCode = process.waitFor();
             if (exitCode != 0) {
