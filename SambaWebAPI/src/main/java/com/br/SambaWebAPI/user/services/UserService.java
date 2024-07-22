@@ -117,7 +117,6 @@ public class UserService {
                         + CommandConstants.USER_ADD_SMB
                         + " "
                         + user.getUser()
-
         );
 
         Process process = processBuilder.start();
@@ -125,10 +124,8 @@ public class UserService {
         outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
         outputStream.flush();
 
-
         outputStream.write((user.getPassword() + "\n").getBytes());
         outputStream.flush();
-
 
         outputStream.write((user.getPassword() + "\n").getBytes());
         outputStream.flush();
@@ -143,5 +140,36 @@ public class UserService {
 
         return true;
 
+    }
+
+    public boolean removeSambaUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
+        processBuilderAdapter = new ProcessBuilderAdapterImpl();
+
+        ProcessBuilder processBuilder = processBuilderAdapter.command(
+                CommandConstants.BASH,
+                CommandConstants.EXECUTE_COMMAND,
+                CommandConstants.SUDO
+                        + " "
+                        + CommandConstants.SUDO_STDIN
+                        + " "
+                        + CommandConstants.USER_DEL_SMB
+                        + " "
+                        + user.getUser()
+        );
+
+        Process process = processBuilder.start();
+        OutputStream outputStream = process.getOutputStream();
+        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+        outputStream.flush();
+        outputStream.close();
+
+        process.waitFor();
+
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+            throw UserCreationFactory.createException(exitCode);
+        }
+
+        return true;
     }
 }

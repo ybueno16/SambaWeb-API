@@ -94,4 +94,16 @@ public class UserController {
             return DefaultResponseEntityFactory.create("Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário samba.", null,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping(path = "/removeSambaUser")
+    public ResponseEntity<?> removeSambaUser(@RequestBody Map<String, Object> json){
+        User user = objectMapper.convertValue(json.get("user"), User.class);
+        SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+        try {
+            userService.removeSambaUser(user,sudoAuthentication);
+            return DefaultResponseEntityFactory.create("Usuario removido com sucesso!", user, HttpStatus.OK);
+        }  catch (Exception e) {
+            return DefaultResponseEntityFactory.create("Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário samba.", null,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
