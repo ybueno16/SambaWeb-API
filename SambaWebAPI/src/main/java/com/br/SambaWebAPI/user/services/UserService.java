@@ -73,7 +73,11 @@ public class UserService {
         process.waitFor();
 
         int exitCode = process.waitFor();
-        return exitCode == 0;
+        if (exitCode != 0) {
+            throw UserCreationFactory.createException(exitCode);
+        }
+
+        return true;
     }
 
     public boolean getUser(User user) throws Exception {

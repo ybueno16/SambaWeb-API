@@ -9,8 +9,6 @@ import com.br.SambaWebAPI.user.exceptions.UserCreationException;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<?> InitialUserCreation(@RequestBody Map<String, Object> json) throws UserCreationFactory {
+    public ResponseEntity<?> InitialUserCreation(@RequestBody Map<String, Object> json) {
         User user = objectMapper.convertValue(json.get("user"), User.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
         try {
@@ -53,8 +51,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/user")
-    public ResponseEntity<?> getUser(@RequestBody User user) throws UserCreationFactory, UserCreationException,
-            IOException, InterruptedException {
+    public ResponseEntity<?> getUser(@RequestBody User user) {
         try{
             userService.getUser(user);
             return DefaultResponseEntityFactory.create("Usuario existe!", user, HttpStatus.OK);
@@ -66,6 +63,21 @@ public class UserController {
             return DefaultResponseEntityFactory.create(
                     "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.",
                     null,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(path = "/removeUser")
+    public ResponseEntity<?> removeUser(@RequestBody Map<String, Object> json){
+        User user = objectMapper.convertValue(json.get("user"), User.class);
+        SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+
+        try {
+            userService.removeUser(user,sudoAuthentication);
+            return DefaultResponseEntityFactory.create("Usuario removido com sucesso!", user, HttpStatus.OK);
+        } catch (UserCreationException e) {
+            return DefaultResponseEntityFactory.create(e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+        } catch (Exception e) {
+            return DefaultResponseEntityFactory.create("Erro genérico. Ocorreu um erro desconhecido durante a remoção do usuário.", null,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
