@@ -18,17 +18,17 @@ public class PermissionService {
         }
         for (Integer value : ownerPermission.values()) {
             if (value < 0 || value > 1) {
-                throw new IllegalArgumentException("Os valores em mapping1 devem estar entre 0 e 1.");
+                throw new IllegalArgumentException("Os valores devem estar entre 0 e 1.");
             }
         }
         for (Integer value : groupPermission.values()) {
             if (value < 0 || value > 1) {
-                throw new IllegalArgumentException("Os valores em mapping2 devem estar entre 0 e 1.");
+                throw new IllegalArgumentException("Os valores devem estar entre 0 e 1.");
             }
         }
         for (Integer value : publicPermission.values()) {
             if (value < 0 || value > 1) {
-                throw new IllegalArgumentException("Os valores em mapping3 devem estar entre 0 e 1.");
+                throw new IllegalArgumentException("Os valores devem estar entre 0 e 1.");
             }
         }
         return true;
