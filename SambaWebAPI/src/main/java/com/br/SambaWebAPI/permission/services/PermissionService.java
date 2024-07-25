@@ -1,60 +1,93 @@
 package com.br.SambaWebAPI.permission.services;
 
-import com.br.SambaWebAPI.permission.enums.GroupPermissionEnum;
-import com.br.SambaWebAPI.permission.enums.OwnerPermissionEnum;
-import com.br.SambaWebAPI.permission.enums.PublicPermissionEnum;
+import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
+import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
+import com.br.SambaWebAPI.folder.models.Folder;
+import com.br.SambaWebAPI.folder.services.FolderService;
+import com.br.SambaWebAPI.password.models.SudoAuthentication;
+import com.br.SambaWebAPI.permission.exceptions.PermissionAddException;
+import com.br.SambaWebAPI.permission.factory.PermissionAddFactory;
+import com.br.SambaWebAPI.permission.models.GroupPermission;
+import com.br.SambaWebAPI.permission.models.OwnerPermission;
+import com.br.SambaWebAPI.permission.models.PublicPermission;
+import com.br.SambaWebAPI.utils.CommandConstants;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
-import java.util.EnumMap;
+import java.io.IOException;
+import java.io.OutputStream;
 
+@Service
 public class PermissionService {
 
-    public boolean chmodMapper(
-            EnumMap<OwnerPermissionEnum, Integer> ownerPermission,
-            EnumMap<GroupPermissionEnum, Integer> groupPermission,
-            EnumMap<PublicPermissionEnum, Integer> publicPermission){
+    private ProcessBuilderAdapter processBuilderAdapter;
+    private FolderService folderService;
 
-        if(ownerPermission.size() != 3 || groupPermission.size() != 3 || publicPermission.size() != 3){
-            throw new IllegalArgumentException("Cada mapeamento deve ter exatamente 3 valores.");
-        }
-        for (Integer value : ownerPermission.values()) {
-            if (value < 0 || value > 1) {
-                throw new IllegalArgumentException("Os valores devem estar entre 0 e 1.");
-            }
-        }
-        for (Integer value : groupPermission.values()) {
-            if (value < 0 || value > 1) {
-                throw new IllegalArgumentException("Os valores devem estar entre 0 e 1.");
-            }
-        }
-        for (Integer value : publicPermission.values()) {
-            if (value < 0 || value > 1) {
-                throw new IllegalArgumentException("Os valores devem estar entre 0 e 1.");
-            }
-        }
-        return true;
+    @Autowired
+    public PermissionService(ProcessBuilderAdapter processBuilderAdapter, FolderService folderService)
+            throws IOException, InterruptedException {
+        this.processBuilderAdapter = processBuilderAdapter;
+        this.folderService = folderService;
+        this.homeDir = folderService.getHomeDir(); // Initialize homeDir here
     }
 
-    public void chmodCalculator(EnumMap<OwnerPermissionEnum,  Integer> ownerPermission,
-                                   EnumMap<GroupPermissionEnum, Integer> groupPermission,
-                                   EnumMap<PublicPermissionEnum, Integer> publicPermission){
+    private String homeDir;
 
-        if(chmodMapper(ownerPermission,groupPermission,publicPermission)){
-            Integer ownerPermissionValue = (int) ((ownerPermission.get(OwnerPermissionEnum.READ)* Math.pow(2,2)
-                    + ownerPermission.get(OwnerPermissionEnum.WRITE) * Math.pow(2,1)
-                    + ownerPermission.get(OwnerPermissionEnum.EXECUTE) * Math.pow(2,0)));
+    public String chmodCalculator(OwnerPermission ownerPermission,
+                                  GroupPermission groupPermission,
+                                  PublicPermission publicPermission) {
 
-            Integer groupPermissionValue = (int) ((groupPermission.get(GroupPermissionEnum.READ)* Math.pow(2,2)
-                    + groupPermission.get(GroupPermissionEnum.WRITE) * Math.pow(2,1)
-                    + groupPermission.get(GroupPermissionEnum.EXECUTE) * Math.pow(2,0)));
+        int ownerPermissionValue = (int) ((ownerPermission.getWrite() * Math.pow(2, 2))
+                + (ownerPermission.getRead() * Math.pow(2, 1))
+                + ownerPermission.getExecute());
 
-            Integer publicPermissionValue = (int) ((publicPermission.get(PublicPermissionEnum.READ)* Math.pow(2,2)
-                    + publicPermission.get(PublicPermissionEnum.WRITE) * Math.pow(2,1)
-                    + publicPermission.get(PublicPermissionEnum.EXECUTE) * Math.pow(2,0)));
+        int groupPermissionValue = (int) ((groupPermission.getWrite() * Math.pow(2, 2))
+                + (groupPermission.getRead() * Math.pow(2, 1))
+                + groupPermission.getExecute());
 
-            String chmodValue = String.valueOf(ownerPermissionValue)
-                    + String.valueOf(groupPermissionValue)
-                    + String.valueOf(ownerPermissionValue) ;
-            System.out.println(chmodValue);
+        int publicPermissionValue = (int) ((publicPermission.getWrite() * Math.pow(2, 2))
+                + (publicPermission.getRead() * Math.pow(2, 1))
+                + publicPermission.getExecute());
+
+        return String.format("%03o",
+                (ownerPermissionValue * 64)
+                        + (groupPermissionValue * 8)
+                        + publicPermissionValue);
+    }
+
+    public void managePermission(OwnerPermission ownerPermission,
+                                 GroupPermission groupPermission,
+                                 PublicPermission publicPermission,
+                                 SudoAuthentication sudoAuthentication,
+                                 Folder folder) throws Exception, PermissionAddException {
+        processBuilderAdapter = new ProcessBuilderAdapterImpl();
+
+        processBuilderAdapter.command("exit");
+        String getPermissionCode = chmodCalculator(ownerPermission, groupPermission, publicPermission);
+
+        ProcessBuilder processBuilder = processBuilderAdapter.command(
+                CommandConstants.SUDO,
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.CHMOD,
+                getPermissionCode,
+                homeDir + "/" + folder.getPath()
+        ).redirectInput(ProcessBuilder.Redirect.PIPE);
+
+        Process process = processBuilder.start();
+
+        OutputStream outputStream = process.getOutputStream();
+        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+        outputStream.flush();
+        outputStream.close();
+        process.waitFor();
+
+        int exitCode = process.waitFor();
+
+        if (exitCode != 0) {
+            throw PermissionAddFactory.createException();
         }
     }
+
 }

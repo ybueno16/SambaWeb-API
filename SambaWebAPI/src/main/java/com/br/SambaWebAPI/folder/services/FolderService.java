@@ -2,17 +2,14 @@ package com.br.SambaWebAPI.folder.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
+import com.br.SambaWebAPI.folder.factory.FolderCreationFactory;
 import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.user.factory.UserCreationFactory;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.util.List;
 
 @Service
 public class FolderService {
@@ -24,7 +21,7 @@ public class FolderService {
         this.processBuilderAdapter = processBuilderAdapter;
     }
 
-    public boolean createFolder(Folder folder, SudoAuthentication sudoAuthentication) throws Exception{
+    public void createFolder(Folder folder, SudoAuthentication sudoAuthentication) throws Exception{
         processBuilderAdapter = new ProcessBuilderAdapterImpl();
 
         processBuilderAdapter.command("exit");
@@ -48,13 +45,12 @@ public class FolderService {
         int exitCode = process.waitFor();
 
         if (exitCode != 0) {
-            throw UserCreationFactory.createException(exitCode);
+            throw FolderCreationFactory.createException();
         }
 
-        return true;
     }
 
-    private String getHomeDir() throws IOException, InterruptedException {
+    public String getHomeDir() throws IOException, InterruptedException {
         ProcessBuilder processBuilder = processBuilderAdapter.command(
                 CommandConstants.BASH,
                 CommandConstants.EXECUTE_COMMAND,

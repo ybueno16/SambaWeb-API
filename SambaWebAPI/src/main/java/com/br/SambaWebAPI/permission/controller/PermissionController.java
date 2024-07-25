@@ -1,12 +1,9 @@
-package com.br.SambaWebAPI.folder.controllers;
+package com.br.SambaWebAPI.permission.controller;
 
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
-import com.br.SambaWebAPI.folder.exceptions.FolderCreationException;
 import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.folder.services.FolderService;
-import com.br.SambaWebAPI.group.exceptions.AddUserToGroupException;
-import com.br.SambaWebAPI.group.services.GroupService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.permission.exceptions.PermissionAddException;
 import com.br.SambaWebAPI.permission.models.GroupPermission;
@@ -23,37 +20,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
-
 @RestController
-@RequestMapping(Global.API_URL_SAMBA + "/folder-config")
-public class FolderController {
+@RequestMapping(Global.API_URL_SAMBA + "/permission-config")
+public class PermissionController {
+
 
     final private ObjectMapper objectMapper;
-    final private FolderService folderService;
     final private PermissionService permissionService;
 
     @Autowired
-    public FolderController(ObjectMapper objectMapper, FolderService folderService, PermissionService permissionService) {
+    public PermissionController(ObjectMapper objectMapper, PermissionService permissionService) {
         this.objectMapper = objectMapper;
-        this.folderService = folderService;
         this.permissionService = permissionService;
     }
-
-    @PostMapping(path = "/createFolder")
-    public ResponseEntity<?> folderCreation(@RequestBody Map<String,Object> json){
-        Folder folder = objectMapper.convertValue(json.get("folder"),Folder.class);
+    @PostMapping
+    public ResponseEntity<?> permissionManager(@RequestBody Map<String, Map<String, String>> json){
+        OwnerPermission ownerPermission = objectMapper.convertValue(json.get("ownerPermission"), OwnerPermission.class);
+        GroupPermission groupPermission = objectMapper.convertValue(json.get("groupPermission"), GroupPermission.class);
+        PublicPermission publicPermission = objectMapper.convertValue(json.get("publicPermission"), PublicPermission.class);
+        Folder folder = objectMapper.convertValue(json.get("folder"), Folder.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
-
         try{
-            folderService.createFolder(folder,sudoAuthentication);
-            return DefaultResponseEntityFactory.create("Pasta criada com sucesso!", folder, HttpStatus.OK);
+            permissionService.managePermission(ownerPermission,groupPermission,publicPermission,sudoAuthentication,folder);
+            return DefaultResponseEntityFactory.create("Grupo associado ao usuario com sucesso!",ownerPermission, HttpStatus.OK);
+
+        } catch (PermissionAddException e) {
+            return DefaultResponseEntityFactory.create(e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
         } catch (Exception e) {
-            return DefaultResponseEntityFactory.create(
-                    "Erro genérico. Ocorreu um erro desconhecido durante a criação da pasta.",
-                    null,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return DefaultResponseEntityFactory.create("Erro genérico. Ocorreu um erro desconhecido durante a criação do grupo.", null,HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
+
     }
-
-
 }
