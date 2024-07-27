@@ -1,6 +1,5 @@
 package com.br.SambaWebAPI.folder.enums;
 
-import com.br.SambaWebAPI.user.enums.UserCreationErrorCode;
 import com.br.SambaWebAPI.utils.ErrorCode;
 import org.springframework.http.HttpStatus;
 

@@ -3,7 +3,6 @@ package com.br.SambaWebAPI.permission.controller;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.folder.models.Folder;
-import com.br.SambaWebAPI.folder.services.FolderService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.permission.exceptions.PermissionAddException;
 import com.br.SambaWebAPI.permission.models.GroupPermission;
@@ -40,7 +39,7 @@ public class PermissionController {
         PublicPermission publicPermission = objectMapper.convertValue(json.get("publicPermission"), PublicPermission.class);
         Folder folder = objectMapper.convertValue(json.get("folder"), Folder.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
-        try{
+        try {
             permissionService.managePermission(ownerPermission,groupPermission,publicPermission,sudoAuthentication,folder);
             return DefaultResponseEntityFactory.create("Garantido a permissão correta!",folder, HttpStatus.OK);
         } catch (PermissionAddException e) {

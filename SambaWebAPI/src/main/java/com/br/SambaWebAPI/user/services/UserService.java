@@ -1,18 +1,14 @@
 package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
-import com.br.SambaWebAPI.password.factory.PasswordCreationFactory;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
-import com.br.SambaWebAPI.user.exceptions.UserCreationException;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.*;
-import java.util.List;
 
 @Service
 public class UserService {

@@ -1,6 +1,5 @@
 package com.br.SambaWebAPI.permission.exceptions;
 
-import com.br.SambaWebAPI.password.enums.PasswordCreationErrorCode;
 import com.br.SambaWebAPI.permission.enums.PermissionAddErrorCode;
 
 public class PermissionAddException extends Throwable {

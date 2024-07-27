@@ -2,16 +2,9 @@ package com.br.SambaWebAPI.folder.controllers;
 
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
-import com.br.SambaWebAPI.folder.exceptions.FolderCreationException;
 import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.folder.services.FolderService;
-import com.br.SambaWebAPI.group.exceptions.AddUserToGroupException;
-import com.br.SambaWebAPI.group.services.GroupService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.permission.exceptions.PermissionAddException;
-import com.br.SambaWebAPI.permission.models.GroupPermission;
-import com.br.SambaWebAPI.permission.models.OwnerPermission;
-import com.br.SambaWebAPI.permission.models.PublicPermission;
 import com.br.SambaWebAPI.permission.services.PermissionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

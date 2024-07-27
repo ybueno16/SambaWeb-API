@@ -8,7 +8,5 @@ public class SambaWebApiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SambaWebApiApplication.class, args);
-
     }
-
 }

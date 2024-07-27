@@ -7,10 +7,6 @@ import com.br.SambaWebAPI.password.factory.PasswordCreationFactory;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 @Service
