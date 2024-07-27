@@ -33,7 +33,7 @@ public class PermissionController {
         this.objectMapper = objectMapper;
         this.permissionService = permissionService;
     }
-    @PostMapping
+    @PostMapping(path = "managePermission")
     public ResponseEntity<?> permissionManager(@RequestBody Map<String, Map<String, String>> json){
         OwnerPermission ownerPermission = objectMapper.convertValue(json.get("ownerPermission"), OwnerPermission.class);
         GroupPermission groupPermission = objectMapper.convertValue(json.get("groupPermission"), GroupPermission.class);
@@ -42,13 +42,11 @@ public class PermissionController {
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
         try{
             permissionService.managePermission(ownerPermission,groupPermission,publicPermission,sudoAuthentication,folder);
-            return DefaultResponseEntityFactory.create("Grupo associado ao usuario com sucesso!",ownerPermission, HttpStatus.OK);
-
+            return DefaultResponseEntityFactory.create("Garantido a permissão correta!",folder, HttpStatus.OK);
         } catch (PermissionAddException e) {
             return DefaultResponseEntityFactory.create(e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
         } catch (Exception e) {
             return DefaultResponseEntityFactory.create("Erro genérico. Ocorreu um erro desconhecido durante a criação do grupo.", null,HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
 
     }

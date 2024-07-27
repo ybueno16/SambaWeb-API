@@ -2,6 +2,7 @@ package com.br.SambaWebAPI.permission.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
+import com.br.SambaWebAPI.folder.exceptions.FolderCreationException;
 import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.folder.services.FolderService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -27,10 +28,10 @@ public class PermissionService {
 
     @Autowired
     public PermissionService(ProcessBuilderAdapter processBuilderAdapter, FolderService folderService)
-            throws IOException, InterruptedException {
+            throws IOException, InterruptedException, FolderCreationException {
         this.processBuilderAdapter = processBuilderAdapter;
         this.folderService = folderService;
-        this.homeDir = folderService.getHomeDir(); // Initialize homeDir here
+        this.homeDir = folderService.getHomeDir();
     }
 
     private String homeDir;
