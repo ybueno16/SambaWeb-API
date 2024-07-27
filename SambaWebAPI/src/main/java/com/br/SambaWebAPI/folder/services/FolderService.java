@@ -2,6 +2,7 @@ package com.br.SambaWebAPI.folder.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
+import com.br.SambaWebAPI.folder.exceptions.FolderCreationException;
 import com.br.SambaWebAPI.folder.factory.FolderCreationFactory;
 import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -50,12 +51,12 @@ public class FolderService {
 
     }
 
-    public String getHomeDir() throws IOException, InterruptedException {
+    public String getHomeDir() throws IOException, InterruptedException, FolderCreationException {
         ProcessBuilder processBuilder = processBuilderAdapter.command(
+                CommandConstants.SUDO,
                 CommandConstants.BASH,
                 CommandConstants.EXECUTE_COMMAND,
-                CommandConstants.ECHO,
-                "$HOME"
+                CommandConstants.ECHO + " " + "$HOME"
         );
 
         Process process = processBuilder.start();
@@ -65,11 +66,16 @@ public class FolderService {
 
         String line;
         String homeDir = "";
-        while ((line = reader.readLine())!= null) {
+        while ((line = reader.readLine()) != null) {
             homeDir = line.trim();
         }
 
-        process.waitFor();
+
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+        throw FolderCreationFactory.createException();
+        }
+
         return homeDir;
     }
 }

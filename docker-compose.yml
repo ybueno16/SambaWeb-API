@@ -8,5 +8,6 @@ services:
     ports:
       - "139:139"
       - "445:445"
+      - "8080:8080"
     volumes:
       - ./SambaWebAPI:/SambaWeb/SambaWebAPI
