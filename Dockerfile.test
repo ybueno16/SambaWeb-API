@@ -1,13 +1,10 @@
 FROM ubuntu:latest
 
 RUN apt-get update && apt-get install -y samba
-
 RUN apt-get install -y sudo
-
+RUN apt-get install samba samba-common-bin acl -y
 RUN apt-get install -y vim
-
 RUN apt-get install -y links
-
 RUN mkdir -p /SambaWeb
 
 WORKDIR /SambaWeb
@@ -19,6 +16,9 @@ ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH $PATH:$JAVA_HOME/bin
 
 RUN java -version
+
+RUN service smbd start
+RUN service nmbd start
 
 # Copiar o script de entrypoint
 COPY entrypoint.test.sh /entrypoint.test.sh
