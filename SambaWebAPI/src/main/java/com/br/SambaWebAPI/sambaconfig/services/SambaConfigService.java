@@ -18,18 +18,26 @@ public class SambaConfigService {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                if(line.contains("[" + sambaConfig.getSection() + "]")){
-                    System.out.println(line);
+
+                boolean comeca = line.startsWith(";" + sambaConfig.getSection() + "]");
+                boolean comecaDiff = line.startsWith(";" +"[" + sambaConfig.getSection() + "]");
+                if(comeca || comecaDiff){
                     for (String sectionParam : sambaConfig.getSectionParams()) {
-                        writer.newLine();
-                        writer.write(Arrays.toString((sectionParam + "\n").toCharArray()));
+                        writer.write(sectionParam + "\n");
+//                        System.out.println(line);
+                        System.out.println("section:"+sambaConfig.getSection());
+                        System.out.println("sectionParams:"+sambaConfig.getSectionParams());
+
                     }
                 } else {
-                    System.out.println(line);
-                    writer.newLine();
                     writer.write("[" + sambaConfig.getSection() + "]" + "\n");
                     for (String sectionParam : sambaConfig.getSectionParams()) {
-                        writer.write(Arrays.toString((sectionParam + "\n").toCharArray()));
+                        writer.write(sectionParam + "\n");
+//                        System.out.println("sectionInvalid:"+sambaConfig.getSection());
+//                        System.out.println("sectionParamsInvalid:"+sambaConfig.getSectionParams());;
+//                        System.out.println(line);
+
+
                     }
                 }
             }

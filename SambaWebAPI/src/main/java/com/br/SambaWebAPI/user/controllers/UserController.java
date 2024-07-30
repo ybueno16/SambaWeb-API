@@ -63,7 +63,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(path = "/removeUser")
+    @DeleteMapping(path = "/removeUser")
     public ResponseEntity<?> removeUser(@RequestBody Map<String, Object> json){
         User user = objectMapper.convertValue(json.get("user"), User.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
@@ -92,7 +92,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(path = "/removeSambaUser")
+    @DeleteMapping(path = "/removeSambaUser")
     public ResponseEntity<?> removeSambaUser(@RequestBody Map<String, Object> json){
         User user = objectMapper.convertValue(json.get("user"), User.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);

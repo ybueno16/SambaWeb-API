@@ -33,9 +33,8 @@ public class SambaConfigController {
 
     @PostMapping(path = "/configureSambaFile")
     public ResponseEntity<?> configureSambaFile(@RequestBody Map<String,Object> json){
-        SambaConfig sambaConfig = objectMapper.convertValue(json.get("section"), SambaConfig.class);
+        SambaConfig sambaConfig = objectMapper.convertValue(json.get("sambaConfig"), SambaConfig.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
-
         try{
             sambaConfigService.sambaConfigWriteNewConfig(sambaConfig,sudoAuthentication);
             return DefaultResponseEntityFactory.create("Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
@@ -48,7 +47,7 @@ public class SambaConfigController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e){
             return DefaultResponseEntityFactory.create(
-                    "Erro genérico. Ocorreu um erro desconhecido durante a criação da pasta.",
+                    "Erro genérico. Ocorreu um erro desconhecido durante a escrita no arquivo." + Global.SMB_CONF_PATH + " " + e,
                     null,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
