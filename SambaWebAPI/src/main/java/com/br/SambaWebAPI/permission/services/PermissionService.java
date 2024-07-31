@@ -12,81 +12,88 @@ import com.br.SambaWebAPI.permission.models.GroupPermission;
 import com.br.SambaWebAPI.permission.models.OwnerPermission;
 import com.br.SambaWebAPI.permission.models.PublicPermission;
 import com.br.SambaWebAPI.utils.CommandConstants;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.io.OutputStream;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PermissionService {
 
-    private ProcessBuilderAdapter processBuilderAdapter;
-    private FolderService folderService;
+  private ProcessBuilderAdapter processBuilderAdapter;
+  private FolderService folderService;
 
-    @Autowired
-    public PermissionService(ProcessBuilderAdapter processBuilderAdapter, FolderService folderService)
-            throws IOException, InterruptedException, FolderCreationException {
-        this.processBuilderAdapter = processBuilderAdapter;
-        this.folderService = folderService;
-        this.homeDir = folderService.getHomeDir();
-    }
+  private String homeDir;
 
-    private String homeDir;
+  @Autowired
+  public PermissionService(ProcessBuilderAdapter processBuilderAdapter, FolderService folderService)
+      throws IOException, InterruptedException, FolderCreationException {
+    this.processBuilderAdapter = processBuilderAdapter;
+    this.folderService = folderService;
+    this.homeDir = folderService.getHomeDir();
+  }
 
-    public String chmodCalculator(OwnerPermission ownerPermission,
-                                  GroupPermission groupPermission,
-                                  PublicPermission publicPermission) {
+  public String chmodCalculator(
+      OwnerPermission ownerPermission,
+      GroupPermission groupPermission,
+      PublicPermission publicPermission) {
 
-        int ownerPermissionValue = (int) ((ownerPermission.getWrite() * Math.pow(2, 2))
+    int ownerPermissionValue =
+        (int)
+            ((ownerPermission.getWrite() * Math.pow(2, 2))
                 + (ownerPermission.getRead() * Math.pow(2, 1))
                 + ownerPermission.getExecute());
 
-        int groupPermissionValue = (int) ((groupPermission.getWrite() * Math.pow(2, 2))
+    int groupPermissionValue =
+        (int)
+            ((groupPermission.getWrite() * Math.pow(2, 2))
                 + (groupPermission.getRead() * Math.pow(2, 1))
                 + groupPermission.getExecute());
 
-        int publicPermissionValue = (int) ((publicPermission.getWrite() * Math.pow(2, 2))
+    int publicPermissionValue =
+        (int)
+            ((publicPermission.getWrite() * Math.pow(2, 2))
                 + (publicPermission.getRead() * Math.pow(2, 1))
                 + publicPermission.getExecute());
 
-        return String.format("%03o",
-                (ownerPermissionValue * 64)
-                        + (groupPermissionValue * 8)
-                        + publicPermissionValue);
-    }
+    return String.format(
+        "%03o", (ownerPermissionValue * 64) + (groupPermissionValue * 8) + publicPermissionValue);
+  }
 
-    public void managePermission(OwnerPermission ownerPermission,
-                                 GroupPermission groupPermission,
-                                 PublicPermission publicPermission,
-                                 SudoAuthentication sudoAuthentication,
-                                 Folder folder) throws Exception, PermissionAddException {
-        processBuilderAdapter = new ProcessBuilderAdapterImpl();
+  public void managePermission(
+      OwnerPermission ownerPermission,
+      GroupPermission groupPermission,
+      PublicPermission publicPermission,
+      SudoAuthentication sudoAuthentication,
+      Folder folder)
+      throws Exception, PermissionAddException {
+    processBuilderAdapter = new ProcessBuilderAdapterImpl();
 
-        processBuilderAdapter.command("exit");
-        String getPermissionCode = chmodCalculator(ownerPermission, groupPermission, publicPermission);
+    processBuilderAdapter.command("exit");
+    String getPermissionCode = chmodCalculator(ownerPermission, groupPermission, publicPermission);
 
-        ProcessBuilder processBuilder = processBuilderAdapter.command(
+    ProcessBuilder processBuilder =
+        processBuilderAdapter
+            .command(
                 CommandConstants.SUDO,
                 CommandConstants.SUDO_STDIN,
                 CommandConstants.CHMOD,
                 getPermissionCode,
-                homeDir + "/" + folder.getPath()
-        ).redirectInput(ProcessBuilder.Redirect.PIPE);
+                homeDir + "/" + folder.getPath())
+            .redirectInput(ProcessBuilder.Redirect.PIPE);
 
-        Process process = processBuilder.start();
+    Process process = processBuilder.start();
 
-        OutputStream outputStream = process.getOutputStream();
-        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
-        outputStream.flush();
-        outputStream.close();
-        process.waitFor();
+    OutputStream outputStream = process.getOutputStream();
+    outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+    outputStream.flush();
+    outputStream.close();
+    process.waitFor();
 
-        int exitCode = process.waitFor();
+    int exitCode = process.waitFor();
 
-        if (exitCode != 0) {
-            throw PermissionAddFactory.createException();
-        }
+    if (exitCode != 0) {
+      throw PermissionAddFactory.createException();
     }
-
+  }
 }
