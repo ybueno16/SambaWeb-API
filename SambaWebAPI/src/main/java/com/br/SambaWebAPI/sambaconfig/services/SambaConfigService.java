@@ -12,39 +12,34 @@ import java.util.Arrays;
 @Service
 public class SambaConfigService {
     public void sambaConfigWriteNewConfig(SambaConfig sambaConfig, SudoAuthentication sudoAuthentication) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(Global.SMB_CONF_PATH,true));
+        System.out.println("Abrindo arquivo: " + Global.SMB_CONF_PATH);
+        BufferedWriter writer = new BufferedWriter(new FileWriter(Global.SMB_CONF_PATH, true));
         BufferedReader reader = new BufferedReader(new FileReader(Global.SMB_CONF_PATH));
+        boolean sectionExists = false;
+
         try {
             String line;
-
-            while ((line = reader.readLine()) != null) {
-
-                boolean comeca = line.startsWith(";" + sambaConfig.getSection() + "]");
-                boolean comecaDiff = line.startsWith(";" +"[" + sambaConfig.getSection() + "]");
-                if(comeca || comecaDiff){
+            while ((line = reader.readLine())!= null) {
+                if (line.startsWith("[" + sambaConfig.getSection() + "]")) {
+                    sectionExists = true;
                     for (String sectionParam : sambaConfig.getSectionParams()) {
                         writer.write(sectionParam + "\n");
-//                        System.out.println(line);
-                        System.out.println("section:"+sambaConfig.getSection());
-                        System.out.println("sectionParams:"+sambaConfig.getSectionParams());
-
-                    }
-                } else {
-                    writer.write("[" + sambaConfig.getSection() + "]" + "\n");
-                    for (String sectionParam : sambaConfig.getSectionParams()) {
-                        writer.write(sectionParam + "\n");
-//                        System.out.println("sectionInvalid:"+sambaConfig.getSection());
-//                        System.out.println("sectionParamsInvalid:"+sambaConfig.getSectionParams());;
-//                        System.out.println(line);
-
-
                     }
                 }
             }
 
+            if (!sectionExists) {
+                writer.write("\n[" + sambaConfig.getSection() + "]\n");
+                for (String sectionParam : sambaConfig.getSectionParams()) {
+                    writer.write(sectionParam + "\n");
+                }
+            }
+
             reader.close();
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println(e);
         }
     }
 }

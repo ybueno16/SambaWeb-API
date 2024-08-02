@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 public class PermissionService {
 
   private ProcessBuilderAdapter processBuilderAdapter;
-  private FolderService folderService;
+
+  @Autowired
+  FolderService folderService;
 
   private String homeDir;
 
