@@ -23,7 +23,6 @@ import java.util.Map;
 @RequestMapping(Global.API_URL_SAMBA + "/permission-config")
 public class PermissionController {
 
-
     final private ObjectMapper objectMapper;
     final private PermissionService permissionService;
 
@@ -32,6 +31,7 @@ public class PermissionController {
         this.objectMapper = objectMapper;
         this.permissionService = permissionService;
     }
+
     @PostMapping(path = "managePermission")
     public ResponseEntity<?> permissionManager(@RequestBody Map<String, Map<String, String>> json){
         OwnerPermission ownerPermission = objectMapper.convertValue(json.get("ownerPermission"), OwnerPermission.class);
@@ -47,6 +47,5 @@ public class PermissionController {
         } catch (Exception e) {
             return DefaultResponseEntityFactory.create("Erro genérico. Ocorreu um erro desconhecido durante a criação do grupo.", null,HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 }

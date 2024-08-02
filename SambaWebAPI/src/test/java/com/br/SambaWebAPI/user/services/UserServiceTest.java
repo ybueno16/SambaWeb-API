@@ -47,7 +47,7 @@ class UserServiceTest {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
         sudoAuthentication.setSudoPassword("senhaforte123");
-        user.setUser("sambauser");
+        user.setUser("sambauserteste123");
         boolean sucess = userService.createUser(user, sudoAuthentication);
         assertTrue(sucess);
     }

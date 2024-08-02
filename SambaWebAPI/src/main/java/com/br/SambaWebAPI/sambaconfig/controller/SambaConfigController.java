@@ -27,8 +27,6 @@ public class SambaConfigController {
     public SambaConfigController(ObjectMapper objectMapper, SambaConfigService sambaConfigService){
         this.objectMapper = objectMapper;
         this.sambaConfigService = sambaConfigService;
-
-
     }
 
     @PostMapping(path = "/configureSambaFile")
@@ -38,7 +36,6 @@ public class SambaConfigController {
         try{
             sambaConfigService.sambaConfigWriteNewConfig(sambaConfig,sudoAuthentication);
             return DefaultResponseEntityFactory.create("Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
-
 
         } catch (IOException e) {
             return DefaultResponseEntityFactory.create(
@@ -51,6 +48,5 @@ public class SambaConfigController {
                     null,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 }
