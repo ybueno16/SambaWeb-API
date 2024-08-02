@@ -29,7 +29,7 @@ public class SambaConfigController {
         this.sambaConfigService = sambaConfigService;
     }
 
-    @PostMapping(path = "/configureSambaFile")
+    @PostMapping(path = "/writeSambaFile")
     public ResponseEntity<?> configureSambaFile(@RequestBody Map<String,Object> json){
         SambaConfig sambaConfig = objectMapper.convertValue(json.get("sambaConfig"), SambaConfig.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
