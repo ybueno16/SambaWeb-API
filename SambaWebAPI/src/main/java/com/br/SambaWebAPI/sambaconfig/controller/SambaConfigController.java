@@ -9,10 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Map;
@@ -30,11 +27,31 @@ public class SambaConfigController {
     }
 
     @PostMapping(path = "/writeSambaFile")
-    public ResponseEntity<?> configureSambaFile(@RequestBody Map<String,Object> json){
+    public ResponseEntity<?> writeSambaFile(@RequestBody Map<String,Object> json){
         SambaConfig sambaConfig = objectMapper.convertValue(json.get("sambaConfig"), SambaConfig.class);
         SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
         try{
             sambaConfigService.sambaConfigWriteNewConfig(sambaConfig,sudoAuthentication);
+            return DefaultResponseEntityFactory.create("Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
+
+        } catch (IOException e) {
+            return DefaultResponseEntityFactory.create(
+                    "Ocorreu um erro na escrita do arquivo. " + e,
+                    null,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e){
+            return DefaultResponseEntityFactory.create(
+                    "Erro genérico. Ocorreu um erro desconhecido durante a escrita no arquivo." + Global.SMB_CONF_PATH + " " + e,
+                    null,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PatchMapping(path = "/editSambaFile")
+    public ResponseEntity<?> editSambaFile(@RequestBody Map<String,Object> json){
+        SambaConfig sambaConfig = objectMapper.convertValue(json.get("sambaConfig"), SambaConfig.class);
+        SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+        try{
+            sambaConfigService.sambaConfigEditConfig(sambaConfig,sudoAuthentication);
             return DefaultResponseEntityFactory.create("Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
 
         } catch (IOException e) {
