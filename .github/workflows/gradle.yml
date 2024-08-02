@@ -1,0 +1,24 @@
+name: Integration Tests
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Run integration tests
+        run: |
+         cd SambaWebAPI
+         ./gradlew test
