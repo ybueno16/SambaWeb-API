@@ -43,6 +43,11 @@ class UserServiceTest {
 
 
     @Test
+    @DisplayName("""
+        Dado o desejo do usuario criar o usuario
+        quando o usuário realizar a criação de usuário
+        então deve realizar a criação de usuario com sucesso
+        """)
     void createUser() throws Exception {
         User user = new User();
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
