@@ -14,11 +14,11 @@ public class SambaConfigService {
             SambaConfig sambaConfig,
             SudoAuthentication sudoAuthentication)
             throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(Global.SMB_CONF_PATH, true));
-        BufferedReader reader = new BufferedReader(new FileReader(Global.SMB_CONF_PATH));
+
         boolean sectionExists = false;
 
-        try {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Global.SMB_CONF_PATH, true));
+             BufferedReader reader = new BufferedReader(new FileReader(Global.SMB_CONF_PATH))){
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("[" + sambaConfig.getSection() + "]")) {
@@ -36,52 +36,42 @@ public class SambaConfigService {
                 }
             }
 
-            reader.close();
-            writer.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     public void sambaConfigEditConfig(
             SambaConfig sambaConfig,
             SudoAuthentication sudoAuthentication)
             throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(Global.SMB_CONF_PATH, true));
-        BufferedReader reader = new BufferedReader(new FileReader(Global.SMB_CONF_PATH));
-        StringBuffer inputBuffer = new StringBuffer();
-        String inputStr = inputBuffer.toString();
-        boolean sectionExists = false;
-        String line;
 
-        try {
-            while ((line = reader.readLine()) != null) {
+        boolean sectionExists = false;
+        StringBuilder modifiedContent = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(Global.SMB_CONF_PATH))) {
+
+            String line;
+
+            while ((line = reader.readLine())!= null) {
                 if (line.startsWith("[" + sambaConfig.getSection() + "]")) {
                     sectionExists = true;
-                    if(sambaConfig.getSectionParams()!= null &&!sambaConfig.getSectionParams().isEmpty()){
-                        for (String sectionParam : sambaConfig.getSectionParams()) {
-                            if(line.startsWith(sambaConfig.getSectionParams() + " " + "=")){
-//                                inputStr = inputStr.toLowerCase().replace()
-                            }
+                    for (String sectionParam : sambaConfig.getSectionParams()) {
+                        String[] parts = sectionParam.split("=");
+                        String key = parts[0].trim();
+                        String value = parts[1].trim();
+                        if (line.contains(key + " = ")) {
+                            line = line.replace(key + " = " + line.split(key + " = ")[1], key + " = " + value);
                         }
                     }
                 }
+                modifiedContent.append(line).append("\n");
             }
-
-            if (!sectionExists) {
-                writer.write("\n[" + sambaConfig.getSection() + "]\n");
-                for (String sectionParam : sambaConfig.getSectionParams()) {
-                    writer.write(sectionParam + "\n");
-                }
-            }
-
-            reader.close();
-            writer.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
+        try (FileWriter writer = new FileWriter(Global.SMB_CONF_PATH)) {
+            writer.write(modifiedContent.toString());
+        }
     }
-
 }
