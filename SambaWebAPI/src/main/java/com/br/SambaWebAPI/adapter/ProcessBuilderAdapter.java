@@ -1,6 +1,5 @@
 package com.br.SambaWebAPI.adapter;
 
-
 public interface ProcessBuilderAdapter {
-     ProcessBuilder command (String... command);
+  ProcessBuilder command(String... command);
 }

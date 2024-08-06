@@ -1,174 +1,178 @@
 package com.br.SambaWebAPI.user.services;
 
+import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
+import java.io.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.io.*;
 
 @Service
 public class UserService {
-    private ProcessBuilderAdapter processBuilderAdapter;
+  private ProcessBuilderAdapter processBuilderAdapter;
 
-    @Autowired
-    public UserService(ProcessBuilderAdapter processBuilderAdapter){
-        this.processBuilderAdapter = processBuilderAdapter;
-    }
+  @Autowired
+  public UserService(ProcessBuilderAdapter processBuilderAdapter) {
+    this.processBuilderAdapter = processBuilderAdapter;
+  }
 
+  public boolean createUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
+    // TODO: decorador que instancia novo processbuilder nos metódos e já chama
+    // o exit
+    processBuilderAdapter = new ProcessBuilderAdapterImpl();
 
-    public boolean createUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
-        // TODO: decorador que instancia novo processbuilder nos metódos e já chama
-        // o exit
-        processBuilderAdapter = new ProcessBuilderAdapterImpl();
+    processBuilderAdapter.command("exit");
 
-        processBuilderAdapter.command("exit");
-
-        ProcessBuilder processBuilder = processBuilderAdapter.command(
+    ProcessBuilder processBuilder =
+        processBuilderAdapter
+            .command(
                 CommandConstants.BASH,
                 CommandConstants.EXECUTE_COMMAND,
                 CommandConstants.ECHO
-                        + " \""
-                        + sudoAuthentication.getSudoPassword()
-                        + "\" | "
-                        + CommandConstants.SUDO
-                        + " "
-                        + CommandConstants.SUDO_STDIN
-                        + " "
-                        + CommandConstants.USER_ADD
-                        + " "
-                        + user.getUser()
-        ).redirectInput(ProcessBuilder.Redirect.PIPE);
+                    + " \""
+                    + sudoAuthentication.getSudoPassword()
+                    + "\" | "
+                    + CommandConstants.SUDO
+                    + " "
+                    + CommandConstants.SUDO_STDIN
+                    + " "
+                    + CommandConstants.USER_ADD
+                    + " "
+                    + user.getUser())
+            .redirectInput(ProcessBuilder.Redirect.PIPE);
 
-        Process process = processBuilder.start();
+    Process process = processBuilder.start();
 
-        int exitCode = process.waitFor();
+    int exitCode = process.waitFor();
 
-        if (exitCode != 0) {
-            throw UserCreationFactory.createException(exitCode);
-        }
-
-        return true;
+    if (exitCode != 0) {
+      throw UserCreationFactory.createException(exitCode);
     }
 
-    public boolean removeUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
-        processBuilderAdapter.command("exit");
+    return true;
+  }
 
-        ProcessBuilder processBuilder = processBuilderAdapter.command(
+  public boolean removeUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
+    processBuilderAdapter.command("exit");
+
+    ProcessBuilder processBuilder =
+        processBuilderAdapter
+            .command(
                 CommandConstants.ECHO,
                 sudoAuthentication.getSudoPassword(),
                 "\" | ",
                 CommandConstants.SUDO,
                 CommandConstants.SUDO_STDIN,
                 CommandConstants.USER_DEL,
-                user.getUser()
-        ).redirectInput(ProcessBuilder.Redirect.PIPE);
+                user.getUser())
+            .redirectInput(ProcessBuilder.Redirect.PIPE);
 
-        Process process = processBuilder.start();
+    Process process = processBuilder.start();
 
-        OutputStream outputStream = process.getOutputStream();
+    OutputStream outputStream = process.getOutputStream();
 
-        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
-        outputStream.flush();
-        outputStream.close();
-        process.waitFor();
+    outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+    outputStream.flush();
+    outputStream.close();
+    process.waitFor();
 
-        int exitCode = process.waitFor();
-        if (exitCode != 0) {
-            throw UserCreationFactory.createException(exitCode);
-        }
-
-        return true;
+    int exitCode = process.waitFor();
+    if (exitCode != 0) {
+      throw UserCreationFactory.createException(exitCode);
     }
 
-    public boolean getUser(User user) throws Exception {
-        ProcessBuilder processBuilder =  processBuilderAdapter.command(
-                CommandConstants.BASH,
-                CommandConstants.EXECUTE_COMMAND,
-                CommandConstants.GET_USER
-                        + user.getUser());
-        Process process = processBuilder.start();
+    return true;
+  }
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+  public boolean getUser(User user) throws Exception {
+    ProcessBuilder processBuilder =
+        processBuilderAdapter.command(
+            CommandConstants.BASH,
+            CommandConstants.EXECUTE_COMMAND,
+            CommandConstants.GET_USER + user.getUser());
+    Process process = processBuilder.start();
 
-        reader.read();
-        reader.close();
+    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-        int exitCode = process.waitFor();
-        return exitCode == 0;
+    reader.read();
+    reader.close();
+
+    int exitCode = process.waitFor();
+    return exitCode == 0;
+  }
+
+  public boolean createSambaUser(User user, SudoAuthentication sudoAuthentication)
+      throws Exception {
+    processBuilderAdapter = new ProcessBuilderAdapterImpl();
+
+    createUser(user, sudoAuthentication);
+
+    ProcessBuilder processBuilder =
+        processBuilderAdapter.command(
+            CommandConstants.BASH,
+            CommandConstants.EXECUTE_COMMAND,
+            CommandConstants.SUDO
+                + " "
+                + CommandConstants.SUDO_STDIN
+                + " "
+                + CommandConstants.USER_ADD_SMB
+                + " "
+                + user.getUser());
+
+    Process process = processBuilder.start();
+    OutputStream outputStream = process.getOutputStream();
+    outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+    outputStream.flush();
+
+    outputStream.write((user.getPassword() + "\n").getBytes());
+    outputStream.flush();
+
+    outputStream.write((user.getPassword() + "\n").getBytes());
+    outputStream.flush();
+    outputStream.close();
+
+    process.waitFor();
+
+    int exitCode = process.waitFor();
+    if (exitCode != 0) {
+      throw UserCreationFactory.createException(exitCode);
     }
 
-    public boolean createSambaUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
-        processBuilderAdapter = new ProcessBuilderAdapterImpl();
+    return true;
+  }
 
-        createUser(user,sudoAuthentication);
+  public boolean removeSambaUser(User user, SudoAuthentication sudoAuthentication)
+      throws Exception {
+    processBuilderAdapter = new ProcessBuilderAdapterImpl();
 
-        ProcessBuilder processBuilder = processBuilderAdapter.command(
-                CommandConstants.BASH,
-                CommandConstants.EXECUTE_COMMAND,
-                CommandConstants.SUDO
-                        + " "
-                        + CommandConstants.SUDO_STDIN
-                        + " "
-                        + CommandConstants.USER_ADD_SMB
-                        + " "
-                        + user.getUser()
-        );
+    ProcessBuilder processBuilder =
+        processBuilderAdapter.command(
+            CommandConstants.BASH,
+            CommandConstants.EXECUTE_COMMAND,
+            CommandConstants.SUDO
+                + " "
+                + CommandConstants.SUDO_STDIN
+                + " "
+                + CommandConstants.USER_DEL_SMB
+                + " "
+                + user.getUser());
 
-        Process process = processBuilder.start();
-        OutputStream outputStream = process.getOutputStream();
-        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
-        outputStream.flush();
+    Process process = processBuilder.start();
+    OutputStream outputStream = process.getOutputStream();
+    outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+    outputStream.flush();
+    outputStream.close();
 
-        outputStream.write((user.getPassword() + "\n").getBytes());
-        outputStream.flush();
+    process.waitFor();
 
-        outputStream.write((user.getPassword() + "\n").getBytes());
-        outputStream.flush();
-        outputStream.close();
-
-        process.waitFor();
-
-        int exitCode = process.waitFor();
-        if (exitCode != 0) {
-            throw UserCreationFactory.createException(exitCode);
-        }
-
-        return true;
-
+    int exitCode = process.waitFor();
+    if (exitCode != 0) {
+      throw UserCreationFactory.createException(exitCode);
     }
 
-    public boolean removeSambaUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
-        processBuilderAdapter = new ProcessBuilderAdapterImpl();
-
-        ProcessBuilder processBuilder = processBuilderAdapter.command(
-                CommandConstants.BASH,
-                CommandConstants.EXECUTE_COMMAND,
-                CommandConstants.SUDO
-                        + " "
-                        + CommandConstants.SUDO_STDIN
-                        + " "
-                        + CommandConstants.USER_DEL_SMB
-                        + " "
-                        + user.getUser()
-        );
-
-        Process process = processBuilder.start();
-        OutputStream outputStream = process.getOutputStream();
-        outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
-        outputStream.flush();
-        outputStream.close();
-
-        process.waitFor();
-
-        int exitCode = process.waitFor();
-        if (exitCode != 0) {
-            throw UserCreationFactory.createException(exitCode);
-        }
-
-        return true;
-    }
+    return true;
+  }
 }

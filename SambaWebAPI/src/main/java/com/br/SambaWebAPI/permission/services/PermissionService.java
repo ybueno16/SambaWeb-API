@@ -22,8 +22,7 @@ public class PermissionService {
 
   private ProcessBuilderAdapter processBuilderAdapter;
 
-  @Autowired
-  FolderService folderService;
+  @Autowired FolderService folderService;
 
   private String homeDir;
 
