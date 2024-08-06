@@ -19,7 +19,10 @@ public class UserService {
         this.processBuilderAdapter = processBuilderAdapter;
     }
 
+
     public boolean createUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
+        // TODO: decorador que instancia novo processbuilder nos metódos e já chama
+        // o exit
         processBuilderAdapter = new ProcessBuilderAdapterImpl();
 
         processBuilderAdapter.command("exit");
