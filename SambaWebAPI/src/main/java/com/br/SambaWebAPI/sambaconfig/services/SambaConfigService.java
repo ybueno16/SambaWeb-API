@@ -7,6 +7,8 @@ import com.br.SambaWebAPI.sambaconfig.models.SambaConfig;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class SambaConfigService {
@@ -57,17 +59,25 @@ public class SambaConfigService {
             while ((line = reader.readLine())!= null) {
                 if (line.startsWith("[" + sambaConfig.getSection() + "]")) {
                     sectionExists = true;
+                } else if (sectionExists && line.contains("[")) {
+                    sectionExists = false;
+                    modifiedContent.append("[").append(sambaConfig.getSection()).append("]\n");
                     for (String sectionParam : sambaConfig.getSectionParams()) {
-                        String[] parts = sectionParam.split("=");
-                        String key = parts[0].trim();
-                        String value = parts[1].trim();
-                        if (line.contains(key + " = ")) {
-                            line = line.replace(key + " = " + line.split(key + " = ")[1], key + " = " + value);
-                        }
+                        modifiedContent.append(sectionParam).append("\n");
                     }
+                    modifiedContent.append("\n");
+                } else if (!sectionExists) {
+                    modifiedContent.append(line).append("\n");
                 }
-                modifiedContent.append(line).append("\n");
             }
+        }
+
+        if (sectionExists) {
+            modifiedContent.append("[").append(sambaConfig.getSection()).append("]\n");
+            for (String sectionParam : sambaConfig.getSectionParams()) {
+                modifiedContent.append(sectionParam).append("\n");
+            }
+            modifiedContent.append("\n");
         }
 
         try (FileWriter writer = new FileWriter(Global.SMB_CONF_PATH)) {
