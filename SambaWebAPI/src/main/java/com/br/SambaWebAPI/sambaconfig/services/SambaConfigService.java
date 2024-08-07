@@ -106,4 +106,31 @@ public class SambaConfigService {
       writer.write(modifiedContent.toString());
     }
   }
+
+  public void sambaConfigRemoveSection(SambaConfig sambaConfig, SudoAuthentication sudoAuthentication)
+          throws IOException {
+
+    boolean sectionExists = false;
+    StringBuilder modifiedContent = new StringBuilder();
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(Global.SMB_CONF_PATH))) {
+
+      String line;
+
+      while ((line = reader.readLine())!= null) {
+        if (line.startsWith("[" + sambaConfig.getSection() + "]")) {
+          sectionExists = true;
+        } else if (sectionExists && line.contains("[")) {
+          sectionExists = false;
+          modifiedContent.append(line).append("\n");
+        } else if (!sectionExists) {
+          modifiedContent.append(line).append("\n");
+        }
+      }
+    }
+
+    try (FileWriter writer = new FileWriter(Global.SMB_CONF_PATH)) {
+      writer.write(modifiedContent.toString());
+    }
+  }
 }
