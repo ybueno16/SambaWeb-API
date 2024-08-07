@@ -76,8 +76,8 @@ public class SambaConfigService {
     }
   }
 
-  public void sambaConfigRemoveSectionParams(SambaConfig sambaConfig, SudoAuthentication sudoAuthentication)
-          throws IOException {
+  public void sambaConfigRemoveSectionParams(
+      SambaConfig sambaConfig, SudoAuthentication sudoAuthentication) throws IOException {
 
     boolean sectionExists = false;
     StringBuilder modifiedContent = new StringBuilder();
@@ -86,7 +86,7 @@ public class SambaConfigService {
 
       String line;
 
-      while ((line = reader.readLine())!= null) {
+      while ((line = reader.readLine()) != null) {
         if (line.startsWith("[" + sambaConfig.getSection() + "]")) {
           sectionExists = true;
         } else if (sectionExists && line.contains("[")) {
@@ -107,8 +107,8 @@ public class SambaConfigService {
     }
   }
 
-  public void sambaConfigRemoveSection(SambaConfig sambaConfig, SudoAuthentication sudoAuthentication)
-          throws IOException {
+  public void sambaConfigRemoveSection(
+      SambaConfig sambaConfig, SudoAuthentication sudoAuthentication) throws IOException {
 
     boolean sectionExists = false;
     StringBuilder modifiedContent = new StringBuilder();
@@ -117,7 +117,7 @@ public class SambaConfigService {
 
       String line;
 
-      while ((line = reader.readLine())!= null) {
+      while ((line = reader.readLine()) != null) {
         if (line.startsWith("[" + sambaConfig.getSection() + "]")) {
           sectionExists = true;
         } else if (sectionExists && line.contains("[")) {

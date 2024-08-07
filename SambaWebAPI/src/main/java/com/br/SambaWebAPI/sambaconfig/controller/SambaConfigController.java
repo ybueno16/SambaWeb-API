@@ -77,23 +77,23 @@ public class SambaConfigController {
   public ResponseEntity<?> removeSectionParamsSamba(@RequestBody Map<String, Object> json) {
     SambaConfig sambaConfig = objectMapper.convertValue(json.get("sambaConfig"), SambaConfig.class);
     SudoAuthentication sudoAuthentication =
-            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       sambaConfigService.sambaConfigRemoveSectionParams(sambaConfig, sudoAuthentication);
       return DefaultResponseEntityFactory.create(
-              "Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
+          "Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
 
     } catch (IOException e) {
       return DefaultResponseEntityFactory.create(
-              "Ocorreu um erro na escrita do arquivo. " + e, null, HttpStatus.INTERNAL_SERVER_ERROR);
+          "Ocorreu um erro na escrita do arquivo. " + e, null, HttpStatus.INTERNAL_SERVER_ERROR);
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-              "Erro genérico. Ocorreu um erro desconhecido durante a escrita no arquivo."
-                      + Global.SMB_CONF_PATH
-                      + " "
-                      + e,
-              null,
-              HttpStatus.INTERNAL_SERVER_ERROR);
+          "Erro genérico. Ocorreu um erro desconhecido durante a escrita no arquivo."
+              + Global.SMB_CONF_PATH
+              + " "
+              + e,
+          null,
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -101,23 +101,23 @@ public class SambaConfigController {
   public ResponseEntity<?> removeSectionSamba(@RequestBody Map<String, Object> json) {
     SambaConfig sambaConfig = objectMapper.convertValue(json.get("sambaConfig"), SambaConfig.class);
     SudoAuthentication sudoAuthentication =
-            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       sambaConfigService.sambaConfigRemoveSection(sambaConfig, sudoAuthentication);
       return DefaultResponseEntityFactory.create(
-              "Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
+          "Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
 
     } catch (IOException e) {
       return DefaultResponseEntityFactory.create(
-              "Ocorreu um erro na escrita do arquivo. " + e, null, HttpStatus.INTERNAL_SERVER_ERROR);
+          "Ocorreu um erro na escrita do arquivo. " + e, null, HttpStatus.INTERNAL_SERVER_ERROR);
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-              "Erro genérico. Ocorreu um erro desconhecido durante a escrita no arquivo."
-                      + Global.SMB_CONF_PATH
-                      + " "
-                      + e,
-              null,
-              HttpStatus.INTERNAL_SERVER_ERROR);
+          "Erro genérico. Ocorreu um erro desconhecido durante a escrita no arquivo."
+              + Global.SMB_CONF_PATH
+              + " "
+              + e,
+          null,
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }
