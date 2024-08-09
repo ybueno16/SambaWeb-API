@@ -13,10 +13,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(Global.API_URL_SAMBA + "/group-config")
@@ -73,4 +70,27 @@ public class GroupController {
           HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  @DeleteMapping(path = "/deleteGroup")
+  public ResponseEntity<?> deleteGroup(@RequestBody Map<String, Object> json) {
+    Group group = objectMapper.convertValue(json.get("group"), Group.class);
+    SudoAuthentication sudoAuthentication =
+            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+
+    try {
+      groupService.deleteGroup(group, sudoAuthentication);
+
+      return DefaultResponseEntityFactory.create(
+              "Grupo removido com sucesso!", group, HttpStatus.OK);
+    } catch (AddUserToGroupException e) {
+      return DefaultResponseEntityFactory.create(
+              e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+    } catch (Exception e) {
+      return DefaultResponseEntityFactory.create(
+              "Erro genérico. Ocorreu um erro desconhecido durante a remoção do grupo.",
+              null,
+              HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
 }

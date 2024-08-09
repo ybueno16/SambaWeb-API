@@ -16,4 +16,5 @@ public class CommandConstants {
   public static final String USER_ADD_SMB = "smbpasswd -a";
   public static final String USER_DEL_SMB = "smbpasswd -x";
   public static final String CHMOD = "chmod";
+  public static final String GROUP_DEL = "groupdel";
 }

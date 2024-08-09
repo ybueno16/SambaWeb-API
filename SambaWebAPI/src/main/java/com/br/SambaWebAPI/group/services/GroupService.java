@@ -54,7 +54,7 @@ public class GroupService {
   }
 
   public boolean addUserToGroup(Group group, User user, SudoAuthentication sudoAuthentication)
-      throws IOException, InterruptedException, GroupCreationException, AddUserToGroupException {
+      throws IOException, InterruptedException, AddUserToGroupException {
     ProcessBuilder processBuilder =
         processBuilderAdapter
             .command(
@@ -65,6 +65,31 @@ public class GroupService {
                 group.getName(),
                 user.getUser())
             .redirectInput(ProcessBuilder.Redirect.PIPE);
+
+    Process process = processBuilder.start();
+
+    OutputStream outputStream = process.getOutputStream();
+    outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+    outputStream.flush();
+    outputStream.close();
+
+    int exitCode = process.waitFor();
+    if (exitCode != 0) {
+      throw AddUserToGroupFactory.createException(exitCode);
+    }
+
+    return true;
+  }
+
+  public boolean deleteGroup(Group group, SudoAuthentication sudoAuthentication) throws IOException, InterruptedException, AddUserToGroupException {
+    ProcessBuilder processBuilder =
+            processBuilderAdapter
+                    .command(
+                            CommandConstants.SUDO,
+                            CommandConstants.SUDO_STDIN,
+                            CommandConstants.GROUP_DEL,
+                            group.getName())
+                    .redirectInput(ProcessBuilder.Redirect.PIPE);
 
     Process process = processBuilder.start();
 
