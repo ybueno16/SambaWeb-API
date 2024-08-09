@@ -2,8 +2,8 @@ package com.br.SambaWebAPI.folder.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
-import com.br.SambaWebAPI.folder.exceptions.FolderCreationException;
 import com.br.SambaWebAPI.folder.factory.FolderCreationFactory;
+import com.br.SambaWebAPI.folder.factory.FolderDeleteFactory;
 import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.utils.CommandConstants;
@@ -51,7 +51,7 @@ public class FolderService {
     }
   }
 
-  public String getHomeDir() throws IOException, InterruptedException, FolderCreationException {
+  public String getHomeDir() throws IOException, InterruptedException {
     ProcessBuilder processBuilder =
         processBuilderAdapter.command(
             CommandConstants.SUDO,
@@ -72,9 +72,42 @@ public class FolderService {
 
     int exitCode = process.waitFor();
     if (exitCode != 0) {
-      throw FolderCreationFactory.createException();
+      throw new IOException("Erro genérico. Ocorreu um erro desconhecido durante a validação da variavel de ambinete $HOME");
     }
 
     return homeDir;
   }
+
+  public void removeFolder(Folder folder, SudoAuthentication sudoAuthentication) throws Exception {
+    processBuilderAdapter = new ProcessBuilderAdapterImpl();
+
+    processBuilderAdapter.command("exit");
+    String homeDir = getHomeDir();
+
+    ProcessBuilder processBuilder =
+            processBuilderAdapter
+                    .command(
+                            CommandConstants.SUDO,
+                            CommandConstants.SUDO_STDIN,
+                            CommandConstants.REMOVE,
+                            CommandConstants.REMOVE_RECURSIVE,
+                            homeDir + "/" + folder.getPath())
+                    .redirectInput(ProcessBuilder.Redirect.PIPE);
+
+    Process process = processBuilder.start();
+
+    OutputStream outputStream = process.getOutputStream();
+    outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+    outputStream.flush();
+    outputStream.close();
+
+    process.waitFor();
+
+    int exitCode = process.exitValue();
+
+    if (exitCode!= 0) {
+      throw FolderDeleteFactory.createException();
+    }
+  }
+
 }

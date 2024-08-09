@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 public class FolderCreationErrorCode extends ErrorCode {
   public static final FolderCreationErrorCode GENERIC_ERROR =
       new FolderCreationErrorCode(
-          "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.",
+          "Erro genérico. Ocorreu um erro desconhecido durante a remoção da pasta.",
           HttpStatus.INTERNAL_SERVER_ERROR);
 
   private FolderCreationErrorCode(String errorMessage, HttpStatus httpStatus) {
