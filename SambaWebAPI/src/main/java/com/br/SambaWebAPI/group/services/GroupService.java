@@ -81,15 +81,16 @@ public class GroupService {
     return true;
   }
 
-  public boolean deleteGroup(Group group, SudoAuthentication sudoAuthentication) throws IOException, InterruptedException, AddUserToGroupException {
+  public boolean deleteGroup(Group group, SudoAuthentication sudoAuthentication)
+      throws IOException, InterruptedException, AddUserToGroupException {
     ProcessBuilder processBuilder =
-            processBuilderAdapter
-                    .command(
-                            CommandConstants.SUDO,
-                            CommandConstants.SUDO_STDIN,
-                            CommandConstants.GROUP_DEL,
-                            group.getName())
-                    .redirectInput(ProcessBuilder.Redirect.PIPE);
+        processBuilderAdapter
+            .command(
+                CommandConstants.SUDO,
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.GROUP_DEL,
+                group.getName())
+            .redirectInput(ProcessBuilder.Redirect.PIPE);
 
     Process process = processBuilder.start();
 

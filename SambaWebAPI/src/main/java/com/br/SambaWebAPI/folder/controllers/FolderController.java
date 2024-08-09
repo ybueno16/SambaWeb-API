@@ -51,17 +51,17 @@ public class FolderController {
   public ResponseEntity<?> folderDelete(@RequestBody Map<String, Object> json) {
     Folder folder = objectMapper.convertValue(json.get("folder"), Folder.class);
     SudoAuthentication sudoAuthentication =
-            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
 
     try {
       folderService.removeFolder(folder, sudoAuthentication);
       return DefaultResponseEntityFactory.create(
-              "Pasta criada com sucesso!", folder, HttpStatus.OK);
+          "Pasta criada com sucesso!", folder, HttpStatus.OK);
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-              "Erro genérico. Ocorreu um erro desconhecido durante a criação da pasta.",
-              null,
-              HttpStatus.INTERNAL_SERVER_ERROR);
+          "Erro genérico. Ocorreu um erro desconhecido durante a criação da pasta.",
+          null,
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

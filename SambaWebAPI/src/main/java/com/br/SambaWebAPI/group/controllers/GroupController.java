@@ -75,22 +75,21 @@ public class GroupController {
   public ResponseEntity<?> deleteGroup(@RequestBody Map<String, Object> json) {
     Group group = objectMapper.convertValue(json.get("group"), Group.class);
     SudoAuthentication sudoAuthentication =
-            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
 
     try {
       groupService.deleteGroup(group, sudoAuthentication);
 
       return DefaultResponseEntityFactory.create(
-              "Grupo removido com sucesso!", group, HttpStatus.OK);
+          "Grupo removido com sucesso!", group, HttpStatus.OK);
     } catch (AddUserToGroupException e) {
       return DefaultResponseEntityFactory.create(
-              e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+          e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-              "Erro genérico. Ocorreu um erro desconhecido durante a remoção do grupo.",
-              null,
-              HttpStatus.INTERNAL_SERVER_ERROR);
+          "Erro genérico. Ocorreu um erro desconhecido durante a remoção do grupo.",
+          null,
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
 }

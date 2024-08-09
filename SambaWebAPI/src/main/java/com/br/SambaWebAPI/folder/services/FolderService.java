@@ -72,7 +72,9 @@ public class FolderService {
 
     int exitCode = process.waitFor();
     if (exitCode != 0) {
-      throw new IOException("Erro genérico. Ocorreu um erro desconhecido durante a validação da variavel de ambinete $HOME");
+      throw new IOException(
+          "Erro genérico. Ocorreu um erro desconhecido durante a validação da variavel de ambinete"
+              + " $HOME");
     }
 
     return homeDir;
@@ -85,14 +87,14 @@ public class FolderService {
     String homeDir = getHomeDir();
 
     ProcessBuilder processBuilder =
-            processBuilderAdapter
-                    .command(
-                            CommandConstants.SUDO,
-                            CommandConstants.SUDO_STDIN,
-                            CommandConstants.REMOVE,
-                            CommandConstants.REMOVE_RECURSIVE,
-                            homeDir + "/" + folder.getPath())
-                    .redirectInput(ProcessBuilder.Redirect.PIPE);
+        processBuilderAdapter
+            .command(
+                CommandConstants.SUDO,
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.REMOVE,
+                CommandConstants.REMOVE_RECURSIVE,
+                homeDir + "/" + folder.getPath())
+            .redirectInput(ProcessBuilder.Redirect.PIPE);
 
     Process process = processBuilder.start();
 
@@ -105,9 +107,8 @@ public class FolderService {
 
     int exitCode = process.exitValue();
 
-    if (exitCode!= 0) {
+    if (exitCode != 0) {
       throw FolderDeleteFactory.createException();
     }
   }
-
 }

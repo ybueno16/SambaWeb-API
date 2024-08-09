@@ -1,14 +1,13 @@
 package com.br.SambaWebAPI.user.enums;
 
-import com.br.SambaWebAPI.group.enums.GroupDeleteErrorCode;
 import com.br.SambaWebAPI.utils.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public class UserDeleteErrorCode extends ErrorCode {
   public static final UserDeleteErrorCode GENERIC_ERROR =
-          new UserDeleteErrorCode(
-                  "Erro genérico. Ocorreu um erro desconhecido durante a remoção do usuário.",
-                  HttpStatus.BAD_REQUEST);
+      new UserDeleteErrorCode(
+          "Erro genérico. Ocorreu um erro desconhecido durante a remoção do usuário.",
+          HttpStatus.BAD_REQUEST);
   public static final UserDeleteErrorCode CANT_UPDT_PASSWD_FILE =
       new UserDeleteErrorCode(
           "Não foi possível atualizar o arquivo de senha.", HttpStatus.INTERNAL_SERVER_ERROR);
