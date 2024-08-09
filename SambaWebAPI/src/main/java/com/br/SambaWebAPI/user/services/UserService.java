@@ -4,6 +4,7 @@ import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
+import com.br.SambaWebAPI.user.factory.UserDeleteFactory;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import java.io.*;
@@ -81,7 +82,7 @@ public class UserService {
 
     int exitCode = process.waitFor();
     if (exitCode != 0) {
-      throw UserCreationFactory.createException(exitCode);
+      throw UserDeleteFactory.createException(exitCode);
     }
 
     return true;
