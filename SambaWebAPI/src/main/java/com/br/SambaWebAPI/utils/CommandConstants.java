@@ -1,4 +1,4 @@
-package com.br.SambaWebAPI.utils;groupdel
+package com.br.SambaWebAPI.utils;
 
 public class CommandConstants {
   public static final String SUDO = "sudo";
