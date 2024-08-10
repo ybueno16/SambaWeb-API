@@ -3,6 +3,7 @@ package com.br.SambaWebAPI.user.controllers;
 import static com.br.SambaWebAPI.config.Global.API_URL_SAMBA;
 
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
+import com.br.SambaWebAPI.password.exceptions.PasswordCreationException;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.password.services.PasswordService;
 import com.br.SambaWebAPI.user.exceptions.UserCreationException;
@@ -34,21 +35,24 @@ public class UserController {
   public ResponseEntity<?> UserCreation(@RequestBody Map<String, Object> json) {
     User user = objectMapper.convertValue(json.get("user"), User.class);
     SudoAuthentication sudoAuthentication =
-        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       userService.createUser(user, sudoAuthentication);
       passwordService.createPassword(user, sudoAuthentication);
 
       return DefaultResponseEntityFactory.create(
-          "Usuario criado com sucesso!", user, HttpStatus.OK);
+              "Usuario criado com sucesso!", user, HttpStatus.OK);
     } catch (UserCreationException e) {
       return DefaultResponseEntityFactory.create(
-          e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
-    } catch (Exception e) {
+              e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+    }catch (PasswordCreationException e){
       return DefaultResponseEntityFactory.create(
-          "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.",
-          null,
-          HttpStatus.INTERNAL_SERVER_ERROR);
+              e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+    }catch (Exception e) {
+      return DefaultResponseEntityFactory.create(
+              "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.",
+              null,
+              HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
