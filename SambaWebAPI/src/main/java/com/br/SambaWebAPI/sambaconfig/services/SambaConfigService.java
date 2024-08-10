@@ -1,13 +1,28 @@
 package com.br.SambaWebAPI.sambaconfig.services;
 
+import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
+import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.config.Global;
+import com.br.SambaWebAPI.folder.factory.FolderDeleteFactory;
+import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.sambaconfig.models.SambaConfig;
 import java.io.*;
+
+import com.br.SambaWebAPI.utils.CommandConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SambaConfigService {
+
+  private ProcessBuilderAdapter processBuilderAdapter;
+
+  @Autowired
+  public SambaConfigService(ProcessBuilderAdapter processBuilderAdapter) {
+    this.processBuilderAdapter = processBuilderAdapter;
+  }
+
   public void sambaConfigWriteNewConfig(
       SambaConfig sambaConfig, SudoAuthentication sudoAuthentication) throws IOException {
 
@@ -131,6 +146,27 @@ public class SambaConfigService {
 
     try (FileWriter writer = new FileWriter(Global.SMB_CONF_PATH)) {
       writer.write(modifiedContent.toString());
+    }
+  }
+
+  public void refreshSambaConfig() throws Exception {
+    processBuilderAdapter = new ProcessBuilderAdapterImpl();
+
+    processBuilderAdapter.command("exit");
+    ProcessBuilder processBuilder =
+            processBuilderAdapter
+                    .command(
+                            CommandConstants.RELOAD_SMB_CONF)
+                    .redirectInput(ProcessBuilder.Redirect.PIPE);
+
+    Process process = processBuilder.start();
+
+    process.waitFor();
+
+    int exitCode = process.exitValue();
+
+    if (exitCode != 0) {
+      throw FolderDeleteFactory.createException();
     }
   }
 }

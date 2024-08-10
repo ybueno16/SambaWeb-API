@@ -32,6 +32,7 @@ public class SambaConfigController {
         objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       sambaConfigService.sambaConfigWriteNewConfig(sambaConfig, sudoAuthentication);
+      sambaConfigService.refreshSambaConfig();
       return DefaultResponseEntityFactory.create(
           "Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
 
@@ -56,6 +57,7 @@ public class SambaConfigController {
         objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       sambaConfigService.sambaConfigEditConfig(sambaConfig, sudoAuthentication);
+      sambaConfigService.refreshSambaConfig();
       return DefaultResponseEntityFactory.create(
           "Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
 
@@ -80,6 +82,8 @@ public class SambaConfigController {
         objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       sambaConfigService.sambaConfigRemoveSectionParams(sambaConfig, sudoAuthentication);
+      sambaConfigService.refreshSambaConfig();
+
       return DefaultResponseEntityFactory.create(
           "Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
 
@@ -104,6 +108,8 @@ public class SambaConfigController {
         objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       sambaConfigService.sambaConfigRemoveSection(sambaConfig, sudoAuthentication);
+      sambaConfigService.refreshSambaConfig();
+
       return DefaultResponseEntityFactory.create(
           "Configuração salva com sucesso!", sambaConfig, HttpStatus.OK);
 
