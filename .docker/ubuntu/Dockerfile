@@ -26,4 +26,4 @@ COPY entrypoint.test.sh /entrypoint.test.sh
 # Comando padrão (não será executado pois o entrypoint está definido)
 CMD ["smbd", "--foreground", "--no-process-group"]
 
-ENTRYPOINT ["/bin/sh", "entrypoint.test.sh"]
+ENTRYPOINT ["/bin/sh", ".docker/ubuntu/entrypoint.test.sh"]

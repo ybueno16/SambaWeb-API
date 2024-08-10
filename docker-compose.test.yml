@@ -3,11 +3,29 @@ version: "3"
 services:
   samba:
     build:
-      context: .
-      dockerfile: Dockerfile.test
+      context: ./.docker/ubuntu
+      dockerfile: Dockerfile
     ports:
       - "139:139"
       - "445:445"
       - "8080:8080"
     volumes:
       - ./:/SambaWeb
+
+  postgres:
+    build:
+      context: ./.docker/postgres
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: SambaWeb
+    ports:
+      - "5432:5432"
+    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'  -p 5432
+    volumes:
+      - ./.docker/postgres-data:/var/lib/postgresql/data
+      - ./.docker/postgresql.conf:/etc/postgresql/postgresql.conf
+
+volumes:
+  postgres-data:
