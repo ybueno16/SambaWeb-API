@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class LogService {
     private final LogRepository logRepository;
-    private final Log log;
+    final Log log;
     @Autowired
     public LogService(LogRepository logRepository, Log log) {
         this.logRepository = logRepository;
