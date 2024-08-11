@@ -14,6 +14,10 @@ public class LogService {
         this.log = log;
     }
 
+    public void readLog() {
+
+    }
+
     public boolean insertLog(Log log) throws Exception {
         return  logRepository.insertLog(log);
     }
