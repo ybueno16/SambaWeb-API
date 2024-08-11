@@ -21,5 +21,4 @@ jobs:
       - name: Run integration tests
         run: |
          cd SambaWebAPI
-         ./gradlew clean build -x test
-         ./gradlew test
+           ./gradlew clean build
