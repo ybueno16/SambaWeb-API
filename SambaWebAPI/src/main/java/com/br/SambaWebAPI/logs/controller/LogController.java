@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,13 +26,13 @@ public class LogController {
     }
 
     @PostMapping
-    public ResponseEntity<?> writeSambaFile(@RequestBody Log log ) throws Exception {
+    public ResponseEntity<?> writeSambaFile() throws Exception {
         try {
-            boolean retorno = logService.insertLog(log);
+            boolean retorno = logService.insertLogs();
             return DefaultResponseEntityFactory.create("Log foi inserido com sucesso.", retorno, HttpStatus.OK);
         } catch (Exception e) {
-
-            return DefaultResponseEntityFactory.create("Erro ao salvarlogs.", null, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e.getMessage());
+            return DefaultResponseEntityFactory.create("Erro ao salvar logs.", null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

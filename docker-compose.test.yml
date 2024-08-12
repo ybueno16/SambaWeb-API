@@ -9,6 +9,8 @@ services:
       - "139:139"
       - "445:445"
       - "8080:8080"
+    environment:
+      - JAVA_DEBUG=true
     volumes:
       - ./:/SambaWeb
 
