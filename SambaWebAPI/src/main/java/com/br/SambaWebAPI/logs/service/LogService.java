@@ -31,7 +31,7 @@ public class LogService {
         return true;
     }
 
-    public List<String[]> readLog() throws IOException {
+    public List<String[]> readLog() throws Exception {
         List<String[]> logs = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(Global.SMB_LOG_PATH))) {
             String line;
@@ -50,9 +50,10 @@ public class LogService {
             if (!logEntry.isEmpty()) {
                 logs.add(new String[] {logEntry.toString()});
             }
+        } catch (IOException e){
+            throw new IOException("Ocorreu um erro de IO na leitura do log");
         } catch (Exception e) {
-            System.out.println("Erro ao ler log: " + e.getMessage());
-            throw e;
+            throw new Exception("Ocorreu um erro ao ler o log");
         }
         return logs;
     }

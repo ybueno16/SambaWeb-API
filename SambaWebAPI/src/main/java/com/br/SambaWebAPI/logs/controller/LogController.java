@@ -36,7 +36,6 @@ public class LogController {
 
         }
         catch (Exception e) {
-            System.out.println(e.getMessage());
             return DefaultResponseEntityFactory.create("Erro ao salvar logs.", null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
