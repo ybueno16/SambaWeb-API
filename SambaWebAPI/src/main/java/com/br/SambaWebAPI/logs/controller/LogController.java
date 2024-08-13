@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
 
 
 @RestController
@@ -30,7 +31,11 @@ public class LogController {
         try {
             boolean retorno = logService.insertLogs();
             return DefaultResponseEntityFactory.create("Log foi inserido com sucesso.", retorno, HttpStatus.OK);
-        } catch (Exception e) {
+        }catch (SQLException e){
+            return DefaultResponseEntityFactory.create("Houve algum erro ao inserir no banco.", null, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+        catch (Exception e) {
             System.out.println(e.getMessage());
             return DefaultResponseEntityFactory.create("Erro ao salvar logs.", null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
