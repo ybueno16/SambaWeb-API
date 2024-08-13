@@ -27,23 +27,22 @@ public class UserService {
 
     processBuilderAdapter.command("exit");
 
-    ProcessBuilder processBuilder =
-        processBuilderAdapter
-            .command(
-                CommandConstants.BASH,
-                CommandConstants.EXECUTE_COMMAND,
-                CommandConstants.ECHO
-                    + " \""
-                    + sudoAuthentication.getSudoPassword()
-                    + "\" | "
-                    + CommandConstants.SUDO
-                    + " "
-                    + CommandConstants.SUDO_STDIN
-                    + " "
-                    + CommandConstants.USER_ADD
-                    + " "
-                    + user.getUser())
-            .redirectInput(ProcessBuilder.Redirect.PIPE);
+    ProcessBuilder processBuilder = processBuilderAdapter
+        .command(
+            CommandConstants.BASH,
+            CommandConstants.EXECUTE_COMMAND,
+            CommandConstants.ECHO
+                + " \""
+                + sudoAuthentication.getSudoPassword()
+                + "\" | "
+                + CommandConstants.SUDO
+                + " "
+                + CommandConstants.SUDO_STDIN
+                + " "
+                + CommandConstants.USER_ADD
+                + " "
+                + user.getUser())
+        .redirectInput(ProcessBuilder.Redirect.PIPE);
 
     Process process = processBuilder.start();
 
@@ -59,17 +58,16 @@ public class UserService {
   public boolean removeUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
     processBuilderAdapter.command("exit");
 
-    ProcessBuilder processBuilder =
-        processBuilderAdapter
-            .command(
-                CommandConstants.ECHO,
-                sudoAuthentication.getSudoPassword(),
-                "\" | ",
-                CommandConstants.SUDO,
-                CommandConstants.SUDO_STDIN,
-                CommandConstants.USER_DEL,
-                user.getUser())
-            .redirectInput(ProcessBuilder.Redirect.PIPE);
+    ProcessBuilder processBuilder = processBuilderAdapter
+        .command(
+            CommandConstants.ECHO,
+            sudoAuthentication.getSudoPassword(),
+            "\" | ",
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.USER_DEL,
+            user.getUser())
+        .redirectInput(ProcessBuilder.Redirect.PIPE);
 
     Process process = processBuilder.start();
 
@@ -89,11 +87,10 @@ public class UserService {
   }
 
   public boolean getUser(User user) throws Exception {
-    ProcessBuilder processBuilder =
-        processBuilderAdapter.command(
-            CommandConstants.BASH,
-            CommandConstants.EXECUTE_COMMAND,
-            CommandConstants.GET_USER + user.getUser());
+    ProcessBuilder processBuilder = processBuilderAdapter.command(
+        CommandConstants.BASH,
+        CommandConstants.EXECUTE_COMMAND,
+        CommandConstants.GET_USER + user.getUser());
     Process process = processBuilder.start();
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -111,17 +108,16 @@ public class UserService {
 
     createUser(user, sudoAuthentication);
 
-    ProcessBuilder processBuilder =
-        processBuilderAdapter.command(
-            CommandConstants.BASH,
-            CommandConstants.EXECUTE_COMMAND,
-            CommandConstants.SUDO
-                + " "
-                + CommandConstants.SUDO_STDIN
-                + " "
-                + CommandConstants.USER_ADD_SMB
-                + " "
-                + user.getUser());
+    ProcessBuilder processBuilder = processBuilderAdapter.command(
+        CommandConstants.BASH,
+        CommandConstants.EXECUTE_COMMAND,
+        CommandConstants.SUDO
+            + " "
+            + CommandConstants.SUDO_STDIN
+            + " "
+            + CommandConstants.USER_ADD_SMB
+            + " "
+            + user.getUser());
 
     Process process = processBuilder.start();
     OutputStream outputStream = process.getOutputStream();
@@ -149,17 +145,16 @@ public class UserService {
       throws Exception {
     processBuilderAdapter = new ProcessBuilderAdapterImpl();
 
-    ProcessBuilder processBuilder =
-        processBuilderAdapter.command(
-            CommandConstants.BASH,
-            CommandConstants.EXECUTE_COMMAND,
-            CommandConstants.SUDO
-                + " "
-                + CommandConstants.SUDO_STDIN
-                + " "
-                + CommandConstants.USER_DEL_SMB
-                + " "
-                + user.getUser());
+    ProcessBuilder processBuilder = processBuilderAdapter.command(
+        CommandConstants.BASH,
+        CommandConstants.EXECUTE_COMMAND,
+        CommandConstants.SUDO
+            + " "
+            + CommandConstants.SUDO_STDIN
+            + " "
+            + CommandConstants.USER_DEL_SMB
+            + " "
+            + user.getUser());
 
     Process process = processBuilder.start();
     OutputStream outputStream = process.getOutputStream();
