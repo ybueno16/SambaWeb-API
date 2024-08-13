@@ -19,25 +19,16 @@ public class LogRepositoryImpl implements LogRepository {
         this.dataSource = dataSource;
     }
 
-    @Override
-    public boolean insertLog(String date, String hour, String logDescription) throws Exception {
-        try {
+    public boolean insertLog(String logEntry) throws Exception {
+        try (Connection conn = dataSource.getConnection(); Statement stmt = conn.createStatement()) {
             StringBuilder sql = new StringBuilder();
             sql.append("INSERT INTO public.logs \n")
-                    .append("(\"date\", \"hour\", log_description) \n")
-                    .append("VALUES(").append("'").append(date).append("'")
-                    .append(", ").append("'").append(hour).append("'")
-                    .append(", ").append("'").append(logDescription).append("'")
+                    .append("(log_description) \n")
+                    .append("VALUES(").append("'").append(logEntry).append("'")
                     .append(")");
-            try (Connection conn = dataSource.getConnection();
-                 Statement stmt = conn.createStatement();){
-                stmt.execute(sql.toString());
-                System.out.println("SQL: " + sql.toString());
-                return true;
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao inserir log: " + e.getMessage());
-            throw e;
+            stmt.execute(sql.toString());
+            System.out.println("Log foi inserido com sucesso!");
+            return true;
         }
     }
 

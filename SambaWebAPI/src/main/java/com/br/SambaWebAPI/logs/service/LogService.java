@@ -10,6 +10,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class LogService {
@@ -24,7 +26,7 @@ public class LogService {
     public boolean insertLogs() throws Exception {
         List<String[]> logs = readLog();
         for (String[] log : logs) {
-            logRepository.insertLog(log[0], log[1], log[2]);
+            logRepository.insertLog(log[0]);
         }
         return true;
     }
@@ -33,24 +35,23 @@ public class LogService {
         List<String[]> logs = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(Global.SMB_LOG_PATH))) {
             String line;
+            StringBuilder logEntry = new StringBuilder();
             while ((line = reader.readLine())!= null) {
-                String[] parts = line.split("  ", 2); // separa a linha em duas partes: data/hora e descrição
-                if (parts.length == 2) {
-                    String[] dateHour = parts[0].split(", ", 2); // separa data e hora
-                    if (dateHour.length >= 2) { // adiciona essa verificação
-                        String[] log = new String[3];
-                        log[0] = dateHour[0].substring(1, 11); // extrai a data (YYYY/MM/DD)
-                        log[1] = dateHour[1].substring(0, 8); // extrai a hora (HH:MM:SS)
-                        log[2] = parts[1].trim(); // extrai a descrição do log
-                        logs.add(log);
-                        System.out.println(logs);
-                        System.out.println(line);
+                if (line.startsWith("[") && line.endsWith("]")) {
+                    if (!logEntry.isEmpty()) {
+                        logs.add(new String[] {logEntry.toString()});
+                        logEntry = new StringBuilder();
                     }
-
+                    logEntry.append(line);
+                } else {
+                    logEntry.append(" ").append(line.trim());
                 }
             }
-        } catch (Exception e){
-            System.out.println(e);
+            if (!logEntry.isEmpty()) {
+                logs.add(new String[] {logEntry.toString()});
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao ler log: " + e.getMessage());
             throw e;
         }
         return logs;
