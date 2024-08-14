@@ -26,31 +26,4 @@ public class AppConfig {
   public Global global() {
     return new Global();
   }
-
-  @Bean
-  public CommandLineRunner commandLineRunner() {
-    return args -> {
-      if (args.length < 2) {
-        System.out.println("Erro: número insuficiente de argumentos");
-        System.out.println("Uso: java Main user=sambauser sudoAuthentication=123");
-        System.exit(1);
-      }
-
-      // Crie objetos User e SudoAuthentication com os argumentos
-      User user = new User(args[0].split("=")[1]);
-      SudoAuthentication sudoAuthentication = new SudoAuthentication(args[1].split("=")[1]);
-      ProcessBuilderAdapter processBuilderAdapter = new ProcessBuilderAdapterImpl();
-
-      // Crie uma instância da classe que contém o método createUser
-      UserService userService = new UserService(processBuilderAdapter);
-
-
-      // Chame o método createUser com os objetos criados
-      try {
-        userService.createUser(user, sudoAuthentication);
-      } catch (Exception e) {
-        System.out.println("Erro ao criar usuário: " + e.getMessage());
-      }
-    };
-  }
 }
