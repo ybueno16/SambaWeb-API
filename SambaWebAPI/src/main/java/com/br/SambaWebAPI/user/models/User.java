@@ -8,9 +8,6 @@ public class User {
   private String password;
   private List<Group> groupList;
 
-    public User(String user) {
-    }
-
     public List<Group> getGroupList() {
     return groupList;
   }
