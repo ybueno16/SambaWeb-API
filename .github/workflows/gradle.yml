@@ -15,10 +15,11 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
-          distribution: 'adopt'
+          java-version: "17"
+          distribution: "adopt"
 
       - name: Run integration tests
         run: |
-         cd SambaWebAPI
-           ./gradlew clean build
+          cd SambaWebAPI
+            ./gradlew test
+            ./gradlew testIntegration
