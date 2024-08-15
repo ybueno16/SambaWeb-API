@@ -1,6 +1,7 @@
 package com.br.SambaWebAPI.user.models;
 
 import com.br.SambaWebAPI.group.models.Group;
+import com.br.SambaWebAPI.user.models.User;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
