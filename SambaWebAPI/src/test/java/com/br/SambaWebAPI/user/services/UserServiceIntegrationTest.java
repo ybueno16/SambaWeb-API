@@ -1,7 +1,6 @@
 package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.SambaWebApiApplication;
-import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.enums.UserCreationErrorCode;
 import com.br.SambaWebAPI.user.exceptions.UserCreationException;
@@ -9,16 +8,14 @@ import com.br.SambaWebAPI.user.models.User;
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 //@TestPropertySource("classpath:application-test.properties")
 @SpringBootTest(classes = SambaWebApiApplication.class)
-class UserServiceTest {
+class UserServiceIntegrationTest {
 
     @Autowired
     UserService userService;
