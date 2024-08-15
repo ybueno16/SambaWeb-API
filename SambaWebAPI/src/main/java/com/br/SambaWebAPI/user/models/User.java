@@ -8,7 +8,12 @@ public class User {
   private String password;
   private List<Group> groupList;
 
-    public List<Group> getGroupList() {
+
+  public User(String user) {
+    this.user = user;
+  }
+
+  public List<Group> getGroupList() {
     return groupList;
   }
 
