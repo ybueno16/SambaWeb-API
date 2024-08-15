@@ -23,15 +23,15 @@ class UserServiceTest {
     @Autowired
     UserService userService;
 
-//    @Value("${sudo.password}")
-//    private String sudoPassword;
+    String username = ("sambauser");
+    String sudoPassword = ("senhaforte123");
 
     @BeforeEach
     public void tearDown() throws Exception {
-        User user = new User();
-        SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("senhaforte123");
-        user.setUser("sambauser");
+
+        User user = new User(username);
+        SudoAuthentication sudoAuthentication = new SudoAuthentication(sudoPassword);
+
         if (userService.getUser(user)) {
             try {
                 userService.removeUser(user, sudoAuthentication);
@@ -49,10 +49,8 @@ class UserServiceTest {
         então deve realizar a criação de usuario com sucesso
         """)
     void createUser() throws Exception {
-        User user = new User();
-        SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("senhaforte123");
-        user.setUser("sambauserteste123");
+        User user = new User("testsambauser");
+        SudoAuthentication sudoAuthentication = new SudoAuthentication(sudoPassword);
         boolean sucess = userService.createUser(user, sudoAuthentication);
         assertTrue(sucess);
     }
@@ -64,10 +62,8 @@ class UserServiceTest {
         então deve retornar uma exceção
         """)
     void createUserWithErrorUsrAlreadyExists() throws Exception {
-        User user = new User();
-        SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword("senhaforte123");
-        user.setUser("sambauser");
+        User user = new User(username);
+        SudoAuthentication sudoAuthentication = new SudoAuthentication(username);
         userService.createUser(user, sudoAuthentication);
         try {
             userService.createUser(user, sudoAuthentication);
