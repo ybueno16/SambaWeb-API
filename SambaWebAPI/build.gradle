@@ -38,8 +38,6 @@ test {
 	include '**/*IntegrationTest.java'
 }
 
-build.dependsOn testIntegration
-
 tasks.register('testIntegration', Test) {
 	testLogging.showStandardStreams = true
 	testLogging {
