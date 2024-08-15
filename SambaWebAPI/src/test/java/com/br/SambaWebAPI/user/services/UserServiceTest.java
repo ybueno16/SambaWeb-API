@@ -5,6 +5,7 @@ import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
 import com.br.SambaWebAPI.user.models.User;
 import org.junit.Before;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -39,6 +40,11 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("""
+         Dado o desejo do usuario criar o usuario
+        quando o usuário realizar a criação de usuário
+        então deve realizar a criação de usuario com sucesso
+            """)
     void createUser() throws Exception {
         User user = new User("usuario");
         SudoAuthentication sudoAuthentication = new SudoAuthentication("senha");
@@ -49,6 +55,11 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("""
+         Dado o desejo do usuario criar o usuario
+        quando o usuário realizar a criação de usuário
+        então deve retronar erro código 1
+        """)
     public void testCreateUserFailureExitCode() throws Exception {
         // Arrange
         User user = new User("usuario");
@@ -64,6 +75,11 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("""
+         Dado o desejo do usuario criar o usuario
+        quando o usuário realizar a criação de usuário
+        então deve retornar exçeão de erro durante a execução do processo
+        """)
     public void testCreateUserFailureProcessException() throws Exception {
         User user = new User("usuario");
         SudoAuthentication sudoAuthentication = new SudoAuthentication("senha");
@@ -78,6 +94,11 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("""
+         Dado o desejo do usuario criar o usuario
+        quando o usuário realizar a criação de usuário
+        então deve retronar erro de NullPointeException na senha sudo
+        """)
     public void testCreateUserFailureSudoAuthenticationNull() throws Exception {
         User user = new User("usuario");
 
@@ -90,6 +111,11 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("""
+         Dado o desejo do usuario criar o usuario
+        quando o usuário realizar a criação de usuário
+        então deve retronar erro de NullPointeException no usuario
+        """)
     public void testCreateUserFailureUserNull() throws Exception {
         SudoAuthentication sudoAuthentication = new SudoAuthentication("senha");
 
