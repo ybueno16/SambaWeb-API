@@ -12,12 +12,6 @@ java {
 	sourceCompatibility = '17'
 }
 
-//configurations {
-//	compileOnly {
-//		extendsFrom annotationProcessor
-//	}
-//}
-
 repositories {
 	mavenCentral()
 }
@@ -35,5 +29,19 @@ dependencies {
 }
 
 test {
+	testLogging.showStandardStreams = true
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
 	useJUnitPlatform()
+	include '**/*Test.java'
+}
+
+tasks.register('testIntegration', Test) {
+	testLogging.showStandardStreams = true
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+	useJUnitPlatform()
+	include '**/*IntegrationTest.java'
 }
