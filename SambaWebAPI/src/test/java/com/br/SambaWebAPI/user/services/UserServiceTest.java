@@ -40,14 +40,11 @@ class UserServiceTest {
 
     @Test
     void createUser() throws Exception {
-        // Arrange
         User user = new User("usuario");
         SudoAuthentication sudoAuthentication = new SudoAuthentication("senha");
 
-        // Act
         boolean result = userService.createUser(user, sudoAuthentication);
 
-        // Assert
         assertTrue(result);
     }
 
@@ -56,9 +53,8 @@ class UserServiceTest {
         // Arrange
         User user = new User("usuario");
         SudoAuthentication sudoAuthentication = new SudoAuthentication("senha");
-        when(process.waitFor()).thenReturn(1); // código de saída!= 0
+        when(process.waitFor()).thenReturn(1);
 
-        // Act e Assert
         try {
             userService.createUser(user, sudoAuthentication);
             fail("Deveria ter lançado uma exceção");
@@ -69,12 +65,10 @@ class UserServiceTest {
 
     @Test
     public void testCreateUserFailureProcessException() throws Exception {
-        // Arrange
         User user = new User("usuario");
         SudoAuthentication sudoAuthentication = new SudoAuthentication("senha");
         when(process.waitFor()).thenThrow(new IOException("Erro durante a execução do processo"));
 
-        // Act e Assert
         try {
             userService.createUser(user, sudoAuthentication);
             fail("Deveria ter lançado uma exceção");
@@ -85,10 +79,8 @@ class UserServiceTest {
 
     @Test
     public void testCreateUserFailureSudoAuthenticationNull() throws Exception {
-        // Arrange
         User user = new User("usuario");
 
-        // Act e Assert
         try {
             userService.createUser(user, null);
             fail("Deveria ter lançado uma exceção");
@@ -99,11 +91,8 @@ class UserServiceTest {
 
     @Test
     public void testCreateUserFailureUserNull() throws Exception {
-        // Arrange
-        User user = null;
         SudoAuthentication sudoAuthentication = new SudoAuthentication("senha");
 
-        // Act e Assert
         try {
             userService.createUser(null, sudoAuthentication);
             fail("Deveria ter lançado uma exceção");
