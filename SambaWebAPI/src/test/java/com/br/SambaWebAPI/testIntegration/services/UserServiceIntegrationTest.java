@@ -1,10 +1,11 @@
-package com.br.SambaWebAPI.user.services;
+package com.br.SambaWebAPI.testIntegration.services;
 
 import com.br.SambaWebAPI.SambaWebApiApplication;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.enums.UserCreationErrorCode;
 import com.br.SambaWebAPI.user.exceptions.UserCreationException;
 import com.br.SambaWebAPI.user.models.User;
+import com.br.SambaWebAPI.user.services.UserService;
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

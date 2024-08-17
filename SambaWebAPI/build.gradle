@@ -30,23 +30,5 @@ dependencies {
 
 
 test {
-	testLogging.showStandardStreams = true
-	testLogging {
-		events "passed", "skipped", "failed"
-		exceptionFormat "full"
-		showStandardStreams true
-	}
 	useJUnitPlatform()
-	include '**/*Test'
-}
-
-tasks.register('testIntegration', Test) {
-	testLogging.showStandardStreams = true
-	testLogging {
-		events "passed", "skipped", "failed"
-		exceptionFormat "full"
-		showStandardStreams true
-	}
-	useJUnitPlatform()
-	include '**/*IntegrationTest'
 }

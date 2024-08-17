@@ -1,8 +1,7 @@
 package com.br.SambaWebAPI.user.models;
 
 import com.br.SambaWebAPI.group.models.Group;
-import com.br.SambaWebAPI.user.models.User;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserTest {
     private User user;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         user = new User("teste");
     }
@@ -53,5 +52,4 @@ class UserTest {
         user.setGroupList(groupList);
         assertEquals(groupList, user.getGroupList());
     }
-
 }
