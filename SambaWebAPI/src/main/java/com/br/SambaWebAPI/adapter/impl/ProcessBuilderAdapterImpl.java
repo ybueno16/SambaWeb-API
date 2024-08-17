@@ -2,6 +2,8 @@ package com.br.SambaWebAPI.adapter.impl;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 
+import java.io.IOException;
+
 public class ProcessBuilderAdapterImpl implements ProcessBuilderAdapter {
   private final ProcessBuilder processBuilder;
 
@@ -13,5 +15,10 @@ public class ProcessBuilderAdapterImpl implements ProcessBuilderAdapter {
   public ProcessBuilder command(String... command) {
     processBuilder.command(command);
     return processBuilder;
+  }
+
+  @Override
+  public void start() throws IOException {
+    processBuilder.start();
   }
 }
