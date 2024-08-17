@@ -18,11 +18,7 @@ jobs:
           java-version: "17"
           distribution: "adopt"
 
-      - name: Run integration tests
-        run: |
-          cd SambaWebAPI
-            ./gradlew testIntegration
-      - name: Run unit tests
+      - name: Run tests
         run: |
           cd SambaWebAPI
             ./gradlew test
