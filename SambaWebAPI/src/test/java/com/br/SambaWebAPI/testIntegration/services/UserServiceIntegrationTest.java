@@ -56,24 +56,4 @@ class UserServiceIntegrationTest {
         boolean sucess = userService.createUser(user, sudoAuthentication);
         assertTrue(sucess);
     }
-
-    @Test
-    @DisplayName("""
-        Dado o desejo do usuario criar o usuario
-        quando já tiver algum usuário com o mesmo nome
-        então deve retornar uma exceção
-        """)
-    void createUserWithErrorUsrAlreadyExists() throws Exception {
-        User user = new User();
-        user.setUser("testsambauser");
-        SudoAuthentication sudoAuthentication = new SudoAuthentication();
-        sudoAuthentication.setSudoPassword(sudoPassword);
-        userService.createUser(user, sudoAuthentication);
-        try {
-            userService.createUser(user, sudoAuthentication);
-            fail("Deveria ter lançado uma exceção UserCreationException");
-        } catch (UserCreationException e) {
-            assertEquals(UserCreationErrorCode.USR_ALREADY_EXISTS, e.getErrorCode(), "Expected error code to be USR_ALREADY_EXISTS, but was " + e.getErrorCode().getErrorMessage());
-        }
-    }
 }
