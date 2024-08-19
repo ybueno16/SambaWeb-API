@@ -32,6 +32,9 @@ public class User {
   }
 
   public void setPassword(String password) {
+    if (password == null) {
+      throw new NullPointerException("Senha não pode ser nula. Por favor, forneça uma senha válida.");
+    }
     this.password = password;
   }
 }
