@@ -41,8 +41,7 @@ public class UserService {
                 + " "
                 + CommandConstants.USER_ADD
                 + " "
-                + user.getUser())
-        .redirectInput(ProcessBuilder.Redirect.PIPE);
+                + user.getUser());
 
     Process process = processBuilder.start();
 
