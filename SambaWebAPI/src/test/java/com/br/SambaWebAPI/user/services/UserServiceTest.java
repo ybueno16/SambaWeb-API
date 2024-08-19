@@ -2,8 +2,11 @@ package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
+import com.br.SambaWebAPI.user.enums.UserDeleteErrorCode;
+import com.br.SambaWebAPI.user.exceptions.UserDeleteException;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,9 +22,11 @@ import static org.mockito.Mockito.*;
 
 
 public class UserServiceTest {
-    private ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);;
+    @Mock
+    private ProcessBuilderAdapter processBuilderAdapter;
 
-    private ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);;
+    @Mock
+    private ProcessBuilder processBuilder;
 
     @Mock
     private SudoAuthentication sudoAuthentication;
@@ -32,13 +37,14 @@ public class UserServiceTest {
     @Mock
     private User user;
 
-    private UserService userService = new UserService(processBuilderAdapter);
+    @InjectMocks
+    private UserService userService;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         sudoAuthentication.setSudoPassword("sudo_password");
-        user.setUser("teste");
+        user.setUser("user_name");
     }
 
     @Test
@@ -47,7 +53,14 @@ public class UserServiceTest {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(user.getUser()).thenReturn("user_name");
 
-        String[] commandArgs = new String[] {CommandConstants.ECHO, "sudo_password", "\" | ", CommandConstants.SUDO, CommandConstants.SUDO_STDIN, CommandConstants.USER_DEL, "user_name"};
+        String[] commandArgs = new String[] {
+                CommandConstants.ECHO,
+                sudoAuthentication.getSudoPassword(),
+                "\" | ",
+                CommandConstants.SUDO,
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.USER_DEL, user.getUser()
+        };
 
         ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);
         ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);
@@ -69,5 +82,64 @@ public class UserServiceTest {
         verify(processBuilderAdapter).command(commandArgs);
         verify(processBuilder).start();
         verify(process,times(2)).waitFor();
+    }
+
+    @Test
+    public void RemoveUserFailWithDifferentErrorCodes() throws Exception {
+        when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
+        when(user.getUser()).thenReturn("user_name");
+
+        String[] commandArgs = new String[] {
+                CommandConstants.ECHO,
+                sudoAuthentication.getSudoPassword(),
+                "\" | ",
+                CommandConstants.SUDO,
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.USER_DEL, user.getUser()
+        };
+
+        ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);
+        ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);
+        when(processBuilderAdapter.command(commandArgs)).thenReturn(processBuilder);
+
+        Process process = Mockito.mock(Process.class);
+        when(processBuilder.start()).thenReturn(process);
+        when(process.getOutputStream()).thenReturn(mock(OutputStream.class));
+
+        UserService userService = new UserService(processBuilderAdapter);
+
+        int[] exitCodes = new int[] {
+                1, 6, 8, 10, 12
+        };
+
+        UserDeleteErrorCode[] errorCodes = new UserDeleteErrorCode[] {
+                UserDeleteErrorCode.CANT_UPDT_PASSWD_FILE,
+                UserDeleteErrorCode.USER_DOESNT_EXIST,
+                UserDeleteErrorCode.USER_LOGGED,
+                UserDeleteErrorCode.CANT_UPDT_GROUP_FILE,
+                UserDeleteErrorCode.CANT_REMOVE_HOME_DIR
+        };
+
+        for (int i = 0; i < exitCodes.length; i++) {
+            when(process.waitFor()).thenReturn(exitCodes[i]);
+            try {
+                userService.removeUser(user, sudoAuthentication);
+                Assertions.fail("Deveria ter lançado uma exceção");
+            } catch (UserDeleteException e) {
+                Assertions.assertEquals(errorCodes[i], e.getErrorCode());
+            }
+        }
+
+        when(process.waitFor()).thenReturn(999);
+        try {
+            userService.removeUser(user, sudoAuthentication);
+            Assertions.fail("Deveria ter lançado uma exceção");
+        } catch (UserDeleteException e) {
+            Assertions.assertEquals(UserDeleteErrorCode.GENERIC_ERROR, e.getErrorCode());
+        }
+
+        verify(processBuilderAdapter, times(exitCodes.length + 1)).command(commandArgs);
+        verify(processBuilder, times(exitCodes.length + 1)).start();
+        verify(process, times((exitCodes.length + 1) * 2)).waitFor();
     }
 }
