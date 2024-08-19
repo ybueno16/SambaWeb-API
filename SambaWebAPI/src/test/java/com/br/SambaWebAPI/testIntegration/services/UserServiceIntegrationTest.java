@@ -50,7 +50,7 @@ class UserServiceIntegrationTest {
         """)
     void createUser() throws Exception {
         User user = new User();
-        user.setUser("testsambauser");
+        user.setUser("testeintegracaousuario");
         SudoAuthentication sudoAuthentication = new SudoAuthentication();
         sudoAuthentication.setSudoPassword(sudoPassword);
         boolean sucess = userService.createUser(user, sudoAuthentication);
