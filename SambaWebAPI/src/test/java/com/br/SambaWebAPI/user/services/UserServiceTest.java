@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -154,6 +156,43 @@ public class UserServiceTest {
         verify(processBuilderAdapter, times(exitCodes.length + 1)).command(Mockito.eq(commandArgs));
         verify(processBuilder, times(exitCodes.length + 1)).start();
         verify(process, times(exitCodes.length + 1)).waitFor();
+    }
+
+    @Test
+    @DisplayName("""
+    Dado um processo de ler a lista de usuário,
+    quando é lida com sucesso,
+    então deve retornar true""")
+    public void GetUserSuccess() throws Exception {
+        user.setUser("sambauser");
+        when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
+        when(user.getUser()).thenReturn("sambauser");
+
+        String[] commandArgs = new String[] {
+                CommandConstants.BASH,
+                CommandConstants.EXECUTE_COMMAND,
+                CommandConstants.GET_USER + user.getUser()
+        };
+
+        ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);
+        ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);
+        when(processBuilderAdapter.command(commandArgs)).thenReturn(processBuilder);
+
+        Process process = Mockito.mock(Process.class);
+        when(processBuilder.start()).thenReturn(process);
+        when(process.getOutputStream()).thenReturn(mock(OutputStream.class));
+        when(process.getInputStream()).thenReturn(new ByteArrayInputStream("some output".getBytes()));
+
+        UserService userService = new UserService(processBuilderAdapter);
+
+        boolean result = userService.getUser(user);
+        System.out.println(user.getUser());
+
+        assertTrue(result);
+
+        verify(processBuilderAdapter).command(commandArgs);
+        verify(processBuilder).start();
+        verify(process).waitFor();
     }
 
     @Test
