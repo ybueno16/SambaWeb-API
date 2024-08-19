@@ -1,17 +1,15 @@
 package com.br.SambaWebAPI.user.models;
 
 import com.br.SambaWebAPI.group.models.Group;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class User {
+  @JsonProperty("user")
   private String user;
   private String password;
   private List<Group> groupList;
-
-
-  public User(String user) {
-    this.user = user;
-  }
 
   public List<Group> getGroupList() {
     return groupList;

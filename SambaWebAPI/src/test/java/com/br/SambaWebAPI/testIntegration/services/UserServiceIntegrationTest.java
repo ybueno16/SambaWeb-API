@@ -27,8 +27,10 @@ class UserServiceIntegrationTest {
     @BeforeEach
     public void tearDown() throws Exception {
 
-        User user = new User(username);
-        SudoAuthentication sudoAuthentication = new SudoAuthentication(sudoPassword);
+        User user = new User();
+        user.setUser(username);
+        SudoAuthentication sudoAuthentication = new SudoAuthentication();
+        sudoAuthentication.setSudoPassword(sudoPassword);
 
         if (userService.getUser(user)) {
             try {
@@ -47,8 +49,10 @@ class UserServiceIntegrationTest {
         então deve realizar a criação de usuario com sucesso
         """)
     void createUser() throws Exception {
-        User user = new User("testsambauser");
-        SudoAuthentication sudoAuthentication = new SudoAuthentication(sudoPassword);
+        User user = new User();
+        user.setUser("testsambauser");
+        SudoAuthentication sudoAuthentication = new SudoAuthentication();
+        sudoAuthentication.setSudoPassword(sudoPassword);
         boolean sucess = userService.createUser(user, sudoAuthentication);
         assertTrue(sucess);
     }
@@ -60,8 +64,10 @@ class UserServiceIntegrationTest {
         então deve retornar uma exceção
         """)
     void createUserWithErrorUsrAlreadyExists() throws Exception {
-        User user = new User(username);
-        SudoAuthentication sudoAuthentication = new SudoAuthentication(username);
+        User user = new User();
+        user.setUser("testsambauser");
+        SudoAuthentication sudoAuthentication = new SudoAuthentication();
+        sudoAuthentication.setSudoPassword(sudoPassword);
         userService.createUser(user, sudoAuthentication);
         try {
             userService.createUser(user, sudoAuthentication);

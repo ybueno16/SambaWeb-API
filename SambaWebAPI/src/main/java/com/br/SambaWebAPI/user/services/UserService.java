@@ -66,8 +66,7 @@ public class UserService {
             CommandConstants.SUDO,
             CommandConstants.SUDO_STDIN,
             CommandConstants.USER_DEL,
-            user.getUser())
-        .redirectInput(ProcessBuilder.Redirect.PIPE);
+            user.getUser());
 
     Process process = processBuilder.start();
 

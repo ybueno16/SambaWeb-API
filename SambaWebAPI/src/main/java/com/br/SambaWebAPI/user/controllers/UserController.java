@@ -82,7 +82,7 @@ public class UserController {
   public ResponseEntity<?> removeUser(@RequestBody Map<String, Object> json) {
     User user = objectMapper.convertValue(json.get("user"), User.class);
     SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"),
-        SudoAuthentication.class);
+            SudoAuthentication.class);
 
     try {
       userService.removeUser(user, sudoAuthentication);

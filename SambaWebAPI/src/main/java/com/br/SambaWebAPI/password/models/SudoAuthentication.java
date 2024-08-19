@@ -4,10 +4,6 @@ public class SudoAuthentication {
   private String sudoPassword;
   private String sudoUser;
 
-  public SudoAuthentication(String sudoPassword) {
-    this.sudoPassword = sudoPassword;
-  }
-
   public String getSudoUser() {
     return sudoUser;
   }
