@@ -81,6 +81,69 @@ public class UserServiceTest {
         verify(process,times(2)).waitFor();
     }
 
+    @Test
+    public void CreateUserFailWithDifferentErrorCodes() throws Exception {
+        ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);
+        ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);
+        when(processBuilderAdapter.command(Mockito.any(String[].class))).thenReturn(processBuilder);
+
+        UserService userService = new UserService(processBuilderAdapter);
+
+        when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
+        when(user.getUser()).thenReturn("user_name");
+
+        String[] commandArgs = new String[] {
+                CommandConstants.BASH,
+                CommandConstants.EXECUTE_COMMAND,
+                CommandConstants.ECHO,
+                sudoAuthentication.getSudoPassword(),
+                "\" | ",
+                CommandConstants.SUDO,
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.USER_ADD,
+                user.getUser()
+        };
+
+        Process process = Mockito.mock(Process.class);
+        when(processBuilder.start()).thenReturn(process);
+        when(process.getOutputStream()).thenReturn(mock(OutputStream.class));
+
+        int[] exitCodes = new int[] {
+                1, 9, 12, 13, 14
+        };
+
+        UserCreationErrorCode[] errorCodes = new UserCreationErrorCode[] {
+                UserCreationErrorCode.CANT_UPDT_PASSWD_FILE,
+                UserCreationErrorCode.USR_ALREADY_EXISTS,
+                UserCreationErrorCode.CANT_CREATE_HOME_DIR,
+                UserCreationErrorCode.CANT_CREATE_MAIL_SPOOL,
+                UserCreationErrorCode.CANT_UPDATE_SELINUX,
+        };
+
+        for (int i = 0; i < exitCodes.length; i++) {
+            when(process.waitFor()).thenReturn(exitCodes[i]);
+            try {
+                userService.createUser(user, sudoAuthentication);
+            } catch (UserCreationException e) {
+                Assertions.assertEquals(errorCodes[i], e.getErrorCode());
+            }
+            verify(processBuilderAdapter, times(i + 1)).command(Mockito.eq(commandArgs));
+            verify(processBuilder, times(i + 1)).start();
+            verify(process, times(i + 1)).waitFor();
+        }
+
+        when(process.waitFor()).thenReturn(999);
+        try {
+            userService.createUser(user, sudoAuthentication);
+            Assertions.fail("Deveria ter lançado uma exceção");
+        } catch (UserCreationException e) {
+            Assertions.assertEquals(UserCreationErrorCode.GENERIC_ERROR, e.getErrorCode());
+        }
+        verify(processBuilderAdapter, times(exitCodes.length + 1)).command(Mockito.eq(commandArgs));
+        verify(processBuilder, times(exitCodes.length + 1)).start();
+        verify(process, times(exitCodes.length + 1)).waitFor();
+    }
+
 
     @Test
     public void RemoveUserFailWithDifferentErrorCodes() throws Exception {
@@ -141,71 +204,5 @@ public class UserServiceTest {
         verify(process, times((exitCodes.length + 1) * 2)).waitFor();
     }
 
-    @Test
-    public void CreateUserFailWithDifferentErrorCodes() throws Exception {
-        when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
-        when(user.getUser()).thenReturn("user_name");
 
-        String[] commandArgs = new String[] {
-                CommandConstants.BASH,
-                CommandConstants.EXECUTE_COMMAND,
-                CommandConstants.ECHO
-                        + " \""
-                        + sudoAuthentication.getSudoPassword()
-                        + "\" | "
-                        + CommandConstants.SUDO
-                        + " "
-                        + CommandConstants.SUDO_STDIN
-                        + " "
-                        + CommandConstants.USER_ADD
-                        + " "
-                        + user.getUser()
-        };
-
-        ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);
-        ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);
-        UserService userService = new UserService(processBuilderAdapter);
-        when(processBuilderAdapter.command(commandArgs)).thenReturn(processBuilder);
-
-        Process process = Mockito.mock(Process.class);
-        when(processBuilder.start()).thenReturn(process);
-        when(process.getOutputStream()).thenReturn(mock(OutputStream.class));
-        when(process.waitFor()).thenReturn(0);
-
-
-        int[] exitCodes = new int[] {
-                1, 9, 12, 13, 14
-        };
-
-        UserCreationErrorCode[] errorCodes = new UserCreationErrorCode[] {
-                UserCreationErrorCode.CANT_UPDT_PASSWD_FILE,
-                UserCreationErrorCode.USR_ALREADY_EXISTS,
-                UserCreationErrorCode.CANT_CREATE_HOME_DIR,
-                UserCreationErrorCode.CANT_CREATE_MAIL_SPOOL,
-                UserCreationErrorCode.CANT_UPDATE_SELINUX,
-        };
-
-        for (int i = 0; i < exitCodes.length; i++) {
-            when(process.waitFor()).thenReturn(exitCodes[i]);
-            try {
-                userService.createUser(user, sudoAuthentication);
-            } catch (UserCreationException e) {
-                Assertions.assertEquals(errorCodes[i], e.getErrorCode());
-            }
-            verify(processBuilderAdapter).command(commandArgs);
-            verify(processBuilder).start();
-            verify(process).waitFor();
-        }
-
-        when(process.waitFor()).thenReturn(999);
-        try {
-            userService.createUser(user, sudoAuthentication);
-            Assertions.fail("Deveria ter lançado uma exceção");
-        } catch (UserCreationException e) {
-            Assertions.assertEquals(UserCreationErrorCode.GENERIC_ERROR, e.getErrorCode());
-        }
-        verify(processBuilderAdapter, times(exitCodes.length + 1)).command(commandArgs);
-        verify(processBuilder, times(exitCodes.length + 1)).start();
-        verify(process, times(exitCodes.length + 1)).waitFor();
-    }
 }

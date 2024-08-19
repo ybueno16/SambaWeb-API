@@ -21,38 +21,29 @@ public class UserService {
   }
 
   public boolean createUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
-    // TODO: decorador que instancia novo processbuilder nos metódos e já chama
-    // o exit
-    processBuilderAdapter = new ProcessBuilderAdapterImpl();
-
-    processBuilderAdapter.command("exit");
-
     ProcessBuilder processBuilder = processBuilderAdapter
-        .command(
-            CommandConstants.BASH,
-            CommandConstants.EXECUTE_COMMAND,
-            CommandConstants.ECHO
-                + " \""
-                + sudoAuthentication.getSudoPassword()
-                + "\" | "
-                + CommandConstants.SUDO
-                + " "
-                + CommandConstants.SUDO_STDIN
-                + " "
-                + CommandConstants.USER_ADD
-                + " "
-                + user.getUser());
+            .command(
+                    CommandConstants.BASH,
+                    CommandConstants.EXECUTE_COMMAND,
+                    CommandConstants.ECHO,
+                    sudoAuthentication.getSudoPassword(),
+                    "\" | ",
+                    CommandConstants.SUDO,
+                    CommandConstants.SUDO_STDIN,
+                    CommandConstants.USER_ADD,
+                    user.getUser());
 
     Process process = processBuilder.start();
 
     int exitCode = process.waitFor();
 
-    if (exitCode != 0) {
+    if (exitCode!= 0) {
       throw UserCreationFactory.createException(exitCode);
     }
 
     return true;
   }
+
 
   public boolean removeUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
     processBuilderAdapter.command("exit");
