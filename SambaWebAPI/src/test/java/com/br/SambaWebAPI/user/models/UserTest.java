@@ -2,12 +2,15 @@ package com.br.SambaWebAPI.user.models;
 
 import com.br.SambaWebAPI.group.models.Group;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 class UserTest {
     private User user;
@@ -19,38 +22,50 @@ class UserTest {
     }
 
     @Test
-    public void testGetUser() {
-        assertEquals("teste", user.getUser());
+    @DisplayName("Testa se o usuário é retornado corretamente")
+    public void testGetUserReturnsCorrectValue() {
+        assertThat(user.getUser(), is("teste"));
     }
 
     @Test
-    public void testSetUser() {
+    @DisplayName("Testa se o usuário é atualizado corretamente")
+    public void testSetUserUpdatesValueCorrectly() {
         user.setUser("novoTeste");
-        assertEquals("novoTeste", user.getUser());
+        assertThat(user.getUser(), is("novoTeste"));
     }
 
     @Test
-    public void testGetPassword() {
+    @DisplayName("Testa se a senha é nula por padrão")
+    public void testGetPasswordReturnsNullByDefault() {
         assertNull(user.getPassword());
     }
 
     @Test
-    public void testSetPassword() {
+    @DisplayName("Testa se a senha é atualizada corretamente")
+    public void testSetPasswordUpdatesValueCorrectly() {
         user.setPassword("senha123");
-        assertEquals("senha123", user.getPassword());
+        assertThat(user.getPassword(), is("senha123"));
     }
 
     @Test
-    public void testGetGroupList() {
+    @DisplayName("Testa se a lista de grupos é nula por padrão")
+    public void testGetGroupListReturnsNullByDefault() {
         assertNull(user.getGroupList());
     }
 
     @Test
-    public void testSetGroupList() {
+    @DisplayName("Testa se a lista de grupos é atualizada corretamente")
+    public void testSetGroupListUpdatesValueCorrectly() {
         Group group = new Group();
         List<Group> groupList = new ArrayList<>();
         groupList.add(group);
         user.setGroupList(groupList);
-        assertEquals(groupList, user.getGroupList());
+        assertThat(user.getGroupList(), is(groupList));
+    }
+
+    @Test
+    @DisplayName("Testa se a senha nula é rejeitada")
+    public void testSetPasswordRejectsNullValue() {
+        assertThrows(NullPointerException.class, () -> user.setPassword(null));
     }
 }
