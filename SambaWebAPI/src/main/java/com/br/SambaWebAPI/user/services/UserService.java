@@ -77,15 +77,17 @@ public class UserService {
 
   public boolean getUser(User user) throws Exception {
     ProcessBuilder processBuilder = processBuilderAdapter.command(
-        CommandConstants.BASH,
-        CommandConstants.EXECUTE_COMMAND,
-        CommandConstants.GET_USER + user.getUser());
+            CommandConstants.BASH,
+            CommandConstants.EXECUTE_COMMAND,
+            CommandConstants.GET_USER + user.getUser());
     Process process = processBuilder.start();
 
-    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-    reader.read();
-    reader.close();
+    InputStream inputStream = process.getInputStream();
+    if (inputStream != null) {
+      BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+      reader.read();
+      reader.close();
+    }
 
     int exitCode = process.waitFor();
     return exitCode == 0;
