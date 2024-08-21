@@ -18,7 +18,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -56,7 +55,7 @@ public class UserServiceTest {
         Dado um processo de criação de usuário,
         quando o usuário é criado com sucesso,
         então deve retornar true""")
-    public void CreateUserSuccess() throws Exception {
+    public void createUserSuccess() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(user.getUser()).thenReturn("user_name");
 
@@ -96,7 +95,7 @@ public class UserServiceTest {
             Dado um processo de criação de usuário com diferentes códigos de saída,
             quando criar usuário,
             então deve lançar exceção com código de erro correto""")
-    public void CreateUserFailWithDifferentErrorCodes() throws Exception {
+    public void createUserFailWithDifferentErrorCodes() throws Exception {
         ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);
         ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);
         when(processBuilderAdapter.command(Mockito.any(String[].class))).thenReturn(processBuilder);
@@ -163,7 +162,7 @@ public class UserServiceTest {
     Dado um processo de ler a lista de usuário,
     quando é lida com sucesso,
     então deve retornar true""")
-    public void GetUserSuccess() throws Exception {
+    public void getUserSuccess() throws Exception {
         user.setUser("sambauser");
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(user.getUser()).thenReturn("sambauser");
@@ -200,7 +199,7 @@ public class UserServiceTest {
         Dado um processo de remoção de usuário,
         quando o usuário é removido com sucesso,
         então deve retornar true""")
-    public void RemoveUserSuccess() throws Exception {
+    public void removeUserSuccess() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(user.getUser()).thenReturn("user_name");
 
@@ -237,7 +236,7 @@ public class UserServiceTest {
             Dado um processo de remoção de usuário com diferentes códigos de saída,
             quando remover o usuário,
             então deve lançar exceção com código de erro correto""")
-    public void RemoveUserFailWithDifferentErrorCodes() throws Exception {
+    public void removeUserFailWithDifferentErrorCodes() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(user.getUser()).thenReturn("user_name");
 
@@ -294,6 +293,4 @@ public class UserServiceTest {
         verify(processBuilder, times(exitCodes.length + 1)).start();
         verify(process, times((exitCodes.length + 1) * 2)).waitFor();
     }
-
-
 }

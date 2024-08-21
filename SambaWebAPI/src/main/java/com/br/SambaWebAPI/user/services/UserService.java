@@ -100,15 +100,12 @@ public class UserService {
     createUser(user, sudoAuthentication);
 
     ProcessBuilder processBuilder = processBuilderAdapter.command(
-        CommandConstants.BASH,
-        CommandConstants.EXECUTE_COMMAND,
-        CommandConstants.SUDO
-            + " "
-            + CommandConstants.SUDO_STDIN
-            + " "
-            + CommandConstants.USER_ADD_SMB
-            + " "
-            + user.getUser());
+            CommandConstants.BASH,
+            CommandConstants.EXECUTE_COMMAND,
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.USER_ADD_SMB,
+            user.getUser());
 
     Process process = processBuilder.start();
     OutputStream outputStream = process.getOutputStream();
