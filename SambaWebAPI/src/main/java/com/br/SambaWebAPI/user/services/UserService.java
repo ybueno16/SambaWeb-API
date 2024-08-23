@@ -3,8 +3,12 @@ package com.br.SambaWebAPI.user.services;
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
+import com.br.SambaWebAPI.user.exceptions.UserSambaCreationException;
+import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
 import com.br.SambaWebAPI.user.factory.UserCreationFactory;
 import com.br.SambaWebAPI.user.factory.UserDeleteFactory;
+import com.br.SambaWebAPI.user.factory.UserSambaCreationFactory;
+import com.br.SambaWebAPI.user.factory.UserSambaDeleteFactory;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import java.io.*;
@@ -23,11 +27,6 @@ public class UserService {
   public boolean createUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
     ProcessBuilder processBuilder = processBuilderAdapter
             .command(
-                    CommandConstants.BASH,
-                    CommandConstants.EXECUTE_COMMAND,
-                    CommandConstants.ECHO,
-                    sudoAuthentication.getSudoPassword(),
-                    "\" | ",
                     CommandConstants.SUDO,
                     CommandConstants.SUDO_STDIN,
                     CommandConstants.USER_ADD,
@@ -37,10 +36,9 @@ public class UserService {
 
     int exitCode = process.waitFor();
 
-    if (exitCode!= 0) {
+    if (exitCode != 0) {
       throw UserCreationFactory.createException(exitCode);
     }
-
     return true;
   }
 
@@ -94,45 +92,52 @@ public class UserService {
   }
 
   public boolean createSambaUser(User user, SudoAuthentication sudoAuthentication)
-      throws Exception {
-    processBuilderAdapter = new ProcessBuilderAdapterImpl();
-
+          throws Exception, UserSambaCreationException {
     createUser(user, sudoAuthentication);
 
     ProcessBuilder processBuilder = processBuilderAdapter.command(
-            CommandConstants.BASH,
-            CommandConstants.EXECUTE_COMMAND,
             CommandConstants.SUDO,
             CommandConstants.SUDO_STDIN,
+            CommandConstants.USER_SMB,
             CommandConstants.USER_ADD_SMB,
             user.getUser());
 
     Process process = processBuilder.start();
     OutputStream outputStream = process.getOutputStream();
-    outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
-    outputStream.flush();
 
     outputStream.write((user.getPassword() + "\n").getBytes());
     outputStream.flush();
 
     outputStream.write((user.getPassword() + "\n").getBytes());
     outputStream.flush();
+
     outputStream.close();
 
     process.waitFor();
 
+//    BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//    BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+//
+//    String outputLine;
+//    while ((outputLine = outputReader.readLine())!= null) {
+//      System.out.println(outputLine);
+//    }
+//
+//    String errorLine;
+//    while ((errorLine = errorReader.readLine())!= null) {
+//      System.out.println(errorLine);
+//    }
+
     int exitCode = process.waitFor();
     if (exitCode != 0) {
-      throw UserCreationFactory.createException(exitCode);
+      throw UserSambaCreationFactory.createException(exitCode);
     }
 
     return true;
   }
 
   public boolean removeSambaUser(User user, SudoAuthentication sudoAuthentication)
-      throws Exception {
-    processBuilderAdapter = new ProcessBuilderAdapterImpl();
-
+          throws Exception, UserSambaDeleteException, UserSambaCreationException {
     ProcessBuilder processBuilder = processBuilderAdapter.command(
         CommandConstants.BASH,
         CommandConstants.EXECUTE_COMMAND,
@@ -154,7 +159,7 @@ public class UserService {
 
     int exitCode = process.waitFor();
     if (exitCode != 0) {
-      throw UserCreationFactory.createException(exitCode);
+      throw UserSambaDeleteFactory.createException(exitCode);
     }
 
     return true;
