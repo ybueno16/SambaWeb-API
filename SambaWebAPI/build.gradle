@@ -3,6 +3,11 @@ plugins {
 	id 'org.springframework.boot' version '3.2.5'
 	id 'io.spring.dependency-management' version '1.1.4'
 	id 'com.avast.gradle.docker-compose' version '0.14.1'
+	id 'jacoco'
+}
+
+jacoco {
+	toolVersion = '0.8.8'
 }
 
 group = 'com.br'
@@ -28,6 +33,19 @@ dependencies {
 
 }
 
+jacocoTestReport {
+	reports {
+		xml {
+			enabled true
+		}
+		csv {
+			enabled true
+		}
+		html {
+			enabled true
+		}
+	}
+}
 
 test {
 	testLogging.showStandardStreams = true
@@ -35,6 +53,9 @@ test {
 		events "passed", "skipped", "failed"
 		exceptionFormat "full"
 		showStandardStreams true
+	}
+	jacoco {
+		enabled true
 	}
 	useJUnitPlatform()
 }

@@ -8,11 +8,11 @@ public class PasswordCreationErrorCode extends ErrorCode {
       new PasswordCreationErrorCode(
           "Erro genérico. Ocorreu um erro desconhecido durante a criação da senha do usuario.",
           HttpStatus.BAD_REQUEST);
-  public static final PasswordCreationErrorCode UNKNOWN_USER =
+  public static final PasswordCreationErrorCode PASSWD_FILE_MISSING =
       new PasswordCreationErrorCode(
-          "Não foi possível encontrar o usuário no sistema", HttpStatus.BAD_REQUEST);
-  public static final PasswordCreationErrorCode UNKNOWN_USERNAME =
-      new PasswordCreationErrorCode("O Usuário não existe", HttpStatus.BAD_REQUEST);
+          "Não foi possível encontrar o arquivo de senha no sistema", HttpStatus.BAD_REQUEST);
+  public static final PasswordCreationErrorCode PASSWD_FILE_BUSY =
+      new PasswordCreationErrorCode("O arquivo passwd está sendo usado no momento", HttpStatus.BAD_REQUEST);
 
   private PasswordCreationErrorCode(String errorMessage, HttpStatus httpStatus) {
     super(errorMessage, httpStatus);

@@ -2,7 +2,6 @@ package com.br.SambaWebAPI.password.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.password.factory.PasswordCreationFactory;
-import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
 
@@ -20,7 +19,7 @@ public class PasswordService {
     this.processBuilderAdapter = processBuilderAdapter;
   }
 
-  public void createPassword(User user) throws Exception {
+  public boolean createPassword(User user) throws Exception {
     ProcessBuilder processBuilder = processBuilderAdapter
             .command(
                     CommandConstants.SUDO,
@@ -42,5 +41,6 @@ public class PasswordService {
     if (exitCode != 0) {
       throw PasswordCreationFactory.createException(exitCode);
     }
+    return true;
   }
 }

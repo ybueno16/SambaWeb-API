@@ -8,8 +8,8 @@ public class PasswordCreationFactory {
   public static PasswordCreationException createException(int exitCode)
       throws PasswordCreationException {
     switch (exitCode) {
-      case 2 -> throw new PasswordCreationException(PasswordCreationErrorCode.UNKNOWN_USER);
-      case 252 -> throw new PasswordCreationException(PasswordCreationErrorCode.UNKNOWN_USERNAME);
+      case 3 -> throw new PasswordCreationException(PasswordCreationErrorCode.PASSWD_FILE_MISSING);
+      case 5 -> throw new PasswordCreationException(PasswordCreationErrorCode.PASSWD_FILE_BUSY);
       default -> throw new PasswordCreationException(PasswordCreationErrorCode.GENERIC_ERROR);
     }
   }
