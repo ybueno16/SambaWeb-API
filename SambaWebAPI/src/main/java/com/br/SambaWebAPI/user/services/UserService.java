@@ -115,19 +115,6 @@ public class UserService {
 
     process.waitFor();
 
-//    BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//    BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-//
-//    String outputLine;
-//    while ((outputLine = outputReader.readLine())!= null) {
-//      System.out.println(outputLine);
-//    }
-//
-//    String errorLine;
-//    while ((errorLine = errorReader.readLine())!= null) {
-//      System.out.println(errorLine);
-//    }
-
     int exitCode = process.waitFor();
     if (exitCode != 0) {
       throw UserSambaCreationFactory.createException(exitCode);
@@ -137,17 +124,13 @@ public class UserService {
   }
 
   public boolean removeSambaUser(User user, SudoAuthentication sudoAuthentication)
-          throws Exception, UserSambaDeleteException, UserSambaCreationException {
+          throws Exception, UserSambaDeleteException {
     ProcessBuilder processBuilder = processBuilderAdapter.command(
-        CommandConstants.BASH,
-        CommandConstants.EXECUTE_COMMAND,
-        CommandConstants.SUDO
-            + " "
-            + CommandConstants.SUDO_STDIN
-            + " "
-            + CommandConstants.USER_DEL_SMB
-            + " "
-            + user.getUser());
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.USER_SMB,
+            CommandConstants.USER_DEL_SMB,
+            user.getUser());
 
     Process process = processBuilder.start();
     OutputStream outputStream = process.getOutputStream();

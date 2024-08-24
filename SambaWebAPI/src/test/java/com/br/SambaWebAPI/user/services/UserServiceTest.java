@@ -189,8 +189,12 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("""
+            Dado um processo de criação de usuário samba,
+            quando criar usuário,
+            então deve retornar true
+            """)
     void createSambaUser() throws Exception, UserSambaCreationException {
-        System.out.println("Iniciando teste createSambaUser");
 
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(user.getUser()).thenReturn("user_name");
@@ -203,6 +207,7 @@ public class UserServiceTest {
                 CommandConstants.USER_ADD_SMB,
                 user.getUser()
         };
+
         String[] commandCreateUserArgs = new String[] {
                 CommandConstants.SUDO,
                 CommandConstants.SUDO_STDIN,
@@ -233,7 +238,47 @@ public class UserServiceTest {
         verify(processBuilderAdapter, times(1)).command(commandCreateUserArgs);
         verify(processBuilder, times(2)).start();
         verify(process, times(3)).waitFor();
-//        assertTrue(userService.getUser(user));
+    }
+
+    @Test
+    @DisplayName("""
+            Dado um processo de remoção de usuário samba,
+            quando criar usuário,
+            então deve retornar true
+            """)
+    void removeSambaUser() throws Exception, UserSambaDeleteException {
+
+        when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
+        when(user.getUser()).thenReturn("user_name");
+        when(user.getPassword()).thenReturn("usuario_senha");
+
+        String[] commandArgs = new String[] {
+                CommandConstants.SUDO,
+                CommandConstants.SUDO_STDIN,
+                CommandConstants.USER_SMB,
+                CommandConstants.USER_DEL_SMB,
+                user.getUser()
+        };
+
+        ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);
+
+        ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);
+        when(processBuilderAdapter.command(commandArgs)).thenReturn(processBuilder);
+
+        Process process = Mockito.mock(Process.class);
+        when(processBuilder.start()).thenReturn(process);
+
+        when(process.getOutputStream()).thenReturn(mock(OutputStream.class));
+
+        UserService userService = new UserService(processBuilderAdapter);
+
+        boolean result = userService.removeSambaUser(user, sudoAuthentication);
+
+        assertTrue(result);
+
+        verify(processBuilderAdapter, times(1)).command(commandArgs);
+        verify(processBuilder, times(1)).start();
+        verify(process, times(2)).waitFor();
     }
 
 @Test

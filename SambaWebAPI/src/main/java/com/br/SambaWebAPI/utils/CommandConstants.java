@@ -18,7 +18,7 @@ public class CommandConstants {
   public static final String REMOVE_RECURSIVE = "-rf";
   public static final String USER_SMB = "/usr/bin/smbpasswd";
   public static final String USER_ADD_SMB = "-a";
-  public static final String USER_DEL_SMB = "smbpasswd -x";
+  public static final String USER_DEL_SMB = "-x";
   public static final String CHMOD = "chmod";
   public static final String GROUP_DEL = "groupdel";
   public static final String RELOAD_SMB_CONF = "smbcontrol smbd reload-config";

@@ -46,7 +46,6 @@ public class UserController {
       return DefaultResponseEntityFactory.create(
           "Usuario criado com sucesso!", user, HttpStatus.OK);
     } catch (PasswordCreationException e) {
-      System.out.println("NÃO CRIOU USUÁRIO");
       userService.removeUser(user, sudoAuthentication);
       return DefaultResponseEntityFactory.create(
           e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
