@@ -4,6 +4,7 @@ import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.group.exceptions.AddUserToGroupException;
 import com.br.SambaWebAPI.group.exceptions.GroupCreationException;
+import com.br.SambaWebAPI.group.exceptions.GroupDeleteException;
 import com.br.SambaWebAPI.group.models.Group;
 import com.br.SambaWebAPI.group.services.GroupService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -82,7 +83,7 @@ public class GroupController {
 
       return DefaultResponseEntityFactory.create(
           "Grupo removido com sucesso!", group, HttpStatus.OK);
-    } catch (AddUserToGroupException e) {
+    } catch (GroupDeleteException e) {
       return DefaultResponseEntityFactory.create(
           e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (Exception e) {

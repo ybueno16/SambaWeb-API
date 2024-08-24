@@ -3,8 +3,10 @@ package com.br.SambaWebAPI.group.services;
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.group.exceptions.AddUserToGroupException;
 import com.br.SambaWebAPI.group.exceptions.GroupCreationException;
+import com.br.SambaWebAPI.group.exceptions.GroupDeleteException;
 import com.br.SambaWebAPI.group.factory.AddUserToGroupFactory;
 import com.br.SambaWebAPI.group.factory.GroupCreationFactory;
+import com.br.SambaWebAPI.group.factory.GroupDeleteFactory;
 import com.br.SambaWebAPI.group.models.Group;
 import com.br.SambaWebAPI.password.exceptions.PasswordCreationException;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -25,7 +27,7 @@ public class GroupService {
   }
 
   public boolean createGroup(Group group, SudoAuthentication sudoAuthentication)
-      throws InterruptedException, IOException, GroupCreationException, PasswordCreationException {
+      throws InterruptedException, IOException, GroupCreationException {
 
     ProcessBuilder processBuilder =
         processBuilderAdapter
@@ -33,8 +35,7 @@ public class GroupService {
                 CommandConstants.SUDO,
                 CommandConstants.SUDO_STDIN,
                 CommandConstants.GROUP_ADD,
-                group.getName())
-            .redirectInput(ProcessBuilder.Redirect.PIPE);
+                group.getName());
 
     Process process = processBuilder.start();
 
@@ -49,7 +50,6 @@ public class GroupService {
 
       throw GroupCreationFactory.createException(exitCode);
     }
-
     return true;
   }
 
@@ -63,8 +63,7 @@ public class GroupService {
                 CommandConstants.USER_MOD,
                 CommandConstants.ADD_GROUP_OPTION,
                 group.getName(),
-                user.getUser())
-            .redirectInput(ProcessBuilder.Redirect.PIPE);
+                user.getUser());
 
     Process process = processBuilder.start();
 
@@ -77,20 +76,19 @@ public class GroupService {
     if (exitCode != 0) {
       throw AddUserToGroupFactory.createException(exitCode);
     }
-
     return true;
   }
 
   public boolean deleteGroup(Group group, SudoAuthentication sudoAuthentication)
-      throws IOException, InterruptedException, AddUserToGroupException {
+          throws IOException, InterruptedException, GroupDeleteException {
     ProcessBuilder processBuilder =
         processBuilderAdapter
             .command(
                 CommandConstants.SUDO,
                 CommandConstants.SUDO_STDIN,
                 CommandConstants.GROUP_DEL,
-                group.getName())
-            .redirectInput(ProcessBuilder.Redirect.PIPE);
+                group.getName());
+
 
     Process process = processBuilder.start();
 
@@ -101,7 +99,7 @@ public class GroupService {
 
     int exitCode = process.waitFor();
     if (exitCode != 0) {
-      throw AddUserToGroupFactory.createException(exitCode);
+      throw GroupDeleteFactory.createException(exitCode);
     }
 
     return true;
