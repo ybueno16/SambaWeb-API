@@ -2,7 +2,6 @@ package com.br.SambaWebAPI.permission.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
-import com.br.SambaWebAPI.folder.exceptions.FolderCreationException;
 import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.folder.services.FolderService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -28,7 +27,7 @@ public class PermissionService {
 
   @Autowired
   public PermissionService(ProcessBuilderAdapter processBuilderAdapter, FolderService folderService)
-      throws IOException, InterruptedException, FolderCreationException {
+      throws IOException, InterruptedException {
     this.processBuilderAdapter = processBuilderAdapter;
     this.folderService = folderService;
     this.homeDir = folderService.getHomeDir();
@@ -61,14 +60,13 @@ public class PermissionService {
         "%03o", (ownerPermissionValue * 64) + (groupPermissionValue * 8) + publicPermissionValue);
   }
 
-  public void managePermission(
+  public boolean managePermission(
       OwnerPermission ownerPermission,
       GroupPermission groupPermission,
       PublicPermission publicPermission,
       SudoAuthentication sudoAuthentication,
       Folder folder)
       throws Exception, PermissionAddException {
-    processBuilderAdapter = new ProcessBuilderAdapterImpl();
 
     processBuilderAdapter.command("exit");
     String getPermissionCode = chmodCalculator(ownerPermission, groupPermission, publicPermission);
@@ -80,8 +78,7 @@ public class PermissionService {
                 CommandConstants.SUDO_STDIN,
                 CommandConstants.CHMOD,
                 getPermissionCode,
-                homeDir + "/" + folder.getPath())
-            .redirectInput(ProcessBuilder.Redirect.PIPE);
+                homeDir + "/" + folder.getPath());
 
     Process process = processBuilder.start();
 
@@ -96,5 +93,6 @@ public class PermissionService {
     if (exitCode != 0) {
       throw PermissionAddFactory.createException();
     }
+    return true;
   }
 }

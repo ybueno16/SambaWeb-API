@@ -8,11 +8,7 @@ import com.br.SambaWebAPI.group.exceptions.AddUserToGroupException;
 import com.br.SambaWebAPI.group.exceptions.GroupCreationException;
 import com.br.SambaWebAPI.group.exceptions.GroupDeleteException;
 import com.br.SambaWebAPI.group.models.Group;
-import com.br.SambaWebAPI.password.enums.PasswordCreationErrorCode;
-import com.br.SambaWebAPI.password.exceptions.PasswordCreationException;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.password.services.PasswordService;
-import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import org.junit.jupiter.api.Assertions;
@@ -33,26 +29,14 @@ import static org.mockito.Mockito.times;
 class GroupServiceTest {
 
     @Mock
-    private ProcessBuilderAdapter processBuilderAdapter;
-
-    @Mock
-    private ProcessBuilder processBuilder;
-
-    @Mock
     private SudoAuthentication sudoAuthentication;
 
-    @Mock
-    private Process process;
 
     @Mock
     private User user;
 
     @Mock
     private Group group;
-
-
-    @InjectMocks
-    private GroupService groupService;
 
     @BeforeEach
     public void setup() {
