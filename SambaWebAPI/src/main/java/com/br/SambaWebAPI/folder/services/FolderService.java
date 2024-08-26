@@ -21,19 +21,18 @@ public class FolderService {
     this.processBuilderAdapter = processBuilderAdapter;
   }
 
-  public boolean createFolder(Folder folder, SudoAuthentication sudoAuthentication) throws Exception {
+  public boolean createFolder(Folder folder, SudoAuthentication sudoAuthentication)
+      throws Exception {
 
     processBuilderAdapter.command("exit");
     String homeDir = getHomeDir();
 
     ProcessBuilder processBuilder =
-        processBuilderAdapter
-            .command(
-                CommandConstants.SUDO,
-                CommandConstants.SUDO_STDIN,
-                CommandConstants.MKDIR,
-                homeDir + "/" + folder.getPath());
-
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.MKDIR,
+            homeDir + "/" + folder.getPath());
 
     Process process = processBuilder.start();
 

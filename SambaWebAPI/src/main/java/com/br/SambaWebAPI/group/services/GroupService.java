@@ -8,7 +8,6 @@ import com.br.SambaWebAPI.group.factory.AddUserToGroupFactory;
 import com.br.SambaWebAPI.group.factory.GroupCreationFactory;
 import com.br.SambaWebAPI.group.factory.GroupDeleteFactory;
 import com.br.SambaWebAPI.group.models.Group;
-import com.br.SambaWebAPI.password.exceptions.PasswordCreationException;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
@@ -30,12 +29,11 @@ public class GroupService {
       throws InterruptedException, IOException, GroupCreationException {
 
     ProcessBuilder processBuilder =
-        processBuilderAdapter
-            .command(
-                CommandConstants.SUDO,
-                CommandConstants.SUDO_STDIN,
-                CommandConstants.GROUP_ADD,
-                group.getName());
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.GROUP_ADD,
+            group.getName());
 
     Process process = processBuilder.start();
 
@@ -56,14 +54,13 @@ public class GroupService {
   public boolean addUserToGroup(Group group, User user, SudoAuthentication sudoAuthentication)
       throws IOException, InterruptedException, AddUserToGroupException {
     ProcessBuilder processBuilder =
-        processBuilderAdapter
-            .command(
-                CommandConstants.SUDO,
-                CommandConstants.SUDO_STDIN,
-                CommandConstants.USER_MOD,
-                CommandConstants.ADD_GROUP_OPTION,
-                group.getName(),
-                user.getUser());
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.USER_MOD,
+            CommandConstants.ADD_GROUP_OPTION,
+            group.getName(),
+            user.getUser());
 
     Process process = processBuilder.start();
 
@@ -80,15 +77,13 @@ public class GroupService {
   }
 
   public boolean deleteGroup(Group group, SudoAuthentication sudoAuthentication)
-          throws IOException, InterruptedException, GroupDeleteException {
+      throws IOException, InterruptedException, GroupDeleteException {
     ProcessBuilder processBuilder =
-        processBuilderAdapter
-            .command(
-                CommandConstants.SUDO,
-                CommandConstants.SUDO_STDIN,
-                CommandConstants.GROUP_DEL,
-                group.getName());
-
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.GROUP_DEL,
+            group.getName());
 
     Process process = processBuilder.start();
 

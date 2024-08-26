@@ -1,7 +1,6 @@
 package com.br.SambaWebAPI.permission.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
-import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.folder.services.FolderService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -72,13 +71,12 @@ public class PermissionService {
     String getPermissionCode = chmodCalculator(ownerPermission, groupPermission, publicPermission);
 
     ProcessBuilder processBuilder =
-        processBuilderAdapter
-            .command(
-                CommandConstants.SUDO,
-                CommandConstants.SUDO_STDIN,
-                CommandConstants.CHMOD,
-                getPermissionCode,
-                homeDir + "/" + folder.getPath());
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.CHMOD,
+            getPermissionCode,
+            homeDir + "/" + folder.getPath());
 
     Process process = processBuilder.start();
 

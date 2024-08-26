@@ -1,7 +1,6 @@
 package com.br.SambaWebAPI.user.exceptions;
 
 import com.br.SambaWebAPI.user.enums.UserSambaCreationErrorCode;
-import com.br.SambaWebAPI.user.enums.UserSambaDeleteErrorCode;
 
 public class UserSambaCreationException extends Throwable {
   private final UserSambaCreationErrorCode errorCode;

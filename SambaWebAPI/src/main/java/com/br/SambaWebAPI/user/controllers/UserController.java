@@ -37,8 +37,8 @@ public class UserController {
   @PostMapping(path = "/register")
   public ResponseEntity<?> UserCreation(@RequestBody Map<String, Object> json) throws Exception {
     User user = objectMapper.convertValue(json.get("user"), User.class);
-    SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"),
-        SudoAuthentication.class);
+    SudoAuthentication sudoAuthentication =
+        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       userService.createUser(user, sudoAuthentication);
       passwordService.createPassword(user);
@@ -83,8 +83,8 @@ public class UserController {
   @DeleteMapping(path = "/removeUser")
   public ResponseEntity<?> removeUser(@RequestBody Map<String, Object> json) {
     User user = objectMapper.convertValue(json.get("user"), User.class);
-    SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"),
-            SudoAuthentication.class);
+    SudoAuthentication sudoAuthentication =
+        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
 
     try {
       userService.removeUser(user, sudoAuthentication);
@@ -102,10 +102,11 @@ public class UserController {
   }
 
   @PostMapping(path = "/createSambaUser")
-  public ResponseEntity<?> createSambaUser(@RequestBody Map<String, Object> json) throws UserSambaCreationException {
+  public ResponseEntity<?> createSambaUser(@RequestBody Map<String, Object> json)
+      throws UserSambaCreationException {
     User user = objectMapper.convertValue(json.get("user"), User.class);
-    SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"),
-        SudoAuthentication.class);
+    SudoAuthentication sudoAuthentication =
+        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       userService.createSambaUser(user, sudoAuthentication);
       return DefaultResponseEntityFactory.create(
@@ -122,10 +123,11 @@ public class UserController {
   }
 
   @DeleteMapping(path = "/removeSambaUser")
-  public ResponseEntity<?> removeSambaUser(@RequestBody Map<String, Object> json) throws UserSambaDeleteException, UserSambaCreationException {
+  public ResponseEntity<?> removeSambaUser(@RequestBody Map<String, Object> json)
+      throws UserSambaDeleteException, UserSambaCreationException {
     User user = objectMapper.convertValue(json.get("user"), User.class);
-    SudoAuthentication sudoAuthentication = objectMapper.convertValue(json.get("sudoAuthentication"),
-        SudoAuthentication.class);
+    SudoAuthentication sudoAuthentication =
+        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       userService.removeSambaUser(user, sudoAuthentication);
       return DefaultResponseEntityFactory.create(

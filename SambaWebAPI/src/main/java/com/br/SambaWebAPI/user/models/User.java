@@ -2,12 +2,12 @@ package com.br.SambaWebAPI.user.models;
 
 import com.br.SambaWebAPI.group.models.Group;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 public class User {
   @JsonProperty("user")
   private String user;
+
   private String password;
   private List<Group> groupList;
 
@@ -33,7 +33,8 @@ public class User {
 
   public void setPassword(String password) {
     if (password == null) {
-      throw new NullPointerException("Senha não pode ser nula. Por favor, forneça uma senha válida.");
+      throw new NullPointerException(
+          "Senha não pode ser nula. Por favor, forneça uma senha válida.");
     }
     this.password = password;
   }

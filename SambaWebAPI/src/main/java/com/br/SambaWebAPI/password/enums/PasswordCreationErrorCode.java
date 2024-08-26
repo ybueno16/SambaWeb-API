@@ -12,7 +12,8 @@ public class PasswordCreationErrorCode extends ErrorCode {
       new PasswordCreationErrorCode(
           "Não foi possível encontrar o arquivo de senha no sistema", HttpStatus.BAD_REQUEST);
   public static final PasswordCreationErrorCode PASSWD_FILE_BUSY =
-      new PasswordCreationErrorCode("O arquivo passwd está sendo usado no momento", HttpStatus.BAD_REQUEST);
+      new PasswordCreationErrorCode(
+          "O arquivo passwd está sendo usado no momento", HttpStatus.BAD_REQUEST);
 
   private PasswordCreationErrorCode(String errorMessage, HttpStatus httpStatus) {
     super(errorMessage, httpStatus);

@@ -1,7 +1,6 @@
 package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
-import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.exceptions.UserSambaCreationException;
 import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
@@ -25,12 +24,12 @@ public class UserService {
   }
 
   public boolean createUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
-    ProcessBuilder processBuilder = processBuilderAdapter
-            .command(
-                    CommandConstants.SUDO,
-                    CommandConstants.SUDO_STDIN,
-                    CommandConstants.USER_ADD,
-                    user.getUser());
+    ProcessBuilder processBuilder =
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.USER_ADD,
+            user.getUser());
 
     Process process = processBuilder.start();
 
@@ -42,12 +41,11 @@ public class UserService {
     return true;
   }
 
-
   public boolean removeUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
     processBuilderAdapter.command("exit");
 
-    ProcessBuilder processBuilder = processBuilderAdapter
-        .command(
+    ProcessBuilder processBuilder =
+        processBuilderAdapter.command(
             CommandConstants.ECHO,
             sudoAuthentication.getSudoPassword(),
             "\" | ",
@@ -74,7 +72,8 @@ public class UserService {
   }
 
   public boolean getUser(User user) throws Exception {
-    ProcessBuilder processBuilder = processBuilderAdapter.command(
+    ProcessBuilder processBuilder =
+        processBuilderAdapter.command(
             CommandConstants.BASH,
             CommandConstants.EXECUTE_COMMAND,
             CommandConstants.GET_USER + user.getUser());
@@ -92,10 +91,11 @@ public class UserService {
   }
 
   public boolean createSambaUser(User user, SudoAuthentication sudoAuthentication)
-          throws Exception, UserSambaCreationException {
+      throws Exception, UserSambaCreationException {
     createUser(user, sudoAuthentication);
 
-    ProcessBuilder processBuilder = processBuilderAdapter.command(
+    ProcessBuilder processBuilder =
+        processBuilderAdapter.command(
             CommandConstants.SUDO,
             CommandConstants.SUDO_STDIN,
             CommandConstants.USER_SMB,
@@ -124,8 +124,9 @@ public class UserService {
   }
 
   public boolean removeSambaUser(User user, SudoAuthentication sudoAuthentication)
-          throws Exception, UserSambaDeleteException {
-    ProcessBuilder processBuilder = processBuilderAdapter.command(
+      throws Exception, UserSambaDeleteException {
+    ProcessBuilder processBuilder =
+        processBuilderAdapter.command(
             CommandConstants.SUDO,
             CommandConstants.SUDO_STDIN,
             CommandConstants.USER_SMB,
