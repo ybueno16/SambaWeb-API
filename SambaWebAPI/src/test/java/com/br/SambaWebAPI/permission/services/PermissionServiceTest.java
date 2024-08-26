@@ -3,14 +3,11 @@ package com.br.SambaWebAPI.permission.services;
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.folder.services.FolderService;
-import com.br.SambaWebAPI.group.models.Group;
-import com.br.SambaWebAPI.group.services.GroupService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.permission.exceptions.PermissionAddException;
 import com.br.SambaWebAPI.permission.models.GroupPermission;
 import com.br.SambaWebAPI.permission.models.OwnerPermission;
 import com.br.SambaWebAPI.permission.models.PublicPermission;
-import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -81,28 +78,13 @@ class PermissionServiceTest {
 
     @Test
     @DisplayName("""
-Dado um processo de dar permissão a uma pasta,
-quando realizar o processo de dar permissão a uma pasta com sucesso,
-então deve retornar true
+        Dado um processo de dar permissão a uma pasta,
+        quando realizar o processo de dar permissão a uma pasta com sucesso,
+        então deve retornar true
 """)
     void managePermission() throws Exception, PermissionAddException {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(folder.getPath()).thenReturn("/foo/bar");
-
-        String[] homeDirArgs = new String[]{
-                CommandConstants.SUDO,
-                CommandConstants.BASH,
-                CommandConstants.EXECUTE_COMMAND,
-                CommandConstants.ECHO + " " + "$HOME"
-        };
-
-        String[] commandArgs = new String[] {
-                CommandConstants.SUDO,
-                CommandConstants.SUDO_STDIN,
-                CommandConstants.CHMOD,
-                "000",
-                "/root" + "/" + folder.getPath()
-        };
 
         ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);
         ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);

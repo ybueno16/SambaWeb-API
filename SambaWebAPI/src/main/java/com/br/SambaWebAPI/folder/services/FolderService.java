@@ -21,8 +21,7 @@ public class FolderService {
     this.processBuilderAdapter = processBuilderAdapter;
   }
 
-  public void createFolder(Folder folder, SudoAuthentication sudoAuthentication) throws Exception {
-    processBuilderAdapter = new ProcessBuilderAdapterImpl();
+  public boolean createFolder(Folder folder, SudoAuthentication sudoAuthentication) throws Exception {
 
     processBuilderAdapter.command("exit");
     String homeDir = getHomeDir();
@@ -33,8 +32,8 @@ public class FolderService {
                 CommandConstants.SUDO,
                 CommandConstants.SUDO_STDIN,
                 CommandConstants.MKDIR,
-                homeDir + "/" + folder.getPath())
-            .redirectInput(ProcessBuilder.Redirect.PIPE);
+                homeDir + "/" + folder.getPath());
+
 
     Process process = processBuilder.start();
 
@@ -49,6 +48,7 @@ public class FolderService {
     if (exitCode != 0) {
       throw FolderCreationFactory.createException();
     }
+    return true;
   }
 
   public String getHomeDir() throws IOException, InterruptedException {
