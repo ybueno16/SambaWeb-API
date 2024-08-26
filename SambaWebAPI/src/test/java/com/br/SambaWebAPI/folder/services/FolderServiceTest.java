@@ -40,7 +40,7 @@ class FolderServiceTest {
             quando criar uma pasta com sucesso,
             então deve retornar true
             """)
-    void createGroup() throws Exception {
+    void createFolder() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(folder.getPath()).thenReturn("/foo/bar");
 
@@ -59,6 +59,36 @@ class FolderServiceTest {
         FolderService folderService = new FolderService(processBuilderAdapter);
 
         boolean result = folderService.createFolder(folder, sudoAuthentication);
+
+        assertTrue(result);
+
+        verify(processBuilderAdapter, times(3)).command(any(String[].class));
+    }
+
+    @Test
+    @DisplayName("""
+            Dado um processo de remoção de pasta,
+            quando remover uma pasta com sucesso,
+            então deve retornar true
+            """)
+    void removeFolder() throws Exception {
+        when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
+        when(folder.getPath()).thenReturn("/foo/bar");
+        ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);
+        ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);
+        Process process = Mockito.mock(Process.class);
+
+        when(processBuilderAdapter.command(any(String[].class))).thenReturn(processBuilder);
+        when(processBuilder.start()).thenReturn(process);
+
+        InputStream inputStream = new ByteArrayInputStream("home_dir".getBytes());
+        when(process.getInputStream()).thenReturn(inputStream);
+        when(process.getOutputStream()).thenReturn(mock(OutputStream.class));
+        when(process.waitFor()).thenReturn(0);
+
+        FolderService folderService = new FolderService(processBuilderAdapter);
+
+        boolean result = folderService.removeFolder(folder, sudoAuthentication);
 
         assertTrue(result);
 

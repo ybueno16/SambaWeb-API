@@ -79,9 +79,7 @@ public class FolderService {
     return homeDir;
   }
 
-  public void removeFolder(Folder folder, SudoAuthentication sudoAuthentication) throws Exception {
-    processBuilderAdapter = new ProcessBuilderAdapterImpl();
-
+  public boolean removeFolder(Folder folder, SudoAuthentication sudoAuthentication) throws Exception {
     processBuilderAdapter.command("exit");
     String homeDir = getHomeDir();
 
@@ -92,8 +90,7 @@ public class FolderService {
                 CommandConstants.SUDO_STDIN,
                 CommandConstants.REMOVE,
                 CommandConstants.REMOVE_RECURSIVE,
-                homeDir + "/" + folder.getPath())
-            .redirectInput(ProcessBuilder.Redirect.PIPE);
+                homeDir + "/" + folder.getPath());
 
     Process process = processBuilder.start();
 
@@ -109,5 +106,6 @@ public class FolderService {
     if (exitCode != 0) {
       throw FolderDeleteFactory.createException();
     }
+    return true;
   }
 }
