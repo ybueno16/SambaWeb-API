@@ -30,7 +30,7 @@ public class GroupController {
   }
 
   @PostMapping(path = "/registerGroup")
-  public ResponseEntity<?> GroupCreation(@RequestBody Map<String, Object> json) {
+  public ResponseEntity<?> groupCreation(@RequestBody Map<String, Object> json) {
     Group group = objectMapper.convertValue(json.get("group"), Group.class);
     SudoAuthentication sudoAuthentication =
         objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
@@ -50,7 +50,7 @@ public class GroupController {
   }
 
   @PostMapping(path = "/assignUserToGroup")
-  public ResponseEntity<?> GroupConfig(@RequestBody Map<String, Object> json) {
+  public ResponseEntity<?> addUserToGroup(@RequestBody Map<String, Object> json) {
     User user = objectMapper.convertValue(json.get("user"), User.class);
     Group group = objectMapper.convertValue(json.get("group"), Group.class);
     SudoAuthentication sudoAuthentication =

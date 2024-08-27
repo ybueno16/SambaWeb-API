@@ -1,14 +1,9 @@
 package com.br.SambaWebAPI.user.controllers;
 
-import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntity;
-import com.br.SambaWebAPI.password.enums.PasswordCreationErrorCode;
-import com.br.SambaWebAPI.password.exceptions.PasswordCreationException;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.password.services.PasswordService;
-import com.br.SambaWebAPI.user.enums.UserCreationErrorCode;
-import com.br.SambaWebAPI.user.enums.UserDeleteErrorCode;
-import com.br.SambaWebAPI.user.exceptions.UserCreationException;
-import com.br.SambaWebAPI.user.exceptions.UserDeleteException;
+import com.br.SambaWebAPI.user.exceptions.UserSambaCreationException;
+import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.user.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,20 +16,15 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.br.SambaWebAPI.user.enums.UserCreationErrorCode.CANT_UPDT_PASSWD_FILE;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 class UserControllerTest {
-
-
-    @InjectMocks
-    private UserController userController;
 
     @Mock
     private User user;
@@ -84,5 +74,74 @@ class UserControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
+
+    @Test
+    @DisplayName("""
+                Dado um processo de listagem de usuário,
+                quando o usuário é criado com sucesso,
+                então deve retornar HTTP 200
+            """)
+    public void getUserCreation() throws Exception {
+
+        UserController userController = new UserController(objectMapper, userService, passwordService);
+
+        when(userService.getUser(user)).thenReturn(true);
+
+        ResponseEntity<?> response = userController.getUser(user);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("""
+                Dado um processo de remoção de usuário,
+                quando o usuário é criado com sucesso,
+                então deve retornar HTTP 200
+            """)
+    public void removeUserCreation() throws Exception {
+
+        UserController userController = new UserController(objectMapper, userService, passwordService);
+
+        when(userService.removeUser(user,sudoAuthentication)).thenReturn(true);
+
+        ResponseEntity<?> response = userController.removeUser(getJson());
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("""
+                Dado um processo de criação de usuário samba,
+                quando o usuário é criado com sucesso,
+                então deve retornar HTTP 200
+            """)
+    public void createSambaUserCreation() throws Exception, UserSambaCreationException {
+
+        UserController userController = new UserController(objectMapper, userService, passwordService);
+
+        when(userService.createSambaUser(user,sudoAuthentication)).thenReturn(true);
+
+        ResponseEntity<?> response = userController.createSambaUser(getJson());
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("""
+                Dado um processo de remoção de usuário samba,
+                quando o usuário é criado com sucesso,
+                então deve retornar HTTP 200
+            """)
+    public void deleteSambaUserCreation() throws Exception, UserSambaDeleteException {
+
+        UserController userController = new UserController(objectMapper, userService, passwordService);
+
+        when(userService.removeSambaUser(user,sudoAuthentication)).thenReturn(true);
+
+        ResponseEntity<?> response = userController.removeSambaUser(getJson());
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
 
 }

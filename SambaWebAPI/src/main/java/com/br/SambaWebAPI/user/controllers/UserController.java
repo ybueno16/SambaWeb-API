@@ -124,7 +124,7 @@ public class UserController {
 
   @DeleteMapping(path = "/removeSambaUser")
   public ResponseEntity<?> removeSambaUser(@RequestBody Map<String, Object> json)
-      throws UserSambaDeleteException, UserSambaCreationException {
+      throws UserSambaDeleteException {
     User user = objectMapper.convertValue(json.get("user"), User.class);
     SudoAuthentication sudoAuthentication =
         objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
