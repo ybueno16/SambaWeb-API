@@ -29,4 +29,4 @@ Este é um projeto que consiste em uma aplicação web para gerenciar um servido
    ```
 
 
-   [![Coverage](.github/badges/jacoco.svg)](https://github.com/ybueno16/SambaWeb/actions/workflows/gradle.yml)
+   ![Coverage](.github/badges/jacoco.svg)
