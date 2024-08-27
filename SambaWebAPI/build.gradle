@@ -49,9 +49,7 @@ test {
 
 	jacoco {
 		enabled true
-
 	}
-
 
 	useJUnitPlatform()
 	finalizedBy(jacocoTestReport)
