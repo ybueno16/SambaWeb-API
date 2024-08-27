@@ -33,6 +33,11 @@ dependencies {
 
 }
 
+tasks.jacocoTestReport {
+	reports {
+		csv.required.set(true)
+	}
+}
 
 test {
 	testLogging.showStandardStreams = true
@@ -41,9 +46,13 @@ test {
 		exceptionFormat "full"
 		showStandardStreams true
 	}
+
 	jacoco {
 		enabled true
+
 	}
+
+
 	useJUnitPlatform()
 	finalizedBy(jacocoTestReport)
 }
