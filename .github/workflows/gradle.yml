@@ -28,4 +28,4 @@ jobs:
         uses: cicirello/jacoco-badge-generator@v2
         with:
           jacoco-csv-file: SambaWebAPI/build/reports/jacoco/test/jacocoTestReport.csv
-          generate-branches-badge: true
+          generate-coverage-badge: true

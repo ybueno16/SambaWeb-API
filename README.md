@@ -27,3 +27,6 @@ Este é um projeto que consiste em uma aplicação web para gerenciar um servido
    ```
    git clone https://github.com/ybueno16/SambaWeb.git
    ```
+
+
+   [![Coverage](.github/badges/jacoco.svg)](https://github.com/ybueno16/SambaWeb/actions/workflows/gradle.yml)
