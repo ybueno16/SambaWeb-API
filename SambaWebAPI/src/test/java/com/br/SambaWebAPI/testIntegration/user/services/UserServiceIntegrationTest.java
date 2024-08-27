@@ -1,4 +1,4 @@
-package com.br.SambaWebAPI.testIntegration.services;
+package com.br.SambaWebAPI.testIntegration.user.services;
 
 import com.br.SambaWebAPI.SambaWebApiApplication;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
