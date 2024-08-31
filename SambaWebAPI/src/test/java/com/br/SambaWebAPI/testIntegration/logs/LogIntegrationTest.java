@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.*;
@@ -14,18 +13,16 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SambaWebApiApplication.class)
-@TestPropertySource(locations = "classpath:applicationTest.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LogIntegrationTest {
 
     private static final String DATABASE_URL = "jdbc:h2:mem:testdb";
-    private static final String DATABASE_USERNAME = "sa";
-    private static final String DATABASE_PASSWORD = "";
+    private static final String DATABASE_USERNAME = "test";
+    private static final String DATABASE_PASSWORD = "test";
 
     @Test
     public void insertLogData() throws SQLException {
         try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD)) {
-            // Create the 'LOGS' table if it doesn't exist
             String createTableQuery = "CREATE TABLE IF NOT EXISTS LOGS (" +
                     "ID INT PRIMARY KEY AUTO_INCREMENT, " +
                     "LOG_DESCRIPTION VARCHAR(255) NOT NULL" +
