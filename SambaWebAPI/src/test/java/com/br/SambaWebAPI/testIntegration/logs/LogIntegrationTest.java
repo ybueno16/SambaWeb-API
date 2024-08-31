@@ -1,11 +1,9 @@
 package com.br.SambaWebAPI.testIntegration.logs;
 
 import com.br.SambaWebAPI.SambaWebApiApplication;
-import com.br.SambaWebAPI.config.DataSourceConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,13 +18,21 @@ import static org.junit.Assert.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LogIntegrationTest {
 
-    @Autowired
-    private DataSourceConfig dataSourceConfig;
-
+    private static final String DATABASE_URL = "jdbc:h2:mem:testdb";
+    private static final String DATABASE_USERNAME = "sa";
+    private static final String DATABASE_PASSWORD = "";
 
     @Test
     public void insertLogData() throws SQLException {
-        try (Connection connection = dataSourceConfig.dataSource().getConnection()) {
+        try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD)) {
+            // Create the 'LOGS' table if it doesn't exist
+            String createTableQuery = "CREATE TABLE IF NOT EXISTS LOGS (" +
+                    "ID INT PRIMARY KEY AUTO_INCREMENT, " +
+                    "LOG_DESCRIPTION VARCHAR(255) NOT NULL" +
+                    ")";
+            try (PreparedStatement createTableStatement = connection.prepareStatement(createTableQuery)) {
+                createTableStatement.execute();
+            }
 
             String query = "INSERT INTO logs (log_description) VALUES ('Teste 1')";
 
@@ -44,7 +50,6 @@ public class LogIntegrationTest {
                             try (ResultSet resultSet = selectStatement.executeQuery()) {
                                 while (resultSet.next()) {
                                     String logDescription = resultSet.getString("log_description");
-
                                     assertEquals("Teste 1", logDescription);
                                 }
                             }
