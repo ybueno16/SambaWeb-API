@@ -7,6 +7,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.*;
@@ -15,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SambaWebApiApplication.class)
+@TestPropertySource(locations = "classpath:applicationTest.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LogIntegrationTest {
 
