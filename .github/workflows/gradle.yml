@@ -18,10 +18,10 @@ jobs:
           java-version: "17"
           distribution: "adopt"
 
-      - name: Run tests with H2
+      - name: Run tests
         run: |
           cd SambaWebAPI
-          ./gradlew test -Dspring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+          ./gradlew test
 
       - name: Generate JaCoCo Badge
         id: jacoco
