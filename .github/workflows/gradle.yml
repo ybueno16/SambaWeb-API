@@ -1,9 +1,7 @@
-name: Run Tests
-
 on:
-  pull_request:
+  push:
     branches:
-      - [ master ]
+      - master
 
 jobs:
   integration-tests:
@@ -22,7 +20,6 @@ jobs:
         run: |
           cd SambaWebAPI
           ./gradlew test
-
       - name: Generate JaCoCo Badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
@@ -34,7 +31,6 @@ jobs:
         run: |
           echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
           echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
-
       - name: Commit and push the badge (if it changed)
         uses: EndBug/add-and-commit@v7
         with:
