@@ -76,15 +76,19 @@ public class LogIntegrationTest {
     }
     @Test
     @DisplayName("""
-        Give a empty log description,
-         when try to insert log data,
-         then the log description shouldn't be inserted
-        """)
+    Give a empty log description,
+     when try to insert log data,
+     then the log description shouldn't be inserted
+    """)
     public void testReadLogEmptyFile() throws SQLException, IOException {
         Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
         setup();
 
         File logFile = new File("log.txt");
+        if (!logFile.exists()) {
+            logFile.createNewFile();
+        }
+
         BufferedReader reader = new BufferedReader(new FileReader(logFile));
         String logDescription = "";
         String line;
@@ -94,6 +98,14 @@ public class LogIntegrationTest {
         reader.close();
 
         if (logDescription.trim().isEmpty()) {
+            String query = "SELECT COUNT(*) FROM logs";
+            try (Statement statement = connection.createStatement()) {
+                try (ResultSet resultSet = statement.executeQuery(query)) {
+                    resultSet.next();
+                    int count = resultSet.getInt(1);
+                    assertEquals(0, count); // Verifica se não há registros no banco
+                }
+            }
             return;
         }
 
