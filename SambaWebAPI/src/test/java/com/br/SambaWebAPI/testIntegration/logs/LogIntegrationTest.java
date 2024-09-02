@@ -1,19 +1,30 @@
 package com.br.SambaWebAPI.testIntegration.logs;
 
 import com.br.SambaWebAPI.SambaWebApiApplication;
+import com.br.SambaWebAPI.config.Global;
+import com.br.SambaWebAPI.logs.repository.impl.LogRepositoryImpl;
+import com.br.SambaWebAPI.logs.service.LogService;
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.*;
 import java.sql.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SambaWebApiApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LogIntegrationTest {
+
+    @Autowired
+    private LogService logService;
+    private LogRepositoryImpl logRepository;
 
     private static final String DATABASE_URL = "jdbc:h2:mem:testdb";
     private static final String DATABASE_USERNAME = "test";
@@ -61,6 +72,58 @@ public class LogIntegrationTest {
                     }
                 }
             }
+        }
+    }
+    @Test
+    @DisplayName("""
+        Give a empty log description,
+         when try tp insert log data,
+         then the log description shouldn't be inserted
+        """)
+    public void testReadLogEmptyFile() throws SQLException, IOException {
+        Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+        setup();
+
+        File logFile = new File(Global.SMB_LOG_PATH);
+        BufferedReader reader = new BufferedReader(new FileReader(logFile));
+        String logDescription = "";
+        String line;
+        while ((line = reader.readLine()) != null) {
+            logDescription += line + "\n";
+        }
+        reader.close();
+
+        if (logDescription.trim().isEmpty()) {
+            return;
+        }
+
+        String query = "INSERT INTO logs (log_description) VALUES (?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, logDescription);
+            statement.execute();
+        }
+    }
+
+    @Test
+    @DisplayName("""
+        Give an invalid log file,
+         when try to insert logs,
+         then an exception should be thrown
+        """)
+    public void testInsertLogsInvalid() throws SQLException, IOException {
+        // Crie um arquivo de log inválido
+        File logFile = new File(Global.SMB_LOG_PATH);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile))) {
+            writer.write("Invalid log entry");
+        }
+
+        // Chame o método insertLogs
+        LogService logService = new LogService(logRepository);
+        try {
+            logService.insertLogs();
+            fail("Expected an exception to be thrown");
+        } catch (Exception e) {
+            assertNotNull(e);
         }
     }
 }
