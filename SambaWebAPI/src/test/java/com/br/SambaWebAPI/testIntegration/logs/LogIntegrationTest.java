@@ -77,14 +77,14 @@ public class LogIntegrationTest {
     @Test
     @DisplayName("""
         Give a empty log description,
-         when try tp insert log data,
+         when try to insert log data,
          then the log description shouldn't be inserted
         """)
     public void testReadLogEmptyFile() throws SQLException, IOException {
         Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
         setup();
 
-        File logFile = new File(Global.SMB_LOG_PATH);
+        File logFile = new File("log.txt");
         BufferedReader reader = new BufferedReader(new FileReader(logFile));
         String logDescription = "";
         String line;
@@ -110,14 +110,11 @@ public class LogIntegrationTest {
          when try to insert logs,
          then an exception should be thrown
         """)
-    public void testInsertLogsInvalid() throws SQLException, IOException {
-        // Crie um arquivo de log inválido
-        File logFile = new File(Global.SMB_LOG_PATH);
+    public void testInsertLogsInvalid() throws IOException {
+        File logFile = new File("log.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile))) {
             writer.write("Invalid log entry");
         }
-
-        // Chame o método insertLogs
         LogService logService = new LogService(logRepository);
         try {
             logService.insertLogs();
