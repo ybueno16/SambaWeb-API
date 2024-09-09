@@ -1,32 +1,25 @@
 # Samba Web Dashboard
 
-Este é um projeto que consiste em uma aplicação web para gerenciar um servidor Samba através de uma interface construída em Angular. A aplicação interage com uma API Spring Boot, que por sua vez executa os comandos necessários no servidor Samba, encapsulado em um contêiner Docker.
+This is a project that consists of a web application to manage a Samba server through an interface built in Angular. The application interacts with a Spring Boot API, which in turn executes the necessary commands on the Samba server, encapsulated in a Docker container.
 
-## Funcionalidades Principais
+## Main Features
 
-- **Dashboard**: Interface intuitiva que exibe informações importantes sobre o servidor Samba, como status, usuários conectados, espaço em disco, etc.
+- **Dashboard**: Intuitive interface that displays important information about the Samba server, such as status, connected users, disk space, etc.
   
-- **Gerenciamento de Compartilhamentos**: Permite criar, editar e excluir compartilhamentos de arquivos e diretórios no servidor Samba.
+- **Share Management**: Allows you to create, edit and delete file and directory shares on the Samba server.
   
-- **Controle de Usuários e Permissões**: Facilita a administração de usuários, grupos e permissões de acesso aos compartilhamentos.
+- **User and Permissions Control**: Facilitates the administration of users, groups and access permissions to shares.
   
-- **Logs e Monitoramento**: Visualização dos logs do servidor Samba para acompanhamento e diagnóstico de problemas.
+- **Logs and Monitoring**: View Samba server logs for monitoring and diagnosing problems.
 
-## Tecnologias Utilizadas
+## Technologies Used
 
-- **Angular**: Framework de desenvolvimento front-end utilizado para construir a interface do usuário.
+- **Angular**: Front-end development framework used to build the user interface.
   
-- **Spring Boot**: Framework Java utilizado para construir a API REST que interage com o servidor Samba.
+- **Spring Boot**: Java Framework used to build the REST API that interacts with the Samba server.
   
-- **Docker**: Utilizado para encapsular o servidor Samba, garantindo portabilidade e isolamento.
-
-## Como Usar
-
-1. **Clonar o Repositório**:
-
-   ```
-   git clone https://github.com/ybueno16/SambaWeb.git
-   ```
+- **Docker**: Used to encapsulate the Samba server, ensuring portability and isolation.
 
 
    ![Coverage](.github/badges/jacoco.svg)
+
