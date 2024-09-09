@@ -103,7 +103,7 @@ public class LogIntegrationTest {
                 try (ResultSet resultSet = statement.executeQuery(query)) {
                     resultSet.next();
                     int count = resultSet.getInt(1);
-                    assertEquals(0, count); // Verifica se não há registros no banco
+                    assertEquals(0, count);
                 }
             }
             return;

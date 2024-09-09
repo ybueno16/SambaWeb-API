@@ -38,30 +38,30 @@ public class UserController {
   public ResponseEntity<?> UserCreation(@RequestBody Map<String, Object> json) throws Exception {
     User user = objectMapper.convertValue(json.get("user"), User.class);
     SudoAuthentication sudoAuthentication =
-        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       userService.createUser(user, sudoAuthentication);
       passwordService.createPassword(user);
 
       return DefaultResponseEntityFactory.create(
-          "Usuario criado com sucesso!", user, HttpStatus.OK);
+              "Usuario criado com sucesso!", user, HttpStatus.OK);
     } catch (PasswordCreationException e) {
       userService.removeUser(user, sudoAuthentication);
-      return DefaultResponseEntityFactory.create(
-          e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+      return ResponseEntity.badRequest().build();
     } catch (UserCreationException e) {
       return DefaultResponseEntityFactory.create(
-          e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+              e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (UserDeleteException e) {
       return DefaultResponseEntityFactory.create(
-          e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+              e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-          "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.",
-          null,
-          HttpStatus.INTERNAL_SERVER_ERROR);
+              "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.",
+              null,
+              HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
 
   @PostMapping(path = "/user")
   public ResponseEntity<?> getUser(@RequestBody User user) {
