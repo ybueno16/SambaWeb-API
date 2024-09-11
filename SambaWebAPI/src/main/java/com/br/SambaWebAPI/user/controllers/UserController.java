@@ -3,12 +3,12 @@ package com.br.SambaWebAPI.user.controllers;
 import static com.br.SambaWebAPI.config.Global.API_URL_SAMBA;
 
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
-import com.br.SambaWebAPI.password.exceptions.PasswordCreationException;
+import com.br.SambaWebAPI.password.exceptions.CreatePasswordException;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.password.services.PasswordService;
-import com.br.SambaWebAPI.user.exceptions.UserCreationException;
-import com.br.SambaWebAPI.user.exceptions.UserDeleteException;
-import com.br.SambaWebAPI.user.exceptions.UserSambaCreationException;
+import com.br.SambaWebAPI.user.exceptions.CreateUserException;
+import com.br.SambaWebAPI.user.exceptions.DeleteUserException;
+import com.br.SambaWebAPI.user.exceptions.CreateUserSambaException;
 import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.user.services.UserService;
@@ -28,13 +28,13 @@ public class UserController {
 
   @Autowired
   public UserController(
-      ObjectMapper objectMapper, UserService userService, PasswordService passwordService) {
+          ObjectMapper objectMapper, UserService userService, PasswordService passwordService) {
     this.objectMapper = objectMapper;
     this.userService = userService;
     this.passwordService = passwordService;
   }
 
-  @PostMapping(path = "/register")
+  @PostMapping
   public ResponseEntity<?> UserCreation(@RequestBody Map<String, Object> json) throws Exception {
     User user = objectMapper.convertValue(json.get("user"), User.class);
     SudoAuthentication sudoAuthentication =
@@ -44,99 +44,103 @@ public class UserController {
       passwordService.createPassword(user);
 
       return DefaultResponseEntityFactory.create(
-              "Usuario criado com sucesso!", user, HttpStatus.OK);
-    } catch (PasswordCreationException e) {
+              "User created successfully!", user, HttpStatus.OK);
+    } catch (CreatePasswordException e) {
       userService.removeUser(user, sudoAuthentication);
       return ResponseEntity.badRequest().build();
-    } catch (UserCreationException e) {
+    } catch (CreateUserException e) {
       return DefaultResponseEntityFactory.create(
               e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
-    } catch (UserDeleteException e) {
+    } catch (DeleteUserException e) {
       return DefaultResponseEntityFactory.create(
               e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-              "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.",
+              "Generic error. An unknown error occurred during user creation.",
               null,
               HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
 
-  @PostMapping(path = "/user")
+  @PostMapping(path = "/getUser")
   public ResponseEntity<?> getUser(@RequestBody User user) {
     try {
       userService.getUser(user);
-      return DefaultResponseEntityFactory.create("Usuario existe!", user, HttpStatus.OK);
+      return DefaultResponseEntityFactory.create("User already exists!", user, HttpStatus.OK);
 
-    } catch (UserCreationException e) {
+    } catch (CreateUserException e) {
       return DefaultResponseEntityFactory.create(
-          e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+              e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-          "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário.",
-          null,
-          HttpStatus.INTERNAL_SERVER_ERROR);
+              "Generic error. An unknown error occurred during user creation.",
+              null,
+              HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @DeleteMapping(path = "/removeUser")
+  @DeleteMapping
   public ResponseEntity<?> removeUser(@RequestBody Map<String, Object> json) {
     User user = objectMapper.convertValue(json.get("user"), User.class);
     SudoAuthentication sudoAuthentication =
-        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
 
     try {
       userService.removeUser(user, sudoAuthentication);
       return DefaultResponseEntityFactory.create(
-          "Usuario removido com sucesso!", user, HttpStatus.OK);
-    } catch (UserCreationException e) {
+              "User removed successfully!", user, HttpStatus.OK);
+    } catch (DeleteUserException e) {
       return DefaultResponseEntityFactory.create(
-          e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+              e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-          "Erro genérico. Ocorreu um erro desconhecido durante a remoção do usuário.",
-          null,
-          HttpStatus.INTERNAL_SERVER_ERROR);
+              "Generic error. An unknown error occurred while removing the user.",
+              null,
+              HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @PostMapping(path = "/createSambaUser")
   public ResponseEntity<?> createSambaUser(@RequestBody Map<String, Object> json)
-      throws UserSambaCreationException {
+          throws CreateUserSambaException {
     User user = objectMapper.convertValue(json.get("user"), User.class);
     SudoAuthentication sudoAuthentication =
-        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       userService.createSambaUser(user, sudoAuthentication);
       return DefaultResponseEntityFactory.create(
-          "Usuario criado com sucesso!", user, HttpStatus.OK);
-    } catch (UserSambaCreationException e) {
+              "Samba user created successfully!", user, HttpStatus.OK);
+    } catch (CreateUserSambaException e) {
       return DefaultResponseEntityFactory.create(
-          e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+              e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-          "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário samba.",
-          null,
-          HttpStatus.INTERNAL_SERVER_ERROR);
+              "Generic error. An unknown error occurred while creating the samba user.",
+              null,
+              HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @DeleteMapping(path = "/removeSambaUser")
   public ResponseEntity<?> removeSambaUser(@RequestBody Map<String, Object> json)
-      throws UserSambaDeleteException {
+          throws UserSambaDeleteException {
     User user = objectMapper.convertValue(json.get("user"), User.class);
     SudoAuthentication sudoAuthentication =
-        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       userService.removeSambaUser(user, sudoAuthentication);
       return DefaultResponseEntityFactory.create(
-          "Usuario removido com sucesso!", user, HttpStatus.OK);
-    } catch (Exception e) {
+              "Smba user removed successfully!", user, HttpStatus.OK);
+    } catch (UserSambaDeleteException e) {
       return DefaultResponseEntityFactory.create(
-          "Erro genérico. Ocorreu um erro desconhecido durante a criação do usuário samba.",
-          null,
-          HttpStatus.INTERNAL_SERVER_ERROR);
+              e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+    }
+    catch (Exception e) {
+      return DefaultResponseEntityFactory.create(
+              "Generic error. An unknown error occurred while removing the samba user.",
+              null,
+              HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

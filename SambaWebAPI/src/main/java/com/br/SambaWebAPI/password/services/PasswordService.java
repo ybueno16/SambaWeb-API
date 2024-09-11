@@ -1,7 +1,7 @@
 package com.br.SambaWebAPI.password.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
-import com.br.SambaWebAPI.password.factory.PasswordCreationFactory;
+import com.br.SambaWebAPI.password.factory.CreatePasswordFactory;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import java.io.*;
@@ -36,7 +36,7 @@ public class PasswordService {
 
     int exitCode = process.waitFor();
     if (exitCode != 0) {
-      throw PasswordCreationFactory.createException(exitCode);
+      throw CreatePasswordFactory.createException(exitCode);
     }
     return true;
   }

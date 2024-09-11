@@ -28,7 +28,7 @@ public class AddUserToGroupErrorCode extends ErrorCode {
           HttpStatus.INTERNAL_SERVER_ERROR);
   public static final AddUserToGroupErrorCode GENERIC_ERROR =
       new AddUserToGroupErrorCode(
-          "Erro genérico. Ocorreu um erro desconhecido durante a adição de grupo ao usuário.",
+          "Generic error. An unknown error occurred while adding a user group.",
           HttpStatus.BAD_REQUEST);
 
   private AddUserToGroupErrorCode(String errorMessage, HttpStatus httpStatus) {

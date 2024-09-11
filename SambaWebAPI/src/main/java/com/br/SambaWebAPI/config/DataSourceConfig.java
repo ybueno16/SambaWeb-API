@@ -37,48 +37,8 @@ public class DataSourceConfig {
     return dataSource;
   }
 
-  public void setDriver(String driver) {
-    this.driver = driver;
-  }
-
-  public void setIp(String ip) {
-    this.ip = ip;
-  }
-
-  public void setPort(String port) {
-    this.port = port;
-  }
-
-  public void setDatabase(String database) {
-    this.database = database;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
   public void setPassword(String password) {
     this.password = password;
-  }
-
-  public String getDriver() {
-    return driver;
-  }
-
-  public String getIp() {
-    return ip;
-  }
-
-  public String getPort() {
-    return port;
-  }
-
-  public String getDatabase() {
-    return database;
-  }
-
-  public String getUsername() {
-    return username;
   }
 
   public String getPassword() {

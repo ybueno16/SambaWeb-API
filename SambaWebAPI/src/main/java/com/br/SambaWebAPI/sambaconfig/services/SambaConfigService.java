@@ -3,7 +3,7 @@ package com.br.SambaWebAPI.sambaconfig.services;
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.config.Global;
-import com.br.SambaWebAPI.folder.factory.FolderDeleteFactory;
+import com.br.SambaWebAPI.folder.factory.DeleteFolderFactory;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.sambaconfig.models.SambaConfig;
 import com.br.SambaWebAPI.utils.CommandConstants;
@@ -163,7 +163,7 @@ public class SambaConfigService {
     int exitCode = process.exitValue();
 
     if (exitCode != 0) {
-      throw FolderDeleteFactory.createException();
+      throw DeleteFolderFactory.createException();
     }
   }
 }

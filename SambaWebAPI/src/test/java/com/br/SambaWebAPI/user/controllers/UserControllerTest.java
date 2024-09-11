@@ -2,7 +2,7 @@ package com.br.SambaWebAPI.user.controllers;
 
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.password.services.PasswordService;
-import com.br.SambaWebAPI.user.exceptions.UserSambaCreationException;
+import com.br.SambaWebAPI.user.exceptions.CreateUserSambaException;
 import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.user.services.UserService;
@@ -10,13 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -115,7 +113,7 @@ class UserControllerTest {
                 quando o usuário é criado com sucesso,
                 então deve retornar HTTP 200
             """)
-    public void createSambaUserCreation() throws Exception, UserSambaCreationException {
+    public void createSambaUserCreation() throws Exception, CreateUserSambaException {
 
         UserController userController = new UserController(objectMapper, userService, passwordService);
 

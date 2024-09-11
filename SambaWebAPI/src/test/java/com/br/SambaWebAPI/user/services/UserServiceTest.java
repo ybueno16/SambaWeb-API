@@ -2,11 +2,11 @@ package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.user.enums.UserCreationErrorCode;
-import com.br.SambaWebAPI.user.enums.UserDeleteErrorCode;
-import com.br.SambaWebAPI.user.exceptions.UserCreationException;
-import com.br.SambaWebAPI.user.exceptions.UserDeleteException;
-import com.br.SambaWebAPI.user.exceptions.UserSambaCreationException;
+import com.br.SambaWebAPI.user.enums.CreateUserErrorCode;
+import com.br.SambaWebAPI.user.enums.DeleteUserErrorCode;
+import com.br.SambaWebAPI.user.exceptions.CreateUserException;
+import com.br.SambaWebAPI.user.exceptions.DeleteUserException;
+import com.br.SambaWebAPI.user.exceptions.CreateUserSambaException;
 import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
@@ -21,7 +21,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -119,19 +118,19 @@ public class UserServiceTest {
                 1, 9, 12, 13, 14
         };
 
-        UserCreationErrorCode[] errorCodes = new UserCreationErrorCode[] {
-                UserCreationErrorCode.CANT_UPDT_PASSWD_FILE,
-                UserCreationErrorCode.USR_ALREADY_EXISTS,
-                UserCreationErrorCode.CANT_CREATE_HOME_DIR,
-                UserCreationErrorCode.CANT_CREATE_MAIL_SPOOL,
-                UserCreationErrorCode.CANT_UPDATE_SELINUX,
+        CreateUserErrorCode[] errorCodes = new CreateUserErrorCode[] {
+                CreateUserErrorCode.CANT_UPDT_PASSWD_FILE,
+                CreateUserErrorCode.USR_ALREADY_EXISTS,
+                CreateUserErrorCode.CANT_CREATE_HOME_DIR,
+                CreateUserErrorCode.CANT_CREATE_MAIL_SPOOL,
+                CreateUserErrorCode.CANT_UPDATE_SELINUX,
         };
 
         for (int i = 0; i < exitCodes.length; i++) {
             when(process.waitFor()).thenReturn(exitCodes[i]);
             try {
                 userService.createUser(user, sudoAuthentication);
-            } catch (UserCreationException e) {
+            } catch (CreateUserException e) {
                 Assertions.assertEquals(errorCodes[i], e.getErrorCode());
             }
             verify(processBuilderAdapter, times(i + 1)).command(Mockito.eq(commandArgs));
@@ -143,8 +142,8 @@ public class UserServiceTest {
         try {
             userService.createUser(user, sudoAuthentication);
             Assertions.fail("Deveria ter lançado uma exceção");
-        } catch (UserCreationException e) {
-            Assertions.assertEquals(UserCreationErrorCode.GENERIC_ERROR, e.getErrorCode());
+        } catch (CreateUserException e) {
+            Assertions.assertEquals(CreateUserErrorCode.GENERIC_ERROR, e.getErrorCode());
         }
         verify(processBuilderAdapter, times(exitCodes.length + 1)).command(Mockito.eq(commandArgs));
         verify(processBuilder, times(exitCodes.length + 1)).start();
@@ -194,7 +193,7 @@ public class UserServiceTest {
             quando criar usuário,
             então deve retornar true
             """)
-    void createSambaUser() throws Exception, UserSambaCreationException {
+    void createSambaUser() throws Exception, CreateUserSambaException {
 
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(user.getUser()).thenReturn("user_name");
@@ -350,12 +349,12 @@ public void removeUserFailWithDifferentErrorCodes() throws Exception {
             1, 6, 8, 10, 12
     };
 
-    UserDeleteErrorCode[] errorCodes = new UserDeleteErrorCode[] {
-            UserDeleteErrorCode.CANT_UPDT_PASSWD_FILE,
-            UserDeleteErrorCode.USER_DOESNT_EXIST,
-            UserDeleteErrorCode.USER_LOGGED,
-            UserDeleteErrorCode.CANT_UPDT_GROUP_FILE,
-            UserDeleteErrorCode.CANT_REMOVE_HOME_DIR
+    DeleteUserErrorCode[] errorCodes = new DeleteUserErrorCode[] {
+            DeleteUserErrorCode.CANT_UPDT_PASSWD_FILE,
+            DeleteUserErrorCode.USER_DOESNT_EXIST,
+            DeleteUserErrorCode.USER_LOGGED,
+            DeleteUserErrorCode.CANT_UPDT_GROUP_FILE,
+            DeleteUserErrorCode.CANT_REMOVE_HOME_DIR
     };
 
     for (int i = 0; i < exitCodes.length; i++) {
@@ -363,7 +362,7 @@ public void removeUserFailWithDifferentErrorCodes() throws Exception {
         try {
             userService.removeUser(user, sudoAuthentication);
             Assertions.fail("Deveria ter lançado uma exceção");
-        } catch (UserDeleteException e) {
+        } catch (DeleteUserException e) {
             Assertions.assertEquals(errorCodes[i], e.getErrorCode());
         }
     }
@@ -372,8 +371,8 @@ public void removeUserFailWithDifferentErrorCodes() throws Exception {
     try {
         userService.removeUser(user, sudoAuthentication);
         Assertions.fail("Deveria ter lançado uma exceção");
-    } catch (UserDeleteException e) {
-        Assertions.assertEquals(UserDeleteErrorCode.GENERIC_ERROR, e.getErrorCode());
+    } catch (DeleteUserException e) {
+        Assertions.assertEquals(DeleteUserErrorCode.GENERIC_ERROR, e.getErrorCode());
     }
 
     verify(processBuilderAdapter, times(exitCodes.length + 1)).command(commandArgs);

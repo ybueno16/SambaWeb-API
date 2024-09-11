@@ -1,16 +1,11 @@
 package com.br.SambaWebAPI.password.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
-import com.br.SambaWebAPI.password.enums.PasswordCreationErrorCode;
-import com.br.SambaWebAPI.password.exceptions.PasswordCreationException;
+import com.br.SambaWebAPI.password.enums.CreatePasswordErrorCode;
+import com.br.SambaWebAPI.password.exceptions.CreatePasswordException;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.user.enums.UserCreationErrorCode;
-import com.br.SambaWebAPI.user.enums.UserDeleteErrorCode;
-import com.br.SambaWebAPI.user.exceptions.UserCreationException;
-import com.br.SambaWebAPI.user.exceptions.UserDeleteException;
 import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
 import com.br.SambaWebAPI.user.models.User;
-import com.br.SambaWebAPI.user.services.UserService;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -125,9 +120,9 @@ class PasswordServiceTest {
                 3,5
         };
 
-        PasswordCreationErrorCode[] errorCodes = new PasswordCreationErrorCode[] {
-                PasswordCreationErrorCode.PASSWD_FILE_MISSING,
-                PasswordCreationErrorCode.PASSWD_FILE_BUSY,
+        CreatePasswordErrorCode[] errorCodes = new CreatePasswordErrorCode[] {
+                CreatePasswordErrorCode.PASSWD_FILE_MISSING,
+                CreatePasswordErrorCode.PASSWD_FILE_BUSY,
         };
 
         for (int i = 0; i < exitCodes.length; i++) {
@@ -135,7 +130,7 @@ class PasswordServiceTest {
             try {
                 passwordService.createPassword(user);
                 Assertions.fail("Deveria ter lançado uma exceção customizada");
-            } catch (PasswordCreationException e) {
+            } catch (CreatePasswordException e) {
                 Assertions.assertEquals(errorCodes[i], e.getErrorCode());
             }
 
@@ -146,8 +141,8 @@ class PasswordServiceTest {
         try {
             passwordService.createPassword(user);
             Assertions.fail("Deveria ter lançado uma exceção");
-        } catch (PasswordCreationException e) {
-            Assertions.assertEquals(PasswordCreationErrorCode.GENERIC_ERROR, e.getErrorCode());
+        } catch (CreatePasswordException e) {
+            Assertions.assertEquals(CreatePasswordErrorCode.GENERIC_ERROR, e.getErrorCode());
         }
 
         verify(processBuilderAdapter, times(exitCodes.length + 1)).command(commandArgs);

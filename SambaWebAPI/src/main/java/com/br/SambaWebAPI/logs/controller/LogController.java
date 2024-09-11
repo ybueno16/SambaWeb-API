@@ -27,14 +27,14 @@ public class LogController {
     try {
       boolean retorno = logService.insertLogs();
       return DefaultResponseEntityFactory.create(
-          "Log foi inserido com sucesso.", retorno, HttpStatus.OK);
+          "Log was inserted successfully!", retorno, HttpStatus.OK);
     } catch (SQLException e) {
       return DefaultResponseEntityFactory.create(
-          "Houve algum erro ao inserir no banco.", null, HttpStatus.INTERNAL_SERVER_ERROR);
+          "There was an error while inserting it into the database.", null, HttpStatus.INTERNAL_SERVER_ERROR);
 
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-          "Erro ao salvar logs.", null, HttpStatus.INTERNAL_SERVER_ERROR);
+          "Error saving logs.", null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

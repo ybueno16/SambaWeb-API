@@ -35,27 +35,27 @@ public class PermissionController {
   @PostMapping(path = "managePermission")
   public ResponseEntity<?> permissionManager(@RequestBody Map<String, Map<String, String>> json) {
     OwnerPermission ownerPermission =
-        objectMapper.convertValue(json.get("ownerPermission"), OwnerPermission.class);
+            objectMapper.convertValue(json.get("ownerPermission"), OwnerPermission.class);
     GroupPermission groupPermission =
-        objectMapper.convertValue(json.get("groupPermission"), GroupPermission.class);
+            objectMapper.convertValue(json.get("groupPermission"), GroupPermission.class);
     PublicPermission publicPermission =
-        objectMapper.convertValue(json.get("publicPermission"), PublicPermission.class);
+            objectMapper.convertValue(json.get("publicPermission"), PublicPermission.class);
     Folder folder = objectMapper.convertValue(json.get("folder"), Folder.class);
     SudoAuthentication sudoAuthentication =
-        objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       permissionService.managePermission(
-          ownerPermission, groupPermission, publicPermission, sudoAuthentication, folder);
+              ownerPermission, groupPermission, publicPermission, sudoAuthentication, folder);
       return DefaultResponseEntityFactory.create(
-          "Garantido a permissão correta!", folder, HttpStatus.OK);
+              "Permission granted correctly!", folder, HttpStatus.OK);
     } catch (PermissionAddException e) {
       return DefaultResponseEntityFactory.create(
-          e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
+              e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-          "Erro genérico. Ocorreu um erro desconhecido durante a criação do grupo.",
-          null,
-          HttpStatus.INTERNAL_SERVER_ERROR);
+              "Generic error. An unknown error occurred during group creation.",
+              null,
+              HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }
