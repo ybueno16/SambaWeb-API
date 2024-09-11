@@ -2,8 +2,6 @@ package com.br.SambaWebAPI.testIntegration.user.services;
 
 import com.br.SambaWebAPI.SambaWebApiApplication;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.user.enums.UserCreationErrorCode;
-import com.br.SambaWebAPI.user.exceptions.UserCreationException;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.user.services.UserService;
 import org.junit.jupiter.api.*;

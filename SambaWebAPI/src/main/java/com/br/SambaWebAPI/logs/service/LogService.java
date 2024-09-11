@@ -45,9 +45,9 @@ public class LogService {
         logs.add(new String[] {logEntry.toString()});
       }
     } catch (IOException e) {
-      throw new IOException("Ocorreu um erro de IO na leitura do log");
+      throw new IOException("An IO error occurred while reading the log");
     } catch (Exception e) {
-      throw new Exception("Ocorreu um erro ao ler o log");
+      throw new Exception("An error occurred while reading the log");
     }
     return logs;
   }

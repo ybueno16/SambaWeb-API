@@ -1,16 +1,16 @@
 package com.br.SambaWebAPI.user.exceptions;
 
-import com.br.SambaWebAPI.user.enums.UserSambaDeleteErrorCode;
+import com.br.SambaWebAPI.user.enums.DeleteUserSambaErrorCode;
 
 public class UserSambaDeleteException extends Throwable {
-  private final UserSambaDeleteErrorCode errorCode;
+  private final DeleteUserSambaErrorCode errorCode;
 
-  public UserSambaDeleteException(UserSambaDeleteErrorCode errorCode) {
+  public UserSambaDeleteException(DeleteUserSambaErrorCode errorCode) {
     super(errorCode.getErrorMessage());
     this.errorCode = errorCode;
   }
 
-  public UserSambaDeleteErrorCode getErrorCode() {
+  public DeleteUserSambaErrorCode getErrorCode() {
     return errorCode;
   }
 }

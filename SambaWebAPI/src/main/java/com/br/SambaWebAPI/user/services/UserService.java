@@ -2,12 +2,12 @@ package com.br.SambaWebAPI.user.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.user.exceptions.UserSambaCreationException;
+import com.br.SambaWebAPI.user.exceptions.CreateUserSambaException;
 import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
-import com.br.SambaWebAPI.user.factory.UserCreationFactory;
-import com.br.SambaWebAPI.user.factory.UserDeleteFactory;
-import com.br.SambaWebAPI.user.factory.UserSambaCreationFactory;
-import com.br.SambaWebAPI.user.factory.UserSambaDeleteFactory;
+import com.br.SambaWebAPI.user.factory.CreateUserFactory;
+import com.br.SambaWebAPI.user.factory.DeleteUserFactory;
+import com.br.SambaWebAPI.user.factory.CreateSambaUserFactory;
+import com.br.SambaWebAPI.user.factory.DeleteSambaUserFactory;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import java.io.*;
@@ -36,7 +36,7 @@ public class UserService {
     int exitCode = process.waitFor();
 
     if (exitCode != 0) {
-      throw UserCreationFactory.createException(exitCode);
+      throw CreateUserFactory.createException(exitCode);
     }
     return true;
   }
@@ -65,7 +65,7 @@ public class UserService {
 
     int exitCode = process.waitFor();
     if (exitCode != 0) {
-      throw UserDeleteFactory.createException(exitCode);
+      throw DeleteUserFactory.createException(exitCode);
     }
 
     return true;
@@ -91,7 +91,7 @@ public class UserService {
   }
 
   public boolean createSambaUser(User user, SudoAuthentication sudoAuthentication)
-      throws Exception, UserSambaCreationException {
+      throws Exception, CreateUserSambaException {
     createUser(user, sudoAuthentication);
 
     ProcessBuilder processBuilder =
@@ -117,7 +117,7 @@ public class UserService {
 
     int exitCode = process.waitFor();
     if (exitCode != 0) {
-      throw UserSambaCreationFactory.createException(exitCode);
+      throw CreateSambaUserFactory.createException(exitCode);
     }
 
     return true;
@@ -143,7 +143,7 @@ public class UserService {
 
     int exitCode = process.waitFor();
     if (exitCode != 0) {
-      throw UserSambaDeleteFactory.createException(exitCode);
+      throw DeleteSambaUserFactory.createException(exitCode);
     }
 
     return true;

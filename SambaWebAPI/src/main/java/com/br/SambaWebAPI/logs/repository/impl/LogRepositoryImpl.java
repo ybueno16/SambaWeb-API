@@ -32,7 +32,7 @@ public class LogRepositoryImpl implements LogRepository {
           .append(")");
       stmt.execute(sql.toString());
     } catch (SQLException e) {
-      throw new SQLException("Houve algum erro ao inserir no banco");
+      throw new SQLException("There was an error when inserting into the database.");
     }
   }
 }

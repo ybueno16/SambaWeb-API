@@ -2,11 +2,11 @@ package com.br.SambaWebAPI.group.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.group.enums.AddUserToGroupErrorCode;
-import com.br.SambaWebAPI.group.enums.GroupCreationErrorCode;
-import com.br.SambaWebAPI.group.enums.GroupDeleteErrorCode;
+import com.br.SambaWebAPI.group.enums.CreateGroupErrorCode;
+import com.br.SambaWebAPI.group.enums.DeleteGroupErrorCode;
 import com.br.SambaWebAPI.group.exceptions.AddUserToGroupException;
-import com.br.SambaWebAPI.group.exceptions.GroupCreationException;
-import com.br.SambaWebAPI.group.exceptions.GroupDeleteException;
+import com.br.SambaWebAPI.group.exceptions.CreateGroupException;
+import com.br.SambaWebAPI.group.exceptions.DeleteGroupException;
 import com.br.SambaWebAPI.group.models.Group;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.models.User;
@@ -119,10 +119,10 @@ class GroupServiceTest {
                 4,9,10
         };
 
-        GroupCreationErrorCode[] errorCodes = new GroupCreationErrorCode[] {
-                GroupCreationErrorCode.GID_ALREADY_EXISTS,
-                GroupCreationErrorCode.GROUP_NAME_NOT_UNIQUE,
-                GroupCreationErrorCode.CANT_UPDT_GROUP_FILE,
+        CreateGroupErrorCode[] errorCodes = new CreateGroupErrorCode[] {
+                CreateGroupErrorCode.GID_ALREADY_EXISTS,
+                CreateGroupErrorCode.GROUP_NAME_NOT_UNIQUE,
+                CreateGroupErrorCode.CANT_UPDT_GROUP_FILE,
         };
 
         for (int i = 0; i < exitCodes.length; i++) {
@@ -130,7 +130,7 @@ class GroupServiceTest {
             try {
                 groupService.createGroup(group,sudoAuthentication);
                 Assertions.fail("Deveria ter lançado uma exceção customizada");
-            } catch (GroupCreationException e) {
+            } catch (CreateGroupException e) {
                 Assertions.assertEquals(errorCodes[i], e.getErrorCode());
             }
 
@@ -141,8 +141,8 @@ class GroupServiceTest {
         try {
             groupService.createGroup(group,sudoAuthentication);
             Assertions.fail("Deveria ter lançado uma exceção");
-        } catch (GroupCreationException e) {
-            Assertions.assertEquals(GroupCreationErrorCode.GENERIC_ERROR, e.getErrorCode());
+        } catch (CreateGroupException e) {
+            Assertions.assertEquals(CreateGroupErrorCode.GENERIC_ERROR, e.getErrorCode());
         }
 
         verify(processBuilderAdapter, times(exitCodes.length + 1)).command(commandArgs);
@@ -331,10 +331,10 @@ class GroupServiceTest {
                 6,8,10
         };
 
-        GroupDeleteErrorCode[] errorCodes = new GroupDeleteErrorCode[] {
-                GroupDeleteErrorCode.GROUP_DOESNT_EXIST,
-                GroupDeleteErrorCode.CANT_REMOVE_PRIMARY_GROUP,
-                GroupDeleteErrorCode.CANT_UPDT_GROUP_FILE,
+        DeleteGroupErrorCode[] errorCodes = new DeleteGroupErrorCode[] {
+                DeleteGroupErrorCode.GROUP_DOESNT_EXIST,
+                DeleteGroupErrorCode.CANT_REMOVE_PRIMARY_GROUP,
+                DeleteGroupErrorCode.CANT_UPDT_GROUP_FILE,
         };
 
         for (int i = 0; i < exitCodes.length; i++) {
@@ -342,7 +342,7 @@ class GroupServiceTest {
             try {
                 groupService.deleteGroup(group,sudoAuthentication);
                 Assertions.fail("Deveria ter lançado uma exceção customizada");
-            } catch (GroupDeleteException e) {
+            } catch (DeleteGroupException e) {
                 Assertions.assertEquals(errorCodes[i], e.getErrorCode());
             }
         }
@@ -351,8 +351,8 @@ class GroupServiceTest {
         try {
             groupService.deleteGroup(group,sudoAuthentication);
             Assertions.fail("Deveria ter lançado uma exceção");
-        } catch (GroupDeleteException e) {
-            Assertions.assertEquals(GroupDeleteErrorCode.GENERIC_ERROR, e.getErrorCode());
+        } catch (DeleteGroupException e) {
+            Assertions.assertEquals(DeleteGroupErrorCode.GENERIC_ERROR, e.getErrorCode());
         }
 
         verify(processBuilderAdapter, times(exitCodes.length + 1)).command(commandArgs);

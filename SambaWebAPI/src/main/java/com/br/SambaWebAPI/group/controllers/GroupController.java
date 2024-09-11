@@ -3,8 +3,8 @@ package com.br.SambaWebAPI.group.controllers;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.group.exceptions.AddUserToGroupException;
-import com.br.SambaWebAPI.group.exceptions.GroupCreationException;
-import com.br.SambaWebAPI.group.exceptions.GroupDeleteException;
+import com.br.SambaWebAPI.group.exceptions.CreateGroupException;
+import com.br.SambaWebAPI.group.exceptions.DeleteGroupException;
 import com.br.SambaWebAPI.group.models.Group;
 import com.br.SambaWebAPI.group.services.GroupService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -29,7 +29,7 @@ public class GroupController {
     this.groupService = groupService;
   }
 
-  @PostMapping(path = "/registerGroup")
+  @PostMapping
   public ResponseEntity<?> groupCreation(@RequestBody Map<String, Object> json) {
     Group group = objectMapper.convertValue(json.get("group"), Group.class);
     SudoAuthentication sudoAuthentication =
@@ -37,13 +37,13 @@ public class GroupController {
     try {
       groupService.createGroup(group, sudoAuthentication);
 
-      return DefaultResponseEntityFactory.create("Grupo criado com sucesso!", group, HttpStatus.OK);
-    } catch (GroupCreationException e) {
+      return DefaultResponseEntityFactory.create("Group created successfully!", group, HttpStatus.OK);
+    } catch (CreateGroupException e) {
       return DefaultResponseEntityFactory.create(
           e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-          "Erro genérico. Ocorreu um erro desconhecido durante a criação do grupo.",
+          "Generic error. An error occurred while creating the group.",
           null,
           HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -60,19 +60,19 @@ public class GroupController {
       groupService.addUserToGroup(group, user, sudoAuthentication);
 
       return DefaultResponseEntityFactory.create(
-          "Grupo associado ao usuario com sucesso!", user, HttpStatus.OK);
+          "Group successfully associated with the user!", user, HttpStatus.OK);
     } catch (AddUserToGroupException e) {
       return DefaultResponseEntityFactory.create(
           e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-          "Erro genérico. Ocorreu um erro desconhecido durante a criação do grupo.",
+          "Generic error. An unknown error occurred while associating the group with the user.",
           null,
           HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @DeleteMapping(path = "/deleteGroup")
+  @DeleteMapping
   public ResponseEntity<?> deleteGroup(@RequestBody Map<String, Object> json) {
     Group group = objectMapper.convertValue(json.get("group"), Group.class);
     SudoAuthentication sudoAuthentication =
@@ -82,13 +82,13 @@ public class GroupController {
       groupService.deleteGroup(group, sudoAuthentication);
 
       return DefaultResponseEntityFactory.create(
-          "Grupo removido com sucesso!", group, HttpStatus.OK);
-    } catch (GroupDeleteException e) {
+          "Group removed successfully!", group, HttpStatus.OK);
+    } catch (DeleteGroupException e) {
       return DefaultResponseEntityFactory.create(
           e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(
-          "Erro genérico. Ocorreu um erro desconhecido durante a remoção do grupo.",
+          "Generic error. An unknown error occurred while removing the group.",
           null,
           HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -1,9 +1,8 @@
 package com.br.SambaWebAPI.folder.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
-import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
-import com.br.SambaWebAPI.folder.factory.FolderCreationFactory;
-import com.br.SambaWebAPI.folder.factory.FolderDeleteFactory;
+import com.br.SambaWebAPI.folder.factory.CreateFolderFactory;
+import com.br.SambaWebAPI.folder.factory.DeleteFolderFactory;
 import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.utils.CommandConstants;
@@ -22,17 +21,18 @@ public class FolderService {
   }
 
   public boolean createFolder(Folder folder, SudoAuthentication sudoAuthentication)
-      throws Exception {
+          throws Exception {
 
     processBuilderAdapter.command("exit");
+
     String homeDir = getHomeDir();
 
     ProcessBuilder processBuilder =
-        processBuilderAdapter.command(
-            CommandConstants.SUDO,
-            CommandConstants.SUDO_STDIN,
-            CommandConstants.MKDIR,
-            homeDir + "/" + folder.getPath());
+            processBuilderAdapter.command(
+                    CommandConstants.SUDO,
+                    CommandConstants.SUDO_STDIN,
+                    CommandConstants.MKDIR,
+                    homeDir + "/" + folder.getPath());
 
     Process process = processBuilder.start();
 
@@ -45,18 +45,18 @@ public class FolderService {
     int exitCode = process.waitFor();
 
     if (exitCode != 0) {
-      throw FolderCreationFactory.createException();
+      throw CreateFolderFactory.createException();
     }
     return true;
   }
 
   public String getHomeDir() throws IOException, InterruptedException {
     ProcessBuilder processBuilder =
-        processBuilderAdapter.command(
-            CommandConstants.SUDO,
-            CommandConstants.BASH,
-            CommandConstants.EXECUTE_COMMAND,
-            CommandConstants.ECHO + " " + "$HOME");
+            processBuilderAdapter.command(
+                    CommandConstants.SUDO,
+                    CommandConstants.BASH,
+                    CommandConstants.EXECUTE_COMMAND,
+                    CommandConstants.ECHO + " " + "$HOME");
 
     Process process = processBuilder.start();
 
@@ -72,8 +72,7 @@ public class FolderService {
     int exitCode = process.waitFor();
     if (exitCode != 0) {
       throw new IOException(
-          "Erro genérico. Ocorreu um erro desconhecido durante a validação da variavel de ambinete"
-              + " $HOME");
+              "Generic error. An unknown error occurred during validation of the environment variable");
     }
 
     return homeDir;
@@ -84,13 +83,13 @@ public class FolderService {
     String homeDir = getHomeDir();
 
     ProcessBuilder processBuilder =
-        processBuilderAdapter
-            .command(
-                CommandConstants.SUDO,
-                CommandConstants.SUDO_STDIN,
-                CommandConstants.REMOVE,
-                CommandConstants.REMOVE_RECURSIVE,
-                homeDir + "/" + folder.getPath());
+            processBuilderAdapter
+                    .command(
+                            CommandConstants.SUDO,
+                            CommandConstants.SUDO_STDIN,
+                            CommandConstants.REMOVE,
+                            CommandConstants.REMOVE_RECURSIVE,
+                            homeDir + "/" + folder.getPath());
 
     Process process = processBuilder.start();
 
@@ -104,7 +103,7 @@ public class FolderService {
     int exitCode = process.exitValue();
 
     if (exitCode != 0) {
-      throw FolderDeleteFactory.createException();
+      throw DeleteFolderFactory.createException();
     }
     return true;
   }
