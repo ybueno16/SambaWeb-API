@@ -2,7 +2,7 @@ package com.br.SambaWebAPI.group.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.group.enums.AddUserToGroupErrorCode;
-import com.br.SambaWebAPI.group.enums.GroupCreationErrorCode;
+import com.br.SambaWebAPI.group.enums.CreateGroupErrorCode;
 import com.br.SambaWebAPI.group.enums.DeleteGroupErrorCode;
 import com.br.SambaWebAPI.group.exceptions.AddUserToGroupException;
 import com.br.SambaWebAPI.group.exceptions.CreateGroupException;
@@ -119,10 +119,10 @@ class GroupServiceTest {
                 4,9,10
         };
 
-        GroupCreationErrorCode[] errorCodes = new GroupCreationErrorCode[] {
-                GroupCreationErrorCode.GID_ALREADY_EXISTS,
-                GroupCreationErrorCode.GROUP_NAME_NOT_UNIQUE,
-                GroupCreationErrorCode.CANT_UPDT_GROUP_FILE,
+        CreateGroupErrorCode[] errorCodes = new CreateGroupErrorCode[] {
+                CreateGroupErrorCode.GID_ALREADY_EXISTS,
+                CreateGroupErrorCode.GROUP_NAME_NOT_UNIQUE,
+                CreateGroupErrorCode.CANT_UPDT_GROUP_FILE,
         };
 
         for (int i = 0; i < exitCodes.length; i++) {
@@ -142,7 +142,7 @@ class GroupServiceTest {
             groupService.createGroup(group,sudoAuthentication);
             Assertions.fail("Deveria ter lançado uma exceção");
         } catch (CreateGroupException e) {
-            Assertions.assertEquals(GroupCreationErrorCode.GENERIC_ERROR, e.getErrorCode());
+            Assertions.assertEquals(CreateGroupErrorCode.GENERIC_ERROR, e.getErrorCode());
         }
 
         verify(processBuilderAdapter, times(exitCodes.length + 1)).command(commandArgs);
