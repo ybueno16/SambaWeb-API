@@ -54,9 +54,9 @@ class GroupControllerTest {
 
     @Test
     @DisplayName("""
-                Dado um processo de criação de grupo,
-                quando o usuário é criado com sucesso,
-                então deve retornar HTTP 200
+                Given a group creation process,
+                when the user is created successfully,
+                then it should return HTTP 200.
             """)
     public void testGroupCreation() throws Exception {
 
@@ -71,9 +71,9 @@ class GroupControllerTest {
 
     @Test
     @DisplayName("""
-                Dado um processo de associar usuario a um grupo,
-                quando o usuário é criado com sucesso,
-                então deve retornar HTTP 200
+                Given a process of associating a user to a group,
+                when the user is added successfully,
+                then it should return HTTP 200.
             """)
     public void testAddUserToGroup() throws Exception {
         Map<String, Object> json = new HashMap<>();
@@ -92,9 +92,9 @@ class GroupControllerTest {
 
     @Test
     @DisplayName("""
-                Dado um processo de remover um grupo,
-                quando o usuário é criado com sucesso,
-                então deve retornar HTTP 200
+                Given a group creation process,
+                when the user is successfully created,
+                then it should return HTTP 200
             """)
     public void testUserCreation() throws Exception {
 

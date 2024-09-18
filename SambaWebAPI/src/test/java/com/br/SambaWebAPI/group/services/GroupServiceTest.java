@@ -48,9 +48,9 @@ class GroupServiceTest {
 
     @Test
     @DisplayName("""
-            Dado um processo de criação de grupo,
-            quando criar o grupo com sucesso,
-            então deve retornar true
+                Given a group creation process,
+                When you create the group successfully,
+                then it should return true
             """)
     void createGroup() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
@@ -89,9 +89,10 @@ class GroupServiceTest {
 
     @Test
     @DisplayName("""
-            Dado um processo de criação de grupo com diferentes códigos de saída,
-            quando criar o grupo,
-            então deve lançar exceção com código de erro correto""")
+                Given a group creation process with different exit codes,
+                When creating the group,
+                then it should throw exception with correct error code
+            """)
     public void createGRoupFailWithDifferentErrorCodes() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(user.getUser()).thenReturn("user_name");
@@ -129,7 +130,7 @@ class GroupServiceTest {
             when(process.waitFor()).thenReturn(exitCodes[i]);
             try {
                 groupService.createGroup(group,sudoAuthentication);
-                Assertions.fail("Deveria ter lançado uma exceção customizada");
+                Assertions.fail("Should have thrown a custom exception");
             } catch (CreateGroupException e) {
                 Assertions.assertEquals(errorCodes[i], e.getErrorCode());
             }
@@ -140,7 +141,7 @@ class GroupServiceTest {
         when(process.waitFor()).thenReturn(999);
         try {
             groupService.createGroup(group,sudoAuthentication);
-            Assertions.fail("Deveria ter lançado uma exceção");
+            Assertions.fail("Should have thrown a exception");
         } catch (CreateGroupException e) {
             Assertions.assertEquals(CreateGroupErrorCode.GENERIC_ERROR, e.getErrorCode());
         }
@@ -152,9 +153,9 @@ class GroupServiceTest {
 
     @Test
     @DisplayName("""
-            Dado um processo de adição do usuário a um grupo,
-            quando adicionar o usuario ao grupo com sucesso,
-            então deve retornar true
+                Given a process of adding the user to a group,
+                When you successfully add the user to the group,
+                then it should return true
             """)
     void addUserToGroup() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
@@ -194,9 +195,10 @@ class GroupServiceTest {
 
     @Test
     @DisplayName("""
-            Dado um processo de adição de usuario ao grupo com diferentes códigos de saída,
-            quando adicionar o usuario ao grupo,
-            então deve lançar exceção com código de erro correto""")
+                Given a process of adding a user to the group with different exit codes,
+                When adding the user to the group,
+                then it should throw exception with correct error code
+            """)
     public void addUsertoGoupFailWithDifferentErrorCodes() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(user.getUser()).thenReturn("user_name");
@@ -240,7 +242,7 @@ class GroupServiceTest {
             when(process.waitFor()).thenReturn(exitCodes[i]);
             try {
                 groupService.addUserToGroup(group,user,sudoAuthentication);
-                Assertions.fail("Deveria ter lançado uma exceção customizada");
+                Assertions.fail("Should have thrown a custom exception");
             } catch (AddUserToGroupException e) {
                 Assertions.assertEquals(errorCodes[i], e.getErrorCode());
             }
@@ -249,7 +251,7 @@ class GroupServiceTest {
         when(process.waitFor()).thenReturn(999);
         try {
             groupService.addUserToGroup(group,user,sudoAuthentication);
-            Assertions.fail("Deveria ter lançado uma exceção");
+            Assertions.fail("Should have thrown a exception");
         } catch (AddUserToGroupException e) {
             Assertions.assertEquals(AddUserToGroupErrorCode.GENERIC_ERROR, e.getErrorCode());
         }
@@ -261,9 +263,9 @@ class GroupServiceTest {
 
     @Test
     @DisplayName("""
-            Dado um processo de remoção do grupo,
-            quando remover o grupo com sucesso,
-            então deve retornar true
+                Given a group removal process,
+                when remove the group successfully,
+                then it should return true
             """)
     void deleteUserToGroup() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
@@ -301,9 +303,10 @@ class GroupServiceTest {
 
     @Test
     @DisplayName("""
-            Dado um processo de adição de usuario ao grupo com diferentes códigos de saída,
-            quando adicionar o usuario ao grupo,
-            então deve lançar exceção com código de erro correto""")
+                Given a process of adding a user to the group with different exit codes,
+                When adding the user to the group,
+                then it should throw exception with correct error code
+            """)
     public void deleteGroupFailWithDifferentErrorCodes() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(user.getUser()).thenReturn("user_name");
@@ -341,7 +344,7 @@ class GroupServiceTest {
             when(process.waitFor()).thenReturn(exitCodes[i]);
             try {
                 groupService.deleteGroup(group,sudoAuthentication);
-                Assertions.fail("Deveria ter lançado uma exceção customizada");
+                Assertions.fail("Should have thrown a custom exception");
             } catch (DeleteGroupException e) {
                 Assertions.assertEquals(errorCodes[i], e.getErrorCode());
             }
@@ -350,7 +353,7 @@ class GroupServiceTest {
         when(process.waitFor()).thenReturn(999);
         try {
             groupService.deleteGroup(group,sudoAuthentication);
-            Assertions.fail("Deveria ter lançado uma exceção");
+            Assertions.fail("Should have thrown a exception");
         } catch (DeleteGroupException e) {
             Assertions.assertEquals(DeleteGroupErrorCode.GENERIC_ERROR, e.getErrorCode());
         }

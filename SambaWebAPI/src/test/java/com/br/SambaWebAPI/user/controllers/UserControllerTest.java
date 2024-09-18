@@ -58,10 +58,10 @@ class UserControllerTest {
 
     @Test
     @DisplayName("""
-                Dado um processo de criação de usuário,
-                quando o usuário é criado com sucesso,
-                então deve retornar HTTP 200
-            """)
+                Given a user creation process,
+                when the user is created successfully,
+                then it should return HTTP 200
+             """)
     public void testUserCreation() throws Exception {
 
         UserController userController = new UserController(objectMapper, userService, passwordService);
@@ -75,10 +75,10 @@ class UserControllerTest {
 
     @Test
     @DisplayName("""
-                Dado um processo de listagem de usuário,
-                quando o usuário é criado com sucesso,
-                então deve retornar HTTP 200
-            """)
+                Given a user listing process,
+                when the user is created successfully,
+                then it should return HTTP 200
+                """)
     public void getUserCreation() throws Exception {
 
         UserController userController = new UserController(objectMapper, userService, passwordService);
@@ -92,10 +92,10 @@ class UserControllerTest {
 
     @Test
     @DisplayName("""
-                Dado um processo de remoção de usuário,
-                quando o usuário é criado com sucesso,
-                então deve retornar HTTP 200
-            """)
+                Given a user removal process,
+                when the user is created successfully,
+                then it should return HTTP 200
+                """)
     public void removeUserCreation() throws Exception {
 
         UserController userController = new UserController(objectMapper, userService, passwordService);
@@ -109,10 +109,10 @@ class UserControllerTest {
 
     @Test
     @DisplayName("""
-                Dado um processo de criação de usuário samba,
-                quando o usuário é criado com sucesso,
-                então deve retornar HTTP 200
-            """)
+                Given a samba user creation process,
+                when the user is created successfully,
+                then it should return HTTP 200
+                """)
     public void createSambaUserCreation() throws Exception, CreateUserSambaException {
 
         UserController userController = new UserController(objectMapper, userService, passwordService);
@@ -126,9 +126,9 @@ class UserControllerTest {
 
     @Test
     @DisplayName("""
-                Dado um processo de remoção de usuário samba,
-                quando o usuário é criado com sucesso,
-                então deve retornar HTTP 200
+                Given a samba user removal process,
+                when the user is created successfully,
+                then it should return HTTP 200
             """)
     public void deleteSambaUserCreation() throws Exception, UserSambaDeleteException {
 

@@ -7,7 +7,7 @@ public class PermissionAddErrorCode extends ErrorCode {
 
   public static final PermissionAddErrorCode GENERIC_ERROR =
       new PermissionAddErrorCode(
-          "Erro genérico. Ocorreu um erro desconhecido durante a criação da senha do usuario.",
+          "Generic error. An unknown error occurred while creating the user password.",
           HttpStatus.BAD_REQUEST);
 
   private PermissionAddErrorCode(String errorMessage, HttpStatus httpStatus) {
