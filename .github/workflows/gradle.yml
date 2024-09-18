@@ -1,9 +1,9 @@
 
-n:
+on:
   push:
     branches:
-      - master<D-ý>require"cmp.utils.feedkeys".run(1)
-J
+      - master
+
 jobs:
   integration-tests:
     runs-on: ubuntu-latest
