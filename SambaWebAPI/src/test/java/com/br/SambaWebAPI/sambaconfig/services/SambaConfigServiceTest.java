@@ -2,13 +2,10 @@ package com.br.SambaWebAPI.sambaconfig.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.config.Global;
-import com.br.SambaWebAPI.folder.models.Folder;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.permission.models.GroupPermission;
-import com.br.SambaWebAPI.permission.models.OwnerPermission;
-import com.br.SambaWebAPI.permission.models.PublicPermission;
 import com.br.SambaWebAPI.sambaconfig.models.SambaConfig;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
@@ -45,6 +42,11 @@ class SambaConfigServiceTest {
     }
 
     @Test
+    @DisplayName("""
+            Given a samba config service,
+            when you write a new config file,
+            then it should return true
+            """)
     public void testSambaConfigWriteNewConfig() throws IOException, InterruptedException {
         ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);
         ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);

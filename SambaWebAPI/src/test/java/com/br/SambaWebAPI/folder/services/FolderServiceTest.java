@@ -36,9 +36,9 @@ class FolderServiceTest {
     }
     @Test
     @DisplayName("""
-            Dado um processo de criação de pasta,
-            quando criar uma pasta com sucesso,
-            então deve retornar true
+            Given a folder creation process,
+            when you create a folder successfully,
+            then it should return true
             """)
     void createFolder() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
@@ -67,9 +67,9 @@ class FolderServiceTest {
 
     @Test
     @DisplayName("""
-            Dado um processo de remoção de pasta,
-            quando remover uma pasta com sucesso,
-            então deve retornar true
+            Given a folder removal process,
+            when you remove a folder successfully,
+            then it should return true
             """)
     void removeFolder() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");

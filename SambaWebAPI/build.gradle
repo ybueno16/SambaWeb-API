@@ -21,9 +21,17 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+    springdocVersion = "2.3.0"
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'io.springfox:springfox-swagger2:3.0.0'
+	implementation "org.springdoc:springdoc-openapi-starter-common:${springdocVersion}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
+	implementation 'org.aspectj:aspectjweaver:1.9.7'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation"org.testcontainers:junit-jupiter"
 	runtimeOnly 'org.postgresql:postgresql'

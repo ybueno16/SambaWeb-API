@@ -44,9 +44,9 @@ public class LogIntegrationTest {
 
     @Test
     @DisplayName("""
-            Give a log description,
-             when insert log data,
-              then the log description should be inserted
+                Give a log description,
+                when insert log data,
+                then the log description should be inserted
             """)
     public void insertLogData() throws SQLException {
         Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
@@ -76,10 +76,10 @@ public class LogIntegrationTest {
     }
     @Test
     @DisplayName("""
-    Give a empty log description,
-     when try to insert log data,
-     then the log description shouldn't be inserted
-    """)
+                Give a empty log description,
+                when try to insert log data,
+                then the log description shouldn't be inserted
+               """)
     public void testReadLogEmptyFile() throws SQLException, IOException {
         Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
         setup();
@@ -118,9 +118,9 @@ public class LogIntegrationTest {
 
     @Test
     @DisplayName("""
-        Give an invalid log file,
-         when try to insert logs,
-         then an exception should be thrown
+            Give an invalid log file,
+            when try to insert logs,
+            then an exception should be thrown
         """)
     public void testInsertLogsInvalid() throws IOException {
         File logFile = new File("log.txt");

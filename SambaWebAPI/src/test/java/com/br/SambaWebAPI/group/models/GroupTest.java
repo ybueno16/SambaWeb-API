@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class GroupTest {
 
   @Test
-  @DisplayName("Verifica Getters e Setters")
+  @DisplayName("Check Getters and Setters")
   public void testGettersAndSetters() {
     Group group = new Group();
     String groupName = "group_teste";
@@ -23,7 +23,7 @@ class GroupTest {
   }
 
   @Test
-  @DisplayName("Testa se a lista de grupos é atualizada corretamente")
+  @DisplayName("Tests whether the group list is updated correctly")
   public void testSetGroupListUpdatesValueCorrectly() {
     Group group = new Group();
     List<User> groupList = new ArrayList<>();
@@ -33,14 +33,14 @@ class GroupTest {
   }
 
   @Test
-  @DisplayName("Testa se a lista de grupos é nula por padrão")
+  @DisplayName("Tests whether the group list is null by default")
   public void testGetGroupListReturnsNullByDefault() {
     Group group = new Group();
     assertEquals(null, group.getUserList());
   }
 
   @Test
-  @DisplayName("Testa se o nome é retornado corretamente")
+  @DisplayName("Tests whether the group name is returned correctly.")
   public void testGetGroupNameReturnsCorrectValue() {
     Group group = new Group();
     group.setName("group_teste");
@@ -48,7 +48,7 @@ class GroupTest {
   }
 
   @Test
-  @DisplayName("Testa se o nome é atualizado corretamente")
+  @DisplayName("Tests whether the group name is updated correctly.")
   public void testSetGroupNameUpdatesValueCorrectly() {
     Group group = new Group();
     group.setName("group_teste");
@@ -56,14 +56,14 @@ class GroupTest {
   }
 
   @Test
-  @DisplayName("Testa se o nome é nulo por padrão")
+  @DisplayName("Tests whether the group name is null by default.")
   public void testGetGroupNameReturnsNullByDefault() {
     Group group = new Group();
     assertEquals(null, group.getName());
   }
 
   @Test
-  @DisplayName("Testa se a lista de usuários é retornado corretamente")
+  @DisplayName("Tests whether the user list is returned correctly.")
   public void testGetUserListReturnsCorrectValue() {
     Group group = new Group();
     List<User> userList = new ArrayList<>();
@@ -73,7 +73,7 @@ class GroupTest {
   }
 
   @Test
-  @DisplayName("Testa se a lista de usuários é nula por padrão")
+  @DisplayName("Tests whether the user list is null by default.")
   public void testGetUserListReturnsNullByDefault() {
     Group group = new Group();
     assertEquals(null, group.getUserList());

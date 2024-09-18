@@ -55,9 +55,10 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("""
-        Dado um processo de criação de usuário,
-        quando o usuário é criado com sucesso,
-        então deve retornar true""")
+        Given a user creation process,
+        when the user is created successfully,
+        then it should return true
+        """)
     public void createUserSuccess() throws Exception {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(user.getUser()).thenReturn("user_name");
@@ -90,9 +91,10 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("""
-            Dado um processo de criação de usuário com diferentes códigos de saída,
-            quando criar usuário,
-            então deve lançar exceção com código de erro correto""")
+            Given a user creation process with different exit codes,
+            when creating user,
+            then it should throw exception with correct error code
+            """)
     public void createUserFailWithDifferentErrorCodes() throws Exception {
         ProcessBuilderAdapter processBuilderAdapter = Mockito.mock(ProcessBuilderAdapter.class);
         ProcessBuilder processBuilder = Mockito.mock(ProcessBuilder.class);
@@ -141,7 +143,7 @@ public class UserServiceTest {
         when(process.waitFor()).thenReturn(999);
         try {
             userService.createUser(user, sudoAuthentication);
-            Assertions.fail("Deveria ter lançado uma exceção");
+            Assertions.fail("Should throw exception");
         } catch (CreateUserException e) {
             Assertions.assertEquals(CreateUserErrorCode.GENERIC_ERROR, e.getErrorCode());
         }
@@ -152,9 +154,10 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("""
-    Dado um processo de ler a lista de usuário,
-    quando é lida com sucesso,
-    então deve retornar true""")
+        Given a process of reading the user list,
+        when it is read successfully,
+        then it should return true
+    """)
     public void getUserSuccess() throws Exception {
         user.setUser("sambauser");
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
@@ -189,9 +192,9 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("""
-            Dado um processo de criação de usuário samba,
-            quando criar usuário,
-            então deve retornar true
+            Given a samba user creation process,
+            when creating user,
+            then it should return true
             """)
     void createSambaUser() throws Exception, CreateUserSambaException {
 
@@ -241,9 +244,9 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("""
-            Dado um processo de remoção de usuário samba,
-            quando criar usuário,
-            então deve retornar true
+            Given a samba user removal process,
+            when creating user,
+            then it should return true
             """)
     void removeSambaUser() throws Exception, UserSambaDeleteException {
 
@@ -282,9 +285,10 @@ public class UserServiceTest {
 
 @Test
 @DisplayName("""
-        Dado um processo de remoção de usuário,
-        quando o usuário é removido com sucesso,
-        então deve retornar true""")
+        Given a user removal process,
+        when the user is successfully removed,
+        then it should return true
+        """)
 public void removeUserSuccess() throws Exception {
     when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
     when(user.getUser()).thenReturn("user_name");
@@ -319,9 +323,10 @@ public void removeUserSuccess() throws Exception {
 
 @Test
 @DisplayName("""
-            Dado um processo de remoção de usuário com diferentes códigos de saída,
-            quando remover o usuário,
-            então deve lançar exceção com código de erro correto""")
+            Given a user removal process with different exit codes,
+            when removing the user,
+            then it should throw exception with correct error code
+            """)
 public void removeUserFailWithDifferentErrorCodes() throws Exception {
     when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
     when(user.getUser()).thenReturn("user_name");
@@ -361,7 +366,7 @@ public void removeUserFailWithDifferentErrorCodes() throws Exception {
         when(process.waitFor()).thenReturn(exitCodes[i]);
         try {
             userService.removeUser(user, sudoAuthentication);
-            Assertions.fail("Deveria ter lançado uma exceção");
+            Assertions.fail("Should have thrown an exception");
         } catch (DeleteUserException e) {
             Assertions.assertEquals(errorCodes[i], e.getErrorCode());
         }
@@ -370,7 +375,7 @@ public void removeUserFailWithDifferentErrorCodes() throws Exception {
     when(process.waitFor()).thenReturn(999);
     try {
         userService.removeUser(user, sudoAuthentication);
-        Assertions.fail("Deveria ter lançado uma exceção");
+        Assertions.fail("Should have thrown an exception");
     } catch (DeleteUserException e) {
         Assertions.assertEquals(DeleteUserErrorCode.GENERIC_ERROR, e.getErrorCode());
     }

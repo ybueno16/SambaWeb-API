@@ -42,9 +42,9 @@ class UserServiceIntegrationTest {
 
     @Test
     @DisplayName("""
-        Dado o desejo do usuario criar o usuario
-        quando o usuário realizar a criação de usuário
-        então deve realizar a criação de usuario com sucesso
+        Given the user's desire to create the user
+        when the user performs user creation
+        then you must successfully create the user
         """)
     void createUser() throws Exception {
         User user = new User();

@@ -52,10 +52,10 @@ class PasswordServiceTest {
 
     @Test
     @DisplayName("""
-            Dado um processo de criação de senha de um usuárui,
-            quando criar a senha do usuário,
-            então deve retornar true
-            """)
+            Given a password creation process,
+            when you create the password successfully,
+            then it should return true
+        """)
     void removeSambaUser() throws Exception, UserSambaDeleteException {
 
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
@@ -91,9 +91,10 @@ class PasswordServiceTest {
     }
     @Test
     @DisplayName("""
-            Dado um processo de remoção de usuário com diferentes códigos de saída,
-            quando remover o usuário,
-            então deve lançar exceção com código de erro correto""")
+                Given a user removal process with different exit codes,
+                when removing the user,
+                then it should throw exception with correct error code
+            """)
     public void removeUserFailWithDifferentErrorCodes() throws Exception {
         when(user.getUser()).thenReturn("user_name");
         when(user.getPassword()).thenReturn("password_user_name");
@@ -129,7 +130,7 @@ class PasswordServiceTest {
             when(process.waitFor()).thenReturn(exitCodes[i]);
             try {
                 passwordService.createPassword(user);
-                Assertions.fail("Deveria ter lançado uma exceção customizada");
+                Assertions.fail("Should have thrown a custom exception");
             } catch (CreatePasswordException e) {
                 Assertions.assertEquals(errorCodes[i], e.getErrorCode());
             }
@@ -140,7 +141,7 @@ class PasswordServiceTest {
         when(process.waitFor()).thenReturn(999);
         try {
             passwordService.createPassword(user);
-            Assertions.fail("Deveria ter lançado uma exceção");
+            Assertions.fail("Should have thrown a exception");
         } catch (CreatePasswordException e) {
             Assertions.assertEquals(CreatePasswordErrorCode.GENERIC_ERROR, e.getErrorCode());
         }

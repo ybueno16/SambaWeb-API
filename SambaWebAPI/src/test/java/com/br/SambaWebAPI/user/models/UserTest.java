@@ -21,39 +21,39 @@ class UserTest {
   }
 
   @Test
-  @DisplayName("Testa se o usuário é retornado corretamente")
+  @DisplayName("Tests wether user is null by default")
   public void testGetUserReturnsCorrectValue() {
-    assertThat(user.getUser(), is("teste"));
+    assertThat(user.getUser(), is("test"));
   }
 
   @Test
-  @DisplayName("Testa se o usuário é atualizado corretamente")
+  @DisplayName("Tests wether user is updated correctly")
   public void testSetUserUpdatesValueCorrectly() {
-    user.setUser("novoTeste");
-    assertThat(user.getUser(), is("novoTeste"));
+    user.setUser("newTest");
+    assertThat(user.getUser(), is("newTest"));
   }
 
   @Test
-  @DisplayName("Testa se a senha é nula por padrão")
+  @DisplayName("Tests wether password is null by default")
   public void testGetPasswordReturnsNullByDefault() {
     assertNull(user.getPassword());
   }
 
   @Test
-  @DisplayName("Testa se a senha é atualizada corretamente")
+  @DisplayName("Tests wether password is updated correctly")
   public void testSetPasswordUpdatesValueCorrectly() {
-    user.setPassword("senha123");
-    assertThat(user.getPassword(), is("senha123"));
+    user.setPassword("password123");
+    assertThat(user.getPassword(), is("password123"));
   }
 
   @Test
-  @DisplayName("Testa se a lista de grupos é nula por padrão")
+  @DisplayName("Tests wether group list is null by default")
   public void testGetGroupListReturnsNullByDefault() {
     assertNull(user.getGroupList());
   }
 
   @Test
-  @DisplayName("Testa se a lista de grupos é atualizada corretamente")
+  @DisplayName("Tests whether the group list is updated correctly")
   public void testSetGroupListUpdatesValueCorrectly() {
     Group group = new Group();
     List<Group> groupList = new ArrayList<>();
@@ -63,7 +63,7 @@ class UserTest {
   }
 
   @Test
-  @DisplayName("Testa se a senha nula é rejeitada")
+  @DisplayName("Tests wether password rejects null value")
   public void testSetPasswordRejectsNullValue() {
     assertThrows(NullPointerException.class, () -> user.setPassword(null));
   }

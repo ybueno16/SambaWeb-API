@@ -29,7 +29,7 @@ public class FolderController {
     this.permissionService = permissionService;
   }
 
-  @PostMapping()
+  @PostMapping
   public ResponseEntity<?> folderCreate(@RequestBody Map<String, Object> json) {
     Folder folder = objectMapper.convertValue(json.get("folder"), Folder.class);
     SudoAuthentication sudoAuthentication =

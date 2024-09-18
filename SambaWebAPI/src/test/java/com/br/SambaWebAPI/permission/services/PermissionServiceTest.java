@@ -8,7 +8,7 @@ import com.br.SambaWebAPI.permission.exceptions.PermissionAddException;
 import com.br.SambaWebAPI.permission.models.GroupPermission;
 import com.br.SambaWebAPI.permission.models.OwnerPermission;
 import com.br.SambaWebAPI.permission.models.PublicPermission;
-import com.br.SambaWebAPI.utils.CommandConstants;
+import com.br.SambaWebAPI.utils.PermissionCodeCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,6 +41,12 @@ class PermissionServiceTest {
     @Mock
     private GroupPermission groupPermission;
 
+    @Mock
+    ProcessBuilderAdapter processBuilderAdapter;
+
+    @Mock
+    PermissionCodeCalculator permissionCodeCalculator;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
@@ -48,15 +54,15 @@ class PermissionServiceTest {
 
     @Test
     @DisplayName("""
-        Dado um processo de calculo de permissão,
-        quando realizar o calculo corretamente da permissão com sucesso,
-        então deve retornar o valor da permissão
-        """)
+                Given a permission calculation process,
+                When you successfully calculate the permission correctly,
+                then it must return the permission value
+            """)
     void chmodCalculator() throws IOException, InterruptedException {
         FolderService folderService = Mockito.mock(FolderService.class);
         Mockito.when(folderService.getHomeDir()).thenReturn("/home");
 
-        PermissionService permissionService = new PermissionService(null, folderService);
+        PermissionService permissionService = new PermissionService(processBuilderAdapter, folderService,permissionCodeCalculator);
 
         OwnerPermission ownerPermission = new OwnerPermission();
         ownerPermission.setExecute(1);
@@ -78,10 +84,10 @@ class PermissionServiceTest {
 
     @Test
     @DisplayName("""
-        Dado um processo de dar permissão a uma pasta,
-        quando realizar o processo de dar permissão a uma pasta com sucesso,
-        então deve retornar true
-""")
+                Given a process of giving permission to a folder,
+                When you successfully complete the process of giving permission to a folder,
+                then it should return true
+               """)
     void managePermission() throws Exception, PermissionAddException {
         when(sudoAuthentication.getSudoPassword()).thenReturn("sudo_password");
         when(folder.getPath()).thenReturn("/foo/bar");
@@ -100,7 +106,7 @@ class PermissionServiceTest {
 
         FolderService folderService = new FolderService(processBuilderAdapter);
 
-        PermissionService permissionService = new PermissionService(processBuilderAdapter, folderService);
+        PermissionService permissionService = new PermissionService(processBuilderAdapter, folderService,permissionCodeCalculator);
 
         boolean result = permissionService.managePermission(ownerPermission, groupPermission, publicPermission, sudoAuthentication, folder);
 

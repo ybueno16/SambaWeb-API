@@ -1,10 +1,10 @@
 package com.br.SambaWebAPI.config.ResponseEntity;
 
-public class DefaultResponseEntity {
+public class DefaultResponseEntity<T> {
   protected final String message;
-  protected final Object dados;
+  protected final T dados;
 
-  public DefaultResponseEntity(String message, Object dados) {
+  public DefaultResponseEntity(String message, T dados) {
     this.message = message;
     this.dados = dados;
   }

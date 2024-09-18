@@ -21,7 +21,7 @@ class SudoAuthenticationTest {
   }
 
   @Test
-  @DisplayName("Verifica Valores Nulos")
+  @DisplayName("Check for null values")
   public void testNullValues() {
     SudoAuthentication sudoAuth = new SudoAuthentication();
 
@@ -30,7 +30,7 @@ class SudoAuthenticationTest {
   }
 
   @Test
-  @DisplayName("Verifica Valores Vazios")
+  @DisplayName("Check for empty values")
   public void testEmptyValues() {
     SudoAuthentication sudoAuth = new SudoAuthentication();
     String sudoUser = "";

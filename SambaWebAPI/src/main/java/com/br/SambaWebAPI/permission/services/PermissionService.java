@@ -9,6 +9,7 @@ import com.br.SambaWebAPI.permission.factory.PermissionAddFactory;
 import com.br.SambaWebAPI.permission.models.GroupPermission;
 import com.br.SambaWebAPI.permission.models.OwnerPermission;
 import com.br.SambaWebAPI.permission.models.PublicPermission;
+import com.br.SambaWebAPI.utils.PermissionCodeCalculator;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,63 +21,61 @@ public class PermissionService {
 
   private ProcessBuilderAdapter processBuilderAdapter;
 
+  private PermissionCodeCalculator permissionCodeCalculator;
+
   @Autowired FolderService folderService;
 
   private String homeDir;
 
   @Autowired
-  public PermissionService(ProcessBuilderAdapter processBuilderAdapter, FolderService folderService)
-      throws IOException, InterruptedException {
+  public PermissionService(
+          ProcessBuilderAdapter processBuilderAdapter,
+          FolderService folderService ,
+          PermissionCodeCalculator permissionCodeCalculator) throws IOException, InterruptedException {
     this.processBuilderAdapter = processBuilderAdapter;
     this.folderService = folderService;
+    this.permissionCodeCalculator = permissionCodeCalculator;
     this.homeDir = folderService.getHomeDir();
   }
 
   public String chmodCalculator(
-      OwnerPermission ownerPermission,
-      GroupPermission groupPermission,
-      PublicPermission publicPermission) {
+          OwnerPermission ownerPermission,
+          GroupPermission groupPermission,
+          PublicPermission publicPermission) {
 
-    int ownerPermissionValue =
-        (int)
-            ((ownerPermission.getWrite() * Math.pow(2, 2))
-                + (ownerPermission.getRead() * Math.pow(2, 1))
-                + ownerPermission.getExecute());
+    int  ownerPermissionValue = permissionCodeCalculator.chmodCalculator(
+            ownerPermission
+    );
 
     int groupPermissionValue =
-        (int)
-            ((groupPermission.getWrite() * Math.pow(2, 2))
-                + (groupPermission.getRead() * Math.pow(2, 1))
-                + groupPermission.getExecute());
-
+            permissionCodeCalculator.chmodCalculator(
+                    groupPermission);
     int publicPermissionValue =
-        (int)
-            ((publicPermission.getWrite() * Math.pow(2, 2))
-                + (publicPermission.getRead() * Math.pow(2, 1))
-                + publicPermission.getExecute());
+            permissionCodeCalculator.chmodCalculator(
+                    publicPermission);
 
     return String.format(
-        "%03o", (ownerPermissionValue * 64) + (groupPermissionValue * 8) + publicPermissionValue);
+            "%03o", (ownerPermissionValue * 64) + (groupPermissionValue * 8) + publicPermissionValue);
   }
 
   public boolean managePermission(
-      OwnerPermission ownerPermission,
-      GroupPermission groupPermission,
-      PublicPermission publicPermission,
-      SudoAuthentication sudoAuthentication,
-      Folder folder)
-      throws Exception, PermissionAddException {
+          OwnerPermission ownerPermission,
+          GroupPermission groupPermission,
+          PublicPermission publicPermission,
+          SudoAuthentication sudoAuthentication,
+          Folder folder)
+          throws Exception, PermissionAddException {
 
     processBuilderAdapter.command("exit");
     String getPermissionCode = chmodCalculator(ownerPermission, groupPermission, publicPermission);
 
     ProcessBuilder processBuilder =
-        processBuilderAdapter.command(
-            CommandConstants.SUDO,
-            CommandConstants.SUDO_STDIN,
-            CommandConstants.CHMOD,
-            getPermissionCode,
-            homeDir + "/" + folder.getPath());
+            processBuilderAdapter.command(
+                    CommandConstants.SUDO,
+                    CommandConstants.SUDO_STDIN,
+                    CommandConstants.CHMOD,
+                    getPermissionCode,
+                    homeDir + "/" + folder.getPath());
 
     Process process = processBuilder.start();
 
