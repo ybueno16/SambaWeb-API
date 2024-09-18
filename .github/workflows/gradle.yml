@@ -1,8 +1,9 @@
-on:
+
+n:
   push:
     branches:
-      - master
-
+      - master<D-ý>require"cmp.utils.feedkeys".run(1)
+J
 jobs:
   integration-tests:
     runs-on: ubuntu-latest
@@ -19,7 +20,7 @@ jobs:
       - name: Run tests
         run: |
           cd SambaWebAPI
-          ./gradlew test
+         ./gradlew test
       - name: Generate JaCoCo Badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
@@ -39,7 +40,7 @@ jobs:
           add: '*.svg'
 
       - name: Upload JaCoCo coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
           path: SambaWebAPI/build/reports/jacoco/test/
