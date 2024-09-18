@@ -1,7 +1,8 @@
+
 on:
   push:
     branches:
-      - master
+      -[ master ]
 
 jobs:
   integration-tests:
@@ -19,7 +20,7 @@ jobs:
       - name: Run tests
         run: |
           cd SambaWebAPI
-          ./gradlew test
+         ./gradlew test
       - name: Generate JaCoCo Badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
@@ -39,7 +40,7 @@ jobs:
           add: '*.svg'
 
       - name: Upload JaCoCo coverage report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
           path: SambaWebAPI/build/reports/jacoco/test/
