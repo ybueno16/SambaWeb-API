@@ -62,7 +62,7 @@ class FolderServiceTest {
 
         assertTrue(result);
 
-        verify(processBuilderAdapter, times(3)).command(any(String[].class));
+        verify(processBuilderAdapter, times(4)).command(any(String[].class));
     }
 
     @Test
@@ -92,7 +92,7 @@ class FolderServiceTest {
 
         assertTrue(result);
 
-        verify(processBuilderAdapter, times(3)).command(any(String[].class));
+        verify(processBuilderAdapter, times(4)).command(any(String[].class));
     }
 
 }

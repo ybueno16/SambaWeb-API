@@ -24,6 +24,8 @@ public class UserService {
   }
 
   public boolean createUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
+    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
+
     ProcessBuilder processBuilder =
         processBuilderAdapter.command(
             CommandConstants.SUDO,
@@ -42,7 +44,8 @@ public class UserService {
   }
 
   public boolean removeUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
-    processBuilderAdapter.command("exit");
+    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
+
 
     ProcessBuilder processBuilder =
         processBuilderAdapter.command(
@@ -72,6 +75,8 @@ public class UserService {
   }
 
   public boolean getUser(User user) throws Exception {
+    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
+
     ProcessBuilder processBuilder =
         processBuilderAdapter.command(
             CommandConstants.BASH,
@@ -93,6 +98,8 @@ public class UserService {
   public boolean createSambaUser(User user, SudoAuthentication sudoAuthentication)
       throws Exception, CreateUserSambaException {
     createUser(user, sudoAuthentication);
+    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
+
 
     ProcessBuilder processBuilder =
         processBuilderAdapter.command(
@@ -125,6 +132,8 @@ public class UserService {
 
   public boolean removeSambaUser(User user, SudoAuthentication sudoAuthentication)
       throws Exception, UserSambaDeleteException {
+    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
+
     ProcessBuilder processBuilder =
         processBuilderAdapter.command(
             CommandConstants.SUDO,

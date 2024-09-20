@@ -23,7 +23,7 @@ public class FolderService {
   public boolean createFolder(Folder folder, SudoAuthentication sudoAuthentication)
           throws Exception {
 
-    processBuilderAdapter.command("exit");
+    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
 
     String homeDir = getHomeDir();
 
@@ -51,6 +51,8 @@ public class FolderService {
   }
 
   public String getHomeDir() throws IOException, InterruptedException {
+    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
+
     ProcessBuilder processBuilder =
             processBuilderAdapter.command(
                     CommandConstants.SUDO,
@@ -79,7 +81,8 @@ public class FolderService {
   }
 
   public boolean removeFolder(Folder folder, SudoAuthentication sudoAuthentication) throws Exception {
-    processBuilderAdapter.command("exit");
+    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
+
     String homeDir = getHomeDir();
 
     ProcessBuilder processBuilder =

@@ -66,7 +66,8 @@ public class PermissionService {
           Folder folder)
           throws Exception, PermissionAddException {
 
-    processBuilderAdapter.command("exit");
+    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
+
     String getPermissionCode = chmodCalculator(ownerPermission, groupPermission, publicPermission);
 
     ProcessBuilder processBuilder =

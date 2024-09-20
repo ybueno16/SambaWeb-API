@@ -150,7 +150,8 @@ public class SambaConfigService {
   public void refreshSambaConfig() throws Exception {
     processBuilderAdapter = new ProcessBuilderAdapterImpl();
 
-    processBuilderAdapter.command("exit");
+    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
+
     ProcessBuilder processBuilder =
         processBuilderAdapter
             .command(CommandConstants.RELOAD_SMB_CONF)
