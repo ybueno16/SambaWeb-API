@@ -22,4 +22,6 @@ public class CommandConstants {
   public static final String CHMOD = "chmod";
   public static final String GROUP_DEL = "groupdel";
   public static final String RELOAD_SMB_CONF = "smbcontrol smbd reload-config";
+  public static final String EXIT_TERMINAL = "exit";
+
 }

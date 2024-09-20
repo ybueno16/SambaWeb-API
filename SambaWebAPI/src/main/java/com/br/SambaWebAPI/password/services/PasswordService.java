@@ -18,6 +18,8 @@ public class PasswordService {
   }
 
   public boolean createPassword(User user) throws Exception {
+    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
+
     ProcessBuilder processBuilder =
         processBuilderAdapter.command(
             CommandConstants.SUDO,
