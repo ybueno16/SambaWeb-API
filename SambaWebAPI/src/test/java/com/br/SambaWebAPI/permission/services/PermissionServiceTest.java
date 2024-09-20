@@ -62,6 +62,7 @@ class PermissionServiceTest {
         FolderService folderService = Mockito.mock(FolderService.class);
         Mockito.when(folderService.getHomeDir()).thenReturn("/home");
 
+        PermissionCodeCalculator permissionCodeCalculator = new PermissionCodeCalculator();
         PermissionService permissionService = new PermissionService(processBuilderAdapter, folderService,permissionCodeCalculator);
 
         OwnerPermission ownerPermission = new OwnerPermission();

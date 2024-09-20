@@ -18,6 +18,8 @@ public class SambaWebApiApplication {
                   "execute o sistema com os seguintes parâmetros:");
           System.err.println("  ./gradlew bootRun --args=\"<NomeUsuario> <SenhaSudo>\"");
           return;
+        }else{
+          SpringApplication.run(SambaWebApiApplication.class, args);
         }
 
         String userName = args[0];
