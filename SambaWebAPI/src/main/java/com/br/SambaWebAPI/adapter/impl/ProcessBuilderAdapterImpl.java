@@ -10,6 +10,10 @@ public class ProcessBuilderAdapterImpl implements ProcessBuilderAdapter {
     processBuilder = new ProcessBuilder();
   }
 
+  /**
+   * @param command
+   * @return processBuilder
+   */
   @Override
   public ProcessBuilder command(String... command) {
     processBuilder.command(command);

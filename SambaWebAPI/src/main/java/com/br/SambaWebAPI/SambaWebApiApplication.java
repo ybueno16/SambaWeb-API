@@ -13,11 +13,13 @@ public class SambaWebApiApplication {
 
   public static void main(String[] args) {
     
-        if (args.length != 2) {
+        if (args.length > 2) {
           System.err.println("Erro: número insuficiente de parâmetros. Para criar um usuário, " +
                   "execute o sistema com os seguintes parâmetros:");
           System.err.println("  ./gradlew bootRun --args=\"<NomeUsuario> <SenhaSudo>\"");
           return;
+        }else{
+          SpringApplication.run(SambaWebApiApplication.class, args);
         }
 
         String userName = args[0];
