@@ -1,5 +1,6 @@
 package com.br.SambaWebAPI.sambaconfig.controller;
 
+import com.br.SambaWebAPI.config.DefaultOperation;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -26,13 +27,16 @@ public class SambaConfigController {
   }
 
   @PostMapping(path = "/writeSambaFile")
+  @DefaultOperation(
+          summary = "Add New Config",
+          description = "Create a new param section in samba config",
+          tags = {"Samba Config"})
   public ResponseEntity<?> writeSambaFile(@RequestBody Map<String, Object> json) {
     SambaConfig sambaConfig = objectMapper.convertValue(json.get("sambaConfig"), SambaConfig.class);
     SudoAuthentication sudoAuthentication =
             objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       sambaConfigService.sambaConfigWriteNewConfig(sambaConfig, sudoAuthentication);
-      sambaConfigService.refreshSambaConfig();
       return DefaultResponseEntityFactory.create(
               "Configuration saved successfully!", sambaConfig, HttpStatus.OK);
 
@@ -49,6 +53,10 @@ public class SambaConfigController {
               HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  @DefaultOperation(
+          summary = "Edit Config",
+          description = "Edit params os a section in samba config",
+          tags = {"Samba Config"})
 
   @PatchMapping(path = "/editSambaFile")
   public ResponseEntity<?> editSambaFile(@RequestBody Map<String, Object> json) {
@@ -57,7 +65,6 @@ public class SambaConfigController {
             objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       sambaConfigService.sambaConfigEditConfig(sambaConfig, sudoAuthentication);
-      sambaConfigService.refreshSambaConfig();
       return DefaultResponseEntityFactory.create(
               "Configuration saved successfully!", sambaConfig, HttpStatus.OK);
 
@@ -75,6 +82,10 @@ public class SambaConfigController {
     }
   }
 
+  @DefaultOperation(
+          summary = "Delete Config",
+          description = "Remove a entire param section in samba config",
+          tags = {"Samba Config"})
   @DeleteMapping(path = "/sectionParams")
   public ResponseEntity<?> removeSectionParamsSamba(@RequestBody Map<String, Object> json) {
     SambaConfig sambaConfig = objectMapper.convertValue(json.get("sambaConfig"), SambaConfig.class);
@@ -82,7 +93,6 @@ public class SambaConfigController {
             objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       sambaConfigService.sambaConfigRemoveSectionParams(sambaConfig, sudoAuthentication);
-      sambaConfigService.refreshSambaConfig();
 
       return DefaultResponseEntityFactory.create(
               "Configuration saved successfully!", sambaConfig, HttpStatus.OK);
@@ -100,7 +110,10 @@ public class SambaConfigController {
               HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
+  @DefaultOperation(
+          summary = "Delete Config",
+          description = "Remove a entire param in samba config",
+          tags = {"Samba Config"})
   @DeleteMapping(path = "/section")
   public ResponseEntity<?> removeSectionSamba(@RequestBody Map<String, Object> json) {
     SambaConfig sambaConfig = objectMapper.convertValue(json.get("sambaConfig"), SambaConfig.class);
@@ -108,7 +121,6 @@ public class SambaConfigController {
             objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
     try {
       sambaConfigService.sambaConfigRemoveSection(sambaConfig, sudoAuthentication);
-      sambaConfigService.refreshSambaConfig();
 
       return DefaultResponseEntityFactory.create(
               "Configuration saved successfully!", sambaConfig, HttpStatus.OK);

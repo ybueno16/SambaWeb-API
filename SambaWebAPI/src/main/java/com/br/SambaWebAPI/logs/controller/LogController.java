@@ -1,5 +1,6 @@
 package com.br.SambaWebAPI.logs.controller;
 
+import com.br.SambaWebAPI.config.DefaultOperation;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.logs.service.LogService;
@@ -23,6 +24,10 @@ public class LogController {
   }
 
   @PostMapping
+  @DefaultOperation(
+          summary = "Save logs",
+          description = "Save logs from samba in the database",
+          tags = {"Logs"})
   public ResponseEntity<?> writeSambaFile() throws Exception {
     try {
       boolean retorno = logService.insertLogs();

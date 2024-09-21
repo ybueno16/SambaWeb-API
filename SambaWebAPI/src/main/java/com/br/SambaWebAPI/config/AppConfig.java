@@ -2,10 +2,7 @@ package com.br.SambaWebAPI.config;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
-import com.br.SambaWebAPI.password.models.SudoAuthentication;
-import com.br.SambaWebAPI.user.models.User;
-import com.br.SambaWebAPI.user.services.UserService;
-import org.springframework.boot.CommandLineRunner;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,4 +23,5 @@ public class AppConfig {
   public Global global() {
     return new Global();
   }
+
 }

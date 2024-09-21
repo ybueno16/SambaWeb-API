@@ -1,5 +1,6 @@
 package com.br.SambaWebAPI.group.controllers;
 
+import com.br.SambaWebAPI.config.DefaultOperation;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.group.exceptions.AddUserToGroupException;
@@ -30,6 +31,10 @@ public class GroupController {
   }
 
   @PostMapping
+  @DefaultOperation(
+          summary = "Add Group",
+          description = "Create linux group",
+          tags = {"Group"})
   public ResponseEntity<?> groupCreation(@RequestBody Map<String, Object> json) {
     Group group = objectMapper.convertValue(json.get("group"), Group.class);
     SudoAuthentication sudoAuthentication =
@@ -50,6 +55,10 @@ public class GroupController {
   }
 
   @PostMapping(path = "/assignUserToGroup")
+  @DefaultOperation(
+          summary = "Assign User to Group",
+          description = "Assign a user to an group",
+          tags = {"Group"})
   public ResponseEntity<?> addUserToGroup(@RequestBody Map<String, Object> json) {
     User user = objectMapper.convertValue(json.get("user"), User.class);
     Group group = objectMapper.convertValue(json.get("group"), Group.class);
@@ -73,6 +82,10 @@ public class GroupController {
   }
 
   @DeleteMapping
+  @DefaultOperation(
+          summary = "Delete Group",
+          description = "Delete linux group",
+          tags = {"Group"})
   public ResponseEntity<?> deleteGroup(@RequestBody Map<String, Object> json) {
     Group group = objectMapper.convertValue(json.get("group"), Group.class);
     SudoAuthentication sudoAuthentication =

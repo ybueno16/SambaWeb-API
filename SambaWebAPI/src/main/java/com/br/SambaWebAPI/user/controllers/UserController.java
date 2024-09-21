@@ -3,6 +3,7 @@ package com.br.SambaWebAPI.user.controllers;
 import static com.br.SambaWebAPI.config.Global.API_URL_SAMBA;
 
 //import com.br.SambaWebAPI.config.DefaultOperation;
+import com.br.SambaWebAPI.config.DefaultOperation;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.password.exceptions.CreatePasswordException;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -40,8 +41,8 @@ public class UserController {
   }
 
   @PostMapping
-//  @DefaultOperation(summary = "Buscar", description = "Buscar cliente pelo nome", tags = {"Cliente"})
-  public ResponseEntity<?> UserCreation( @RequestBody Map<String, Object> json) throws Exception {
+  @DefaultOperation(summary = "Create User", description = "Create a new linux user", tags = {"User"})
+  public ResponseEntity<?> UserCreation(@RequestBody Map<String, Object> json) throws Exception {
     User user = objectMapper.convertValue(json.get("user"), User.class);
     SudoAuthentication sudoAuthentication =
             objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
@@ -68,6 +69,7 @@ public class UserController {
     }
   }
 
+  @DefaultOperation(summary = "List User", description = "Try to list a existent user", tags = {"User"})
 
   @PostMapping(path = "/getUser")
   public ResponseEntity<?> getUser(@RequestBody User user) {
@@ -85,7 +87,7 @@ public class UserController {
               HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
+  @DefaultOperation(summary = "Delete User", description = "Delete user", tags = {"User"})
   @DeleteMapping
   public ResponseEntity<?> removeUser(@RequestBody Map<String, Object> json) {
     User user = objectMapper.convertValue(json.get("user"), User.class);
@@ -106,6 +108,7 @@ public class UserController {
               HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  @DefaultOperation(summary = "Create user", description = "Create samba user", tags = {"User"})
 
   @PostMapping(path = "/createSambaUser")
   public ResponseEntity<?> createSambaUser(@RequestBody Map<String, Object> json)
@@ -128,6 +131,8 @@ public class UserController {
     }
   }
 
+  @DefaultOperation(summary = "Delete User", description = "Delete samba user", tags = {"User"})
+
   @DeleteMapping(path = "/removeSambaUser")
   public ResponseEntity<?> removeSambaUser(@RequestBody Map<String, Object> json)
           throws UserSambaDeleteException {
@@ -137,7 +142,7 @@ public class UserController {
     try {
       userService.removeSambaUser(user, sudoAuthentication);
       return DefaultResponseEntityFactory.create(
-              "Smba user removed successfully!", user, HttpStatus.OK);
+              "Samba user removed successfully!", user, HttpStatus.OK);
     } catch (UserSambaDeleteException e) {
       return DefaultResponseEntityFactory.create(
               e.getErrorCode().getErrorMessage(), null, e.getErrorCode().getHttpStatus());

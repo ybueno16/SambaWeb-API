@@ -1,5 +1,6 @@
 package com.br.SambaWebAPI.permission.controller;
 
+import com.br.SambaWebAPI.config.DefaultOperation;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.folder.models.Folder;
@@ -33,6 +34,10 @@ public class PermissionController {
   }
 
   @PostMapping(path = "managePermission")
+  @DefaultOperation(
+          summary = "Add Permission",
+          description = "Add permission to a folder or file",
+          tags = {"Permission"})
   public ResponseEntity<?> permissionManager(@RequestBody Map<String, Map<String, String>> json) {
     OwnerPermission ownerPermission =
             objectMapper.convertValue(json.get("ownerPermission"), OwnerPermission.class);
