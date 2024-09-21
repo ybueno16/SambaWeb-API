@@ -47,6 +47,8 @@ public class SambaConfigService {
 
     } catch (IOException e) {
       e.printStackTrace();
+    } catch (Exception e) {
+        throw new RuntimeException(e);
     }
   }
 
@@ -121,7 +123,7 @@ public class SambaConfigService {
   }
 
   public void sambaConfigRemoveSection(
-      SambaConfig sambaConfig, SudoAuthentication sudoAuthentication) throws IOException {
+      SambaConfig sambaConfig, SudoAuthentication sudoAuthentication) throws Exception {
 
     boolean sectionExists = false;
     StringBuilder modifiedContent = new StringBuilder();
@@ -144,27 +146,6 @@ public class SambaConfigService {
 
     try (FileWriter writer = new FileWriter(Global.SMB_CONF_PATH)) {
       writer.write(modifiedContent.toString());
-    }
-  }
-
-  public void refreshSambaConfig() throws Exception {
-    processBuilderAdapter = new ProcessBuilderAdapterImpl();
-
-    processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
-
-    ProcessBuilder processBuilder =
-        processBuilderAdapter
-            .command(CommandConstants.RELOAD_SMB_CONF)
-            .redirectInput(ProcessBuilder.Redirect.PIPE);
-
-    Process process = processBuilder.start();
-
-    process.waitFor();
-
-    int exitCode = process.exitValue();
-
-    if (exitCode != 0) {
-      throw DeleteFolderFactory.createException();
     }
   }
 }

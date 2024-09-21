@@ -7,13 +7,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
 public class User {
-  @Schema(
-          description = "Username",
-          example = "user"
-  )
+
   @JsonProperty("user")
+  @Schema(description = "The user's name", example = "sambauser")
   private String user;
+  @Schema(description = "The user's passsword", example = "strongpassword123")
   private String password;
+  @Schema(description = "The user's groups", example = "[group1,group2]")
   private List<Group> groupList;
 
   public List<Group> getGroupList() {

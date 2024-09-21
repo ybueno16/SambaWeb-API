@@ -1,5 +1,6 @@
 package com.br.SambaWebAPI.folder.controllers;
 
+import com.br.SambaWebAPI.config.DefaultOperation;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.folder.models.Folder;
@@ -30,6 +31,10 @@ public class FolderController {
   }
 
   @PostMapping
+  @DefaultOperation(
+          summary = "Create folder",
+          description = "Create an folder",
+          tags = {"Folder"})
   public ResponseEntity<?> folderCreate(@RequestBody Map<String, Object> json) {
     Folder folder = objectMapper.convertValue(json.get("folder"), Folder.class);
     SudoAuthentication sudoAuthentication =
@@ -47,6 +52,10 @@ public class FolderController {
   }
 
   @DeleteMapping
+  @DefaultOperation(
+          summary = "Delete folder",
+          description = "Delete an folder",
+          tags = {"Folder"})
   public ResponseEntity<?> removeFolder(@RequestBody Map<String, Object> json) {
     Folder folder = objectMapper.convertValue(json.get("folder"), Folder.class);
     SudoAuthentication sudoAuthentication =
