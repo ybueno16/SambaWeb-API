@@ -12,6 +12,8 @@ This is a project that consists of a web application to manage a Samba server th
   
 - **Logs and Monitoring**: View Samba server logs for monitoring and diagnosing problems.
 
+- **Documentation**: View API docs via swagger http://localhost:8080/swagger-ui/index.html#/ 
+
 ## Technologies Used
 
 - **Angular**: Front-end development framework used to build the user interface.
