@@ -1,6 +1,6 @@
 package com.br.SambaWebAPI.sambaconfig.controller;
 
-import com.br.SambaWebAPI.config.DefaultOperation;
+import com.br.SambaWebAPI.config.swagger.DefaultOperation;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;

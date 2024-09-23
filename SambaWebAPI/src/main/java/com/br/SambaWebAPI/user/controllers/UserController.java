@@ -2,8 +2,8 @@ package com.br.SambaWebAPI.user.controllers;
 
 import static com.br.SambaWebAPI.config.Global.API_URL_SAMBA;
 
-//import com.br.SambaWebAPI.config.DefaultOperation;
-import com.br.SambaWebAPI.config.DefaultOperation;
+//import com.br.SambaWebAPI.config.swagger.DefaultOperation;
+import com.br.SambaWebAPI.config.swagger.DefaultOperation;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.password.exceptions.CreatePasswordException;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -18,8 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 
 
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

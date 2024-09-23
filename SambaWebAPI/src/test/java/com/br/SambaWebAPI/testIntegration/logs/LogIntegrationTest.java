@@ -7,9 +7,11 @@ import com.br.SambaWebAPI.logs.service.LogService;
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.sql.DataSource;
 import java.io.*;
 import java.sql.*;
 
@@ -30,8 +32,22 @@ public class LogIntegrationTest {
     private static final String DATABASE_USERNAME = "test";
     private static final String DATABASE_PASSWORD = "test";
 
+    private DataSource dataSource;
+
+    @BeforeAll
+    public void setupDataSource() {
+        dataSource = DataSourceBuilder.create()
+                .driverClassName("org.h2.Driver")
+                .url(DATABASE_URL)
+                .username(DATABASE_USERNAME)
+                .password(DATABASE_PASSWORD)
+                .build();
+    }
+
+
     public void setup() throws SQLException {
-        try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD)) {
+        logRepository = new LogRepositoryImpl(dataSource);
+        try (Connection connection = dataSource.getConnection()) {
             String createTableQuery = "CREATE TABLE IF NOT EXISTS LOGS (" +
                     "ID INT PRIMARY KEY AUTO_INCREMENT, " +
                     "LOG_DESCRIPTION VARCHAR(255) NOT NULL" +
@@ -44,51 +60,40 @@ public class LogIntegrationTest {
 
     @Test
     @DisplayName("""
-                Give a log description,
-                when insert log data,
-                then the log description should be inserted
-            """)
-    public void insertLogData() throws SQLException {
+            Give a log description,
+            when insert log data,
+            then the log description should be inserted
+        """)
+    public void insertLogData() throws Exception {
+
+        LogRepositoryImpl logRepository = new LogRepositoryImpl(dataSource);
+        logRepository.insertLog("Teste 1");
+
         Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
-        setup();
-
-        String query = "INSERT INTO logs (log_description) VALUES ('Teste 1')";
-        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.execute();
-
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                int id = generatedKeys.getInt(1);
-
-                query = "SELECT log_description FROM logs WHERE id = ?";
-                try (PreparedStatement selectStatement = connection.prepareStatement(query)) {
-                    selectStatement.setInt(1, id);
-
-                    try (ResultSet resultSet = selectStatement.executeQuery()) {
-                        while (resultSet.next()) {
-                            String logDescription = resultSet.getString("log_description");
-                            assertEquals("Teste 1", logDescription);
-                        }
-                    }
+        String query = "SELECT log_description FROM logs WHERE log_description = ?";
+        try (PreparedStatement selectStatement = connection.prepareStatement(query)) {
+            selectStatement.setString(1, "Teste 1");
+            try (ResultSet resultSet = selectStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String logDescription = resultSet.getString("log_description");
+                    assertEquals("Teste 1", logDescription);
                 }
             }
         }
     }
+
     @Test
     @DisplayName("""
-                Give a empty log description,
-                when try to insert log data,
-                then the log description shouldn't be inserted
-               """)
-    public void testReadLogEmptyFile() throws SQLException, IOException {
-        Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+            Give a empty log description,
+            when try to insert log data,
+            then the log description shouldn't be inserted
+           """)
+    public void testReadLogEmptyFile() throws Exception {
         setup();
-
         File logFile = new File("log.txt");
         if (!logFile.exists()) {
             logFile.createNewFile();
         }
-
         BufferedReader reader = new BufferedReader(new FileReader(logFile));
         String logDescription = "";
         String line;
@@ -96,10 +101,9 @@ public class LogIntegrationTest {
             logDescription += line + "\n";
         }
         reader.close();
-
         if (logDescription.trim().isEmpty()) {
             String query = "SELECT COUNT(*) FROM logs";
-            try (Statement statement = connection.createStatement()) {
+            try (Statement statement = dataSource.getConnection().createStatement()) {
                 try (ResultSet resultSet = statement.executeQuery(query)) {
                     resultSet.next();
                     int count = resultSet.getInt(1);
@@ -108,21 +112,26 @@ public class LogIntegrationTest {
             }
             return;
         }
-
-        String query = "INSERT INTO logs (log_description) VALUES (?)";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, logDescription);
-            statement.execute();
-        }
+        logRepository.insertLog(logDescription);
     }
 
     @Test
     @DisplayName("""
-            Give an invalid log file,
-            when try to insert logs,
-            then an exception should be thrown
-        """)
-    public void testInsertLogsInvalid() throws IOException {
+        Give an invalid log file,
+        when try to insert logs,
+        then an exception should be thrown
+    """)
+    public void testInsertLogsInvalid() throws Exception {
+
+        DataSource dataSource = DataSourceBuilder.create()
+                .driverClassName("org.h2.Driver")
+                .url("jdbc:h2:mem:invalid-db")
+                .username("test")
+                .password("test")
+                .build();
+
+        LogRepositoryImpl logRepository = new LogRepositoryImpl(dataSource);
+
         File logFile = new File("log.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile))) {
             writer.write("Invalid log entry");
@@ -131,7 +140,7 @@ public class LogIntegrationTest {
         try {
             logService.insertLogs();
             fail("Expected an exception to be thrown");
-        } catch (Exception e) {
+        } catch (IOException e) {
             assertNotNull(e);
         }
     }

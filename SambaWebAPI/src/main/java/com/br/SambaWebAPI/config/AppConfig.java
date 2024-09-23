@@ -3,8 +3,6 @@ package com.br.SambaWebAPI.config;
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 
-import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.FlywayException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -1,4 +1,4 @@
-package com.br.SambaWebAPI.config;
+package com.br.SambaWebAPI.config.swagger;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;

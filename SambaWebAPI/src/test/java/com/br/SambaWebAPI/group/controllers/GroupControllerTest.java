@@ -1,5 +1,6 @@
 package com.br.SambaWebAPI.group.controllers;
 
+import com.br.SambaWebAPI.group.exceptions.CreateGroupException;
 import com.br.SambaWebAPI.group.models.Group;
 import com.br.SambaWebAPI.group.services.GroupService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
@@ -18,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class GroupControllerTest {
@@ -35,7 +38,7 @@ class GroupControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
-    GroupService groupService = Mockito.mock(GroupService.class);
+    GroupService groupService = mock(GroupService.class);
 
     @BeforeEach
     public void setup() {
