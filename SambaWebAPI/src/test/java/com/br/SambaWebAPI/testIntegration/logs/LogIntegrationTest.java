@@ -140,7 +140,7 @@ public class LogIntegrationTest {
         try {
             logService.insertLogs();
             fail("Expected an exception to be thrown");
-        } catch (SQLException e) {
+        } catch (IOException e) {
             assertNotNull(e);
         }
     }
