@@ -20,7 +20,7 @@ jobs:
       - name: Run tests
         run: |
           cd SambaWebAPI
-         ./gradlew test
+          ./gradlew test
       - name: Generate JaCoCo Badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
