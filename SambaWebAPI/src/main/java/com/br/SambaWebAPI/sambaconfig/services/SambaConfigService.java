@@ -4,7 +4,10 @@ import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.folder.factory.DeleteFolderFactory;
+import com.br.SambaWebAPI.password.factory.CreatePasswordFactory;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
+import com.br.SambaWebAPI.sambaconfig.exceptions.ReloadSambaConfigException;
+import com.br.SambaWebAPI.sambaconfig.factory.ReloadSambaConfigFactory;
 import com.br.SambaWebAPI.sambaconfig.models.SambaConfig;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import java.io.*;
@@ -147,5 +150,34 @@ public class SambaConfigService {
     try (FileWriter writer = new FileWriter(Global.SMB_CONF_PATH)) {
       writer.write(modifiedContent.toString());
     }
+  }
+
+  public boolean refreshSambaConfig(SudoAuthentication sudoAuthentication) throws IOException, InterruptedException, ReloadSambaConfigException {
+    System.out.println("Iniciando refreshSambaConfig...");
+
+    ProcessBuilder processBuilder =
+            processBuilderAdapter.command(
+                    CommandConstants.SUDO,
+                    CommandConstants.SUDO_STDIN,
+                    CommandConstants.SMBCONTROL,
+                    CommandConstants.SMBCONTROL_ALL,
+                    CommandConstants.SMBCONTROL_RELOAD_CONF
+            );
+
+    Process process = processBuilder.start();
+
+    OutputStream outputStream = process.getOutputStream();
+
+    outputStream.write((sudoAuthentication.getSudoPassword() + "\n").getBytes());
+    outputStream.flush();
+    outputStream.close();
+    process.waitFor();
+
+    int exitCode = process.waitFor();
+
+    if (exitCode != 0) {
+      throw ReloadSambaConfigFactory.createException(exitCode);
+    }
+    return true;
   }
 }
