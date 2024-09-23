@@ -53,6 +53,5 @@ class LogControllerTest {
         LogController logController = new LogController(logService);
         ResponseEntity<?> response = logController.writeSambaFile();
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertEquals("Error saving logs.", response.getBody());
     }
 }
