@@ -26,4 +26,5 @@ public class CommandConstants {
   public static final String SMBCONTROL_RELOAD_CONF = "reload-config";
   public static final String EXIT_TERMINAL = "exit";
   public static final String VERIFY_IDENTITY = "su";
+  public static final String USER_ARGUMENT = "-u";
 }

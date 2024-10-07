@@ -6,6 +6,7 @@ import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.config.swagger.DefaultOperation;
 import com.br.SambaWebAPI.login.exceptions.LoginException;
 import com.br.SambaWebAPI.login.services.LoginService;
+import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -38,9 +39,10 @@ public class LoginController {
             tags = {"Login"})
     public ResponseEntity<?> login(@RequestBody Map<String, Object> json) {
         User user = objectMapper.convertValue(json.get("user"), User.class);
-
+        SudoAuthentication sudoAuthentication =
+                objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
         try {
-            loginService.login(user);
+            loginService.login(user,sudoAuthentication);
             return DefaultResponseEntityFactory.create("Login successful.", user, HttpStatus.OK);
         } catch (LoginException e) {
             return DefaultResponseEntityFactory.create(
