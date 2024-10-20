@@ -13,6 +13,7 @@ import com.br.SambaWebAPI.user.exceptions.DeleteUserException;
 import com.br.SambaWebAPI.user.exceptions.CreateUserSambaException;
 import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
 import com.br.SambaWebAPI.user.models.User;
+import com.br.SambaWebAPI.user.models.dto.UserOperationsDTO;
 import com.br.SambaWebAPI.user.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
@@ -26,28 +27,24 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(API_URL_SAMBA + "/user-config")
 public class UserController {
-  private final ObjectMapper objectMapper;
   private final UserService userService;
   private final PasswordService passwordService;
 
   @Autowired
-  public UserController(
-          ObjectMapper objectMapper, UserService userService, PasswordService passwordService) {
-    this.objectMapper = objectMapper;
+  public UserController(UserService userService,
+                        PasswordService passwordService) {
     this.userService = userService;
     this.passwordService = passwordService;
   }
 
   @PostMapping
   @DefaultOperation(summary = "Create User", description = "Create a new linux user", tags = {"User"})
-  public ResponseEntity<?> UserCreation(@RequestBody Map<String, Object> json) throws Exception {
-    User user = objectMapper.convertValue(json.get("user"), User.class);
-    SudoAuthentication sudoAuthentication =
-            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+  public ResponseEntity<?> UserCreation(@RequestBody UserOperationsDTO request) throws Exception {
+    User user = request.getUser();
+    SudoAuthentication sudoAuthentication = request.getSudoAuthentication();
     try {
       userService.createUser(user, sudoAuthentication);
       passwordService.createPassword(user);
-
       return DefaultResponseEntityFactory.create(
               "User created successfully!", user, HttpStatus.OK);
     } catch (CreatePasswordException e) {
@@ -87,10 +84,9 @@ public class UserController {
   }
   @DefaultOperation(summary = "Delete User", description = "Delete user", tags = {"User"})
   @DeleteMapping
-  public ResponseEntity<?> removeUser(@RequestBody Map<String, Object> json) {
-    User user = objectMapper.convertValue(json.get("user"), User.class);
-    SudoAuthentication sudoAuthentication =
-            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+  public ResponseEntity<?> removeUser(@RequestBody UserOperationsDTO request) {
+    User user = request.getUser();
+    SudoAuthentication sudoAuthentication = request.getSudoAuthentication();
 
     try {
       userService.removeUser(user, sudoAuthentication);
@@ -109,11 +105,10 @@ public class UserController {
   @DefaultOperation(summary = "Create user", description = "Create samba user", tags = {"User"})
 
   @PostMapping(path = "/createSambaUser")
-  public ResponseEntity<?> createSambaUser(@RequestBody Map<String, Object> json)
+  public ResponseEntity<?> createSambaUser(@RequestBody UserOperationsDTO request)
           throws CreateUserSambaException {
-    User user = objectMapper.convertValue(json.get("user"), User.class);
-    SudoAuthentication sudoAuthentication =
-            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+    User user = request.getUser();
+    SudoAuthentication sudoAuthentication = request.getSudoAuthentication();
     try {
       userService.createSambaUser(user, sudoAuthentication);
       return DefaultResponseEntityFactory.create(
@@ -132,11 +127,10 @@ public class UserController {
   @DefaultOperation(summary = "Delete User", description = "Delete samba user", tags = {"User"})
 
   @DeleteMapping(path = "/removeSambaUser")
-  public ResponseEntity<?> removeSambaUser(@RequestBody Map<String, Object> json)
+  public ResponseEntity<?> removeSambaUser(@RequestBody UserOperationsDTO request)
           throws UserSambaDeleteException {
-    User user = objectMapper.convertValue(json.get("user"), User.class);
-    SudoAuthentication sudoAuthentication =
-            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+    User user = request.getUser();
+    SudoAuthentication sudoAuthentication = request.getSudoAuthentication();
     try {
       userService.removeSambaUser(user, sudoAuthentication);
       return DefaultResponseEntityFactory.create(

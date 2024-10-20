@@ -5,6 +5,7 @@ import com.br.SambaWebAPI.password.services.PasswordService;
 import com.br.SambaWebAPI.user.exceptions.CreateUserSambaException;
 import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
 import com.br.SambaWebAPI.user.models.User;
+import com.br.SambaWebAPI.user.models.dto.UserOperationsDTO;
 import com.br.SambaWebAPI.user.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,29 +48,19 @@ class UserControllerTest {
         sudoAuthentication.setSudoPassword("sudo_password");
     }
 
-    private Map<String, Object> getJson() {
-        Map<String, Object> json = new HashMap<>();
-        json.put(user.getUser(), user);
-        json.put(user.getPassword(),user);
-        json.put(sudoAuthentication.getSudoPassword(),sudoAuthentication);
-        return json;
-    }
-
-
     @Test
     @DisplayName("""
-                Given a user creation process,
-                when the user is created successfully,
-                then it should return HTTP 200
-             """)
+            Given a user creation process,
+            when the user is created successfully,
+            then it should return HTTP 200
+         """)
     public void testUserCreation() throws Exception {
-
-        UserController userController = new UserController(objectMapper, userService, passwordService);
-
+        UserController userController = new UserController(userService, passwordService);
+        UserOperationsDTO userOperationsDTO = new UserOperationsDTO();
+        userOperationsDTO.setUser(user);
+        userOperationsDTO.setSudoAuthentication(sudoAuthentication);
         when(userService.createUser(user,sudoAuthentication)).thenReturn(true);
-
-        ResponseEntity<?> response = userController.UserCreation(getJson());
-
+        ResponseEntity<?> response = userController.UserCreation(userOperationsDTO);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -81,7 +72,7 @@ class UserControllerTest {
                 """)
     public void getUserCreation() throws Exception {
 
-        UserController userController = new UserController(objectMapper, userService, passwordService);
+        UserController userController = new UserController(userService, passwordService);
 
         when(userService.getUser(user)).thenReturn(true);
 
@@ -92,52 +83,49 @@ class UserControllerTest {
 
     @Test
     @DisplayName("""
-                Given a user removal process,
-                when the user is created successfully,
-                then it should return HTTP 200
-                """)
-    public void removeUserCreation() throws Exception {
-
-        UserController userController = new UserController(objectMapper, userService, passwordService);
-
-        when(userService.removeUser(user,sudoAuthentication)).thenReturn(true);
-
-        ResponseEntity<?> response = userController.removeUser(getJson());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    @Test
-    @DisplayName("""
-                Given a samba user creation process,
-                when the user is created successfully,
-                then it should return HTTP 200
-                """)
-    public void createSambaUserCreation() throws Exception, CreateUserSambaException {
-
-        UserController userController = new UserController(objectMapper, userService, passwordService);
-
-        when(userService.createSambaUser(user,sudoAuthentication)).thenReturn(true);
-
-        ResponseEntity<?> response = userController.createSambaUser(getJson());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    @Test
-    @DisplayName("""
-                Given a samba user removal process,
-                when the user is created successfully,
-                then it should return HTTP 200
+            Given a user removal process,
+            when the user is created successfully,
+            then it should return HTTP 200
             """)
+    public void removeUserCreation() throws Exception {
+        UserController userController = new UserController(userService, passwordService);
+        UserOperationsDTO userOperationsDTO = new UserOperationsDTO();
+        userOperationsDTO.setUser(user);
+        userOperationsDTO.setSudoAuthentication(sudoAuthentication);
+        when(userService.removeUser(user,sudoAuthentication)).thenReturn(true);
+        ResponseEntity<?> response = userController.removeUser(userOperationsDTO);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("""
+            Given a samba user creation process,
+            when the user is created successfully,
+            then it should return HTTP 200
+            """)
+    public void createSambaUserCreation() throws Exception, CreateUserSambaException {
+        UserController userController = new UserController(userService, passwordService);
+        UserOperationsDTO userOperationsDTO = new UserOperationsDTO();
+        userOperationsDTO.setUser(user);
+        userOperationsDTO.setSudoAuthentication(sudoAuthentication);
+        when(userService.createSambaUser(user,sudoAuthentication)).thenReturn(true);
+        ResponseEntity<?> response = userController.createSambaUser(userOperationsDTO);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("""
+            Given a samba user removal process,
+            when the user is created successfully,
+            then it should return HTTP 200
+        """)
     public void deleteSambaUserCreation() throws Exception, UserSambaDeleteException {
-
-        UserController userController = new UserController(objectMapper, userService, passwordService);
-
+        UserController userController = new UserController(userService, passwordService);
+        UserOperationsDTO userOperationsDTO = new UserOperationsDTO();
+        userOperationsDTO.setUser(user);
+        userOperationsDTO.setSudoAuthentication(sudoAuthentication);
         when(userService.removeSambaUser(user,sudoAuthentication)).thenReturn(true);
-
-        ResponseEntity<?> response = userController.removeSambaUser(getJson());
-
+        ResponseEntity<?> response = userController.removeSambaUser(userOperationsDTO);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
