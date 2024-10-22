@@ -3,7 +3,7 @@ CREATE TABLE logs (
     log_description TEXT
 );
 
-CREATE TABLE serverconfig (
+CREATE TABLE server_config (
    id SERIAL PRIMARY KEY,
    ip VARCHAR(15) NOT NULL,
    port INT NOT NULL

@@ -22,8 +22,10 @@ public class ServerConfigService {
             serverConfigRepository.saveServerConfig(serverConfig);
             return true;
         } catch (SQLException e){
+            System.out.println(e.getMessage());
             throw new SQLException("Error saving server config.", e.getMessage(), e);
         } catch (Exception e){
+            System.out.println(e.getMessage());
             throw new Exception("Error saving server config: " + e.getMessage(), e);
         }
     }

@@ -37,7 +37,7 @@ public class ServerConfigRepositoryImpl implements ServerConfigRepository {
                     .append(")");
             stmt.execute(sql.toString());
         } catch (SQLException e) {
-            throw new SQLException("There was an error when inserting into the database.");
+            throw new SQLException("Error inserting into database: " + e.getMessage());
         }
     }
 }
