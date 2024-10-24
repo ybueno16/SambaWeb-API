@@ -28,6 +28,8 @@ services:
     volumes:
       - ./.docker/postgres-data:/var/lib/postgresql/data
       - ./.docker/postgresql.conf:/etc/postgresql/postgresql.conf
+    networks:
+      - sambaweb
 
 volumes:
   postgres-data:
