@@ -7,49 +7,49 @@ import com.br.SambaWebAPI.permission.models.OwnerPermission;
 import com.br.SambaWebAPI.permission.models.PublicPermission;
 
 public class PermissionDTO {
-    private OwnerPermission ownerPermission;
-    private GroupPermission groupPermission;
-    private PublicPermission publicPermission;
-    private Folder folder;
-    private SudoAuthentication sudoAuthentication;
+  private OwnerPermission ownerPermission;
+  private GroupPermission groupPermission;
+  private PublicPermission publicPermission;
+  private Folder folder;
+  private SudoAuthentication sudoAuthentication;
 
-    public OwnerPermission getOwnerPermission() {
-        return ownerPermission;
-    }
+  public OwnerPermission getOwnerPermission() {
+    return ownerPermission;
+  }
 
-    public void setOwnerPermission(OwnerPermission ownerPermission) {
-        this.ownerPermission = ownerPermission;
-    }
+  public void setOwnerPermission(OwnerPermission ownerPermission) {
+    this.ownerPermission = ownerPermission;
+  }
 
-    public GroupPermission getGroupPermission() {
-        return groupPermission;
-    }
+  public GroupPermission getGroupPermission() {
+    return groupPermission;
+  }
 
-    public void setGroupPermission(GroupPermission groupPermission) {
-        this.groupPermission = groupPermission;
-    }
+  public void setGroupPermission(GroupPermission groupPermission) {
+    this.groupPermission = groupPermission;
+  }
 
-    public PublicPermission getPublicPermission() {
-        return publicPermission;
-    }
+  public PublicPermission getPublicPermission() {
+    return publicPermission;
+  }
 
-    public void setPublicPermission(PublicPermission publicPermission) {
-        this.publicPermission = publicPermission;
-    }
+  public void setPublicPermission(PublicPermission publicPermission) {
+    this.publicPermission = publicPermission;
+  }
 
-    public Folder getFolder() {
-        return folder;
-    }
+  public Folder getFolder() {
+    return folder;
+  }
 
-    public void setFolder(Folder folder) {
-        this.folder = folder;
-    }
+  public void setFolder(Folder folder) {
+    this.folder = folder;
+  }
 
-    public SudoAuthentication getSudoAuthentication() {
-        return sudoAuthentication;
-    }
+  public SudoAuthentication getSudoAuthentication() {
+    return sudoAuthentication;
+  }
 
-    public void setSudoAuthentication(SudoAuthentication sudoAuthentication) {
-        this.sudoAuthentication = sudoAuthentication;
-    }
+  public void setSudoAuthentication(SudoAuthentication sudoAuthentication) {
+    this.sudoAuthentication = sudoAuthentication;
+  }
 }

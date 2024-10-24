@@ -5,31 +5,31 @@ import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.models.User;
 
 public class AssignUserToGroupDTO {
-    private User user;
-    private Group group;
-    private SudoAuthentication sudoAuthentication;
+  private User user;
+  private Group group;
+  private SudoAuthentication sudoAuthentication;
 
-    public User getUser() {
-        return user;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-    public Group getGroup() {
-        return group;
-    }
+  public Group getGroup() {
+    return group;
+  }
 
-    public void setGroup(Group group) {
-        this.group = group;
-    }
+  public void setGroup(Group group) {
+    this.group = group;
+  }
 
-    public SudoAuthentication getSudoAuthentication() {
-        return sudoAuthentication;
-    }
+  public SudoAuthentication getSudoAuthentication() {
+    return sudoAuthentication;
+  }
 
-    public void setSudoAuthentication(SudoAuthentication sudoAuthentication) {
-        this.sudoAuthentication = sudoAuthentication;
-    }
+  public void setSudoAuthentication(SudoAuthentication sudoAuthentication) {
+    this.sudoAuthentication = sudoAuthentication;
+  }
 }

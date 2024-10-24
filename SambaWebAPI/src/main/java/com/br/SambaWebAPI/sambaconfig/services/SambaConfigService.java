@@ -1,10 +1,7 @@
 package com.br.SambaWebAPI.sambaconfig.services;
 
 import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
-import com.br.SambaWebAPI.adapter.impl.ProcessBuilderAdapterImpl;
 import com.br.SambaWebAPI.config.Global;
-import com.br.SambaWebAPI.folder.factory.DeleteFolderFactory;
-import com.br.SambaWebAPI.password.factory.CreatePasswordFactory;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.sambaconfig.exceptions.ReloadSambaConfigException;
 import com.br.SambaWebAPI.sambaconfig.factory.ReloadSambaConfigFactory;
@@ -51,7 +48,7 @@ public class SambaConfigService {
     } catch (IOException e) {
       e.printStackTrace();
     } catch (Exception e) {
-        throw new RuntimeException(e);
+      throw new RuntimeException(e);
     }
   }
 
@@ -152,17 +149,17 @@ public class SambaConfigService {
     }
   }
 
-  public boolean refreshSambaConfig(SudoAuthentication sudoAuthentication) throws IOException, InterruptedException, ReloadSambaConfigException {
+  public boolean refreshSambaConfig(SudoAuthentication sudoAuthentication)
+      throws IOException, InterruptedException, ReloadSambaConfigException {
     System.out.println("Iniciando refreshSambaConfig...");
 
     ProcessBuilder processBuilder =
-            processBuilderAdapter.command(
-                    CommandConstants.SUDO,
-                    CommandConstants.SUDO_STDIN,
-                    CommandConstants.SMBCONTROL,
-                    CommandConstants.SMBCONTROL_ALL,
-                    CommandConstants.SMBCONTROL_RELOAD_CONF
-            );
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.SMBCONTROL,
+            CommandConstants.SMBCONTROL_ALL,
+            CommandConstants.SMBCONTROL_RELOAD_CONF);
 
     Process process = processBuilder.start();
 

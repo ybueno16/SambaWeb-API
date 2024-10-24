@@ -7,6 +7,7 @@ public class SudoAuthentication {
   @JsonProperty("sudoAuthentication")
   @Schema(description = "The sudoer's password", example = "strongpassword")
   private String sudoPassword;
+
   @Schema(description = "The sudoer's user", example = "root")
   private String sudoUser;
 

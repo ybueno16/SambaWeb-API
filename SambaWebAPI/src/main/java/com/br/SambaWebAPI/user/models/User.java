@@ -3,7 +3,6 @@ package com.br.SambaWebAPI.user.models;
 import com.br.SambaWebAPI.group.models.Group;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.util.List;
 
 public class User {
@@ -11,8 +10,10 @@ public class User {
   @JsonProperty("user")
   @Schema(description = "The user's name", example = "sambauser")
   private String user;
+
   @Schema(description = "The user's passsword", example = "strongpassword123")
   private String password;
+
   @Schema(description = "The user's groups", example = "[group1,group2]")
   private List<Group> groupList;
 

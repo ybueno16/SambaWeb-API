@@ -5,10 +5,9 @@ import com.br.SambaWebAPI.login.factory.LoginFactory;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
+import java.io.OutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.OutputStream;
 
 @Service
 public class LoginService {
@@ -23,14 +22,14 @@ public class LoginService {
     processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
 
     ProcessBuilder processBuilder =
-            processBuilderAdapter.command(
-                    CommandConstants.SUDO,
-                    CommandConstants.USER_ARGUMENT,
-                    sudoAuthentication.getSudoUser(),
-                    CommandConstants.VERIFY_IDENTITY,
-                    user.getUser(),
-                    CommandConstants.EXECUTE_COMMAND,
-                    "true");
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.USER_ARGUMENT,
+            sudoAuthentication.getSudoUser(),
+            CommandConstants.VERIFY_IDENTITY,
+            user.getUser(),
+            CommandConstants.EXECUTE_COMMAND,
+            "true");
     Process process = processBuilder.start();
 
     OutputStream outputStream = process.getOutputStream();

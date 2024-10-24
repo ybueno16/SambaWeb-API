@@ -26,15 +26,15 @@ public class GroupService {
   }
 
   public boolean createGroup(Group group, SudoAuthentication sudoAuthentication)
-          throws InterruptedException, IOException, CreateGroupException {
+      throws InterruptedException, IOException, CreateGroupException {
     processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
 
     ProcessBuilder processBuilder =
-            processBuilderAdapter.command(
-                    CommandConstants.SUDO,
-                    CommandConstants.SUDO_STDIN,
-                    CommandConstants.GROUP_ADD,
-                    group.getName());
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.GROUP_ADD,
+            group.getName());
 
     Process process = processBuilder.start();
 
@@ -53,17 +53,17 @@ public class GroupService {
   }
 
   public boolean addUserToGroup(Group group, User user, SudoAuthentication sudoAuthentication)
-          throws IOException, InterruptedException, AddUserToGroupException {
+      throws IOException, InterruptedException, AddUserToGroupException {
     processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
 
     ProcessBuilder processBuilder =
-            processBuilderAdapter.command(
-                    CommandConstants.SUDO,
-                    CommandConstants.SUDO_STDIN,
-                    CommandConstants.USER_MOD,
-                    CommandConstants.ADD_GROUP_OPTION,
-                    group.getName(),
-                    user.getUser());
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.USER_MOD,
+            CommandConstants.ADD_GROUP_OPTION,
+            group.getName(),
+            user.getUser());
 
     Process process = processBuilder.start();
 
@@ -80,15 +80,15 @@ public class GroupService {
   }
 
   public boolean deleteGroup(Group group, SudoAuthentication sudoAuthentication)
-          throws IOException, InterruptedException, DeleteGroupException {
+      throws IOException, InterruptedException, DeleteGroupException {
     processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
 
     ProcessBuilder processBuilder =
-            processBuilderAdapter.command(
-                    CommandConstants.SUDO,
-                    CommandConstants.SUDO_STDIN,
-                    CommandConstants.GROUP_DEL,
-                    group.getName());
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.GROUP_DEL,
+            group.getName());
 
     Process process = processBuilder.start();
 

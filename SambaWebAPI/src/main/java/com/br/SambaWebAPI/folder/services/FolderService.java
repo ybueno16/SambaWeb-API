@@ -21,18 +21,18 @@ public class FolderService {
   }
 
   public boolean createFolder(Folder folder, SudoAuthentication sudoAuthentication)
-          throws Exception {
+      throws Exception {
 
     processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
 
     String homeDir = getHomeDir();
 
     ProcessBuilder processBuilder =
-            processBuilderAdapter.command(
-                    CommandConstants.SUDO,
-                    CommandConstants.SUDO_STDIN,
-                    CommandConstants.MKDIR,
-                    homeDir + "/" + folder.getPath());
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.MKDIR,
+            homeDir + "/" + folder.getPath());
 
     Process process = processBuilder.start();
 
@@ -54,11 +54,11 @@ public class FolderService {
     processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
 
     ProcessBuilder processBuilder =
-            processBuilderAdapter.command(
-                    CommandConstants.SUDO,
-                    CommandConstants.BASH,
-                    CommandConstants.EXECUTE_COMMAND,
-                    CommandConstants.ECHO + " " + "$HOME");
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.BASH,
+            CommandConstants.EXECUTE_COMMAND,
+            CommandConstants.ECHO + " " + "$HOME");
 
     Process process = processBuilder.start();
 
@@ -74,25 +74,25 @@ public class FolderService {
     int exitCode = process.waitFor();
     if (exitCode != 0) {
       throw new IOException(
-              "Generic error. An unknown error occurred during validation of the environment variable");
+          "Generic error. An unknown error occurred during validation of the environment variable");
     }
 
     return homeDir;
   }
 
-  public boolean removeFolder(Folder folder, SudoAuthentication sudoAuthentication) throws Exception {
+  public boolean removeFolder(Folder folder, SudoAuthentication sudoAuthentication)
+      throws Exception {
     processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
 
     String homeDir = getHomeDir();
 
     ProcessBuilder processBuilder =
-            processBuilderAdapter
-                    .command(
-                            CommandConstants.SUDO,
-                            CommandConstants.SUDO_STDIN,
-                            CommandConstants.REMOVE,
-                            CommandConstants.REMOVE_RECURSIVE,
-                            homeDir + "/" + folder.getPath());
+        processBuilderAdapter.command(
+            CommandConstants.SUDO,
+            CommandConstants.SUDO_STDIN,
+            CommandConstants.REMOVE,
+            CommandConstants.REMOVE_RECURSIVE,
+            homeDir + "/" + folder.getPath());
 
     Process process = processBuilder.start();
 
