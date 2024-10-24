@@ -4,10 +4,10 @@ import com.br.SambaWebAPI.adapter.ProcessBuilderAdapter;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.exceptions.CreateUserSambaException;
 import com.br.SambaWebAPI.user.exceptions.UserSambaDeleteException;
-import com.br.SambaWebAPI.user.factory.CreateUserFactory;
-import com.br.SambaWebAPI.user.factory.DeleteUserFactory;
 import com.br.SambaWebAPI.user.factory.CreateSambaUserFactory;
+import com.br.SambaWebAPI.user.factory.CreateUserFactory;
 import com.br.SambaWebAPI.user.factory.DeleteSambaUserFactory;
+import com.br.SambaWebAPI.user.factory.DeleteUserFactory;
 import com.br.SambaWebAPI.user.models.User;
 import com.br.SambaWebAPI.utils.CommandConstants;
 import java.io.*;
@@ -45,7 +45,6 @@ public class UserService {
 
   public boolean removeUser(User user, SudoAuthentication sudoAuthentication) throws Exception {
     processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
-
 
     ProcessBuilder processBuilder =
         processBuilderAdapter.command(
@@ -99,7 +98,6 @@ public class UserService {
       throws Exception, CreateUserSambaException {
     createUser(user, sudoAuthentication);
     processBuilderAdapter.command(CommandConstants.EXIT_TERMINAL);
-
 
     ProcessBuilder processBuilder =
         processBuilderAdapter.command(

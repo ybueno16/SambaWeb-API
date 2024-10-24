@@ -1,8 +1,8 @@
 package com.br.SambaWebAPI.logs.controller;
 
-import com.br.SambaWebAPI.config.swagger.DefaultOperation;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
+import com.br.SambaWebAPI.config.swagger.DefaultOperation;
 import com.br.SambaWebAPI.logs.service.LogService;
 import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ public class LogController {
 
   @PostMapping
   @DefaultOperation(
-          summary = "Save logs",
-          description = "Save logs from samba in the database",
-          tags = {"Logs"})
+      summary = "Save logs",
+      description = "Save logs from samba in the database",
+      tags = {"Logs"})
   public ResponseEntity<?> writeSambaFile() throws Exception {
     try {
       boolean retorno = logService.insertLogs();
@@ -35,7 +35,9 @@ public class LogController {
           "Log was inserted successfully!", retorno, HttpStatus.OK);
     } catch (SQLException e) {
       return DefaultResponseEntityFactory.create(
-          "There was an error while inserting it into the database.", null, HttpStatus.INTERNAL_SERVER_ERROR);
+          "There was an error while inserting it into the database.",
+          null,
+          HttpStatus.INTERNAL_SERVER_ERROR);
 
     } catch (Exception e) {
       return DefaultResponseEntityFactory.create(

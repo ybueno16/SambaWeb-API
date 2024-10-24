@@ -4,22 +4,22 @@ import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.sambaconfig.models.SambaConfig;
 
 public class SambaConfigOperationsDTO {
-    private SambaConfig sambaConfig;
-    private SudoAuthentication sudoAuthentication;
+  private SambaConfig sambaConfig;
+  private SudoAuthentication sudoAuthentication;
 
-    public SambaConfig getSambaConfig() {
-        return sambaConfig;
-    }
+  public SambaConfig getSambaConfig() {
+    return sambaConfig;
+  }
 
-    public void setSambaConfig(SambaConfig sambaConfig) {
-        this.sambaConfig = sambaConfig;
-    }
+  public void setSambaConfig(SambaConfig sambaConfig) {
+    this.sambaConfig = sambaConfig;
+  }
 
-    public SudoAuthentication getSudoAuthentication() {
-        return sudoAuthentication;
-    }
+  public SudoAuthentication getSudoAuthentication() {
+    return sudoAuthentication;
+  }
 
-    public void setSudoAuthentication(SudoAuthentication sudoAuthentication) {
-        this.sudoAuthentication = sudoAuthentication;
-    }
+  public void setSudoAuthentication(SudoAuthentication sudoAuthentication) {
+    this.sudoAuthentication = sudoAuthentication;
+  }
 }

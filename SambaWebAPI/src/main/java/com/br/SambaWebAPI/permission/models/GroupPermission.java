@@ -34,5 +34,4 @@ public class GroupPermission implements PermissionInterface {
   public void setExecute(Integer execute) {
     this.execute = execute;
   }
-
 }

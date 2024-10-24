@@ -14,8 +14,7 @@ public class DeleteGroupErrorCode extends ErrorCode {
       new DeleteGroupErrorCode(
           "The primary group could not be excluded.", HttpStatus.INTERNAL_SERVER_ERROR);
   public static final DeleteGroupErrorCode CANT_UPDT_GROUP_FILE =
-      new DeleteGroupErrorCode(
-          "Unable to update the groups file.", HttpStatus.BAD_REQUEST);
+      new DeleteGroupErrorCode("Unable to update the groups file.", HttpStatus.BAD_REQUEST);
 
   protected DeleteGroupErrorCode(String errorMessage, HttpStatus httpStatus) {
     super(errorMessage, httpStatus);

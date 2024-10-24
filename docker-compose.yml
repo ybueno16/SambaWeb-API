@@ -11,6 +11,10 @@ services:
       - JAVA_DEBUG=true
     volumes:
       - ./:/SambaWeb
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - sambaweb
 
   postgres:
     image: sambaweb/sambaweb-postgres:latest
@@ -24,6 +28,11 @@ services:
     volumes:
       - ./.docker/postgres-data:/var/lib/postgresql/data
       - ./.docker/postgresql.conf:/etc/postgresql/postgresql.conf
+    networks:
+      - sambaweb
 
 volumes:
   postgres-data:
+networks:
+  sambaweb:
+    external: true
