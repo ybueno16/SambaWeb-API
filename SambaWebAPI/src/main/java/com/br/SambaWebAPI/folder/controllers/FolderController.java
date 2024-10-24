@@ -4,9 +4,11 @@ import com.br.SambaWebAPI.config.swagger.DefaultOperation;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.folder.models.Folder;
+import com.br.SambaWebAPI.folder.models.dto.FolderOperationsDTO;
 import com.br.SambaWebAPI.folder.services.FolderService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.permission.services.PermissionService;
+import com.br.SambaWebAPI.user.models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +20,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(Global.API_URL_SAMBA + "/folder-config")
 public class FolderController {
 
-  private final ObjectMapper objectMapper;
   private final FolderService folderService;
-  private final PermissionService permissionService;
 
   @Autowired
-  public FolderController(
-          ObjectMapper objectMapper, FolderService folderService, PermissionService permissionService) {
-    this.objectMapper = objectMapper;
+  public FolderController(FolderService folderService) {
     this.folderService = folderService;
-    this.permissionService = permissionService;
   }
 
   @PostMapping
@@ -35,10 +32,9 @@ public class FolderController {
           summary = "Create folder",
           description = "Create an folder",
           tags = {"Folder"})
-  public ResponseEntity<?> folderCreate(@RequestBody Map<String, Object> json) {
-    Folder folder = objectMapper.convertValue(json.get("folder"), Folder.class);
-    SudoAuthentication sudoAuthentication =
-            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+  public ResponseEntity<?> folderCreate(@RequestBody FolderOperationsDTO request) {
+    Folder folder = request.getFolder();
+    SudoAuthentication sudoAuthentication = request.getSudoAuthentication();
     try {
       folderService.createFolder(folder, sudoAuthentication);
       return DefaultResponseEntityFactory.create(
@@ -56,10 +52,9 @@ public class FolderController {
           summary = "Delete folder",
           description = "Delete an folder",
           tags = {"Folder"})
-  public ResponseEntity<?> removeFolder(@RequestBody Map<String, Object> json) {
-    Folder folder = objectMapper.convertValue(json.get("folder"), Folder.class);
-    SudoAuthentication sudoAuthentication =
-            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+  public ResponseEntity<?> removeFolder(@RequestBody FolderOperationsDTO request) {
+    Folder folder = request.getFolder();
+    SudoAuthentication sudoAuthentication = request.getSudoAuthentication();
     try {
       folderService.removeFolder(folder, sudoAuthentication);
       return DefaultResponseEntityFactory.create(

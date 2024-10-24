@@ -4,11 +4,13 @@ import com.br.SambaWebAPI.config.swagger.DefaultOperation;
 import com.br.SambaWebAPI.config.Global;
 import com.br.SambaWebAPI.config.ResponseEntity.DefaultResponseEntityFactory;
 import com.br.SambaWebAPI.folder.models.Folder;
+import com.br.SambaWebAPI.group.models.dto.GroupOperationDTO;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.permission.exceptions.PermissionAddException;
 import com.br.SambaWebAPI.permission.models.GroupPermission;
 import com.br.SambaWebAPI.permission.models.OwnerPermission;
 import com.br.SambaWebAPI.permission.models.PublicPermission;
+import com.br.SambaWebAPI.permission.models.dto.PermissionDTO;
 import com.br.SambaWebAPI.permission.services.PermissionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
@@ -38,16 +40,13 @@ public class PermissionController {
           summary = "Add Permission",
           description = "Add permission to a folder or file",
           tags = {"Permission"})
-  public ResponseEntity<?> permissionManager(@RequestBody Map<String, Map<String, String>> json) {
-    OwnerPermission ownerPermission =
-            objectMapper.convertValue(json.get("ownerPermission"), OwnerPermission.class);
-    GroupPermission groupPermission =
-            objectMapper.convertValue(json.get("groupPermission"), GroupPermission.class);
-    PublicPermission publicPermission =
-            objectMapper.convertValue(json.get("publicPermission"), PublicPermission.class);
-    Folder folder = objectMapper.convertValue(json.get("folder"), Folder.class);
-    SudoAuthentication sudoAuthentication =
-            objectMapper.convertValue(json.get("sudoAuthentication"), SudoAuthentication.class);
+  public ResponseEntity<?> permissionManager(@RequestBody PermissionDTO request) {
+    OwnerPermission ownerPermission = request.getOwnerPermission();
+    GroupPermission groupPermission = request.getGroupPermission();
+    PublicPermission publicPermission = request.getPublicPermission();
+    Folder folder = request.getFolder();
+    SudoAuthentication sudoAuthentication = request.getSudoAuthentication();
+
     try {
       permissionService.managePermission(
               ownerPermission, groupPermission, publicPermission, sudoAuthentication, folder);

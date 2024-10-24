@@ -2,6 +2,8 @@ package com.br.SambaWebAPI.group.controllers;
 
 import com.br.SambaWebAPI.group.exceptions.CreateGroupException;
 import com.br.SambaWebAPI.group.models.Group;
+import com.br.SambaWebAPI.group.models.dto.AssignUserToGroupDTO;
+import com.br.SambaWebAPI.group.models.dto.GroupOperationDTO;
 import com.br.SambaWebAPI.group.services.GroupService;
 import com.br.SambaWebAPI.password.models.SudoAuthentication;
 import com.br.SambaWebAPI.user.models.User;
@@ -48,65 +50,52 @@ class GroupControllerTest {
         sudoAuthentication.setSudoPassword("sudo_password");
     }
 
-    private Map<String, Object> getJson() {
-        Map<String, Object> json = new HashMap<>();
-        json.put(group.getName(), group);
-        json.put(sudoAuthentication.getSudoPassword(),sudoAuthentication);
-        return json;
-    }
-
     @Test
     @DisplayName("""
-                Given a group creation process,
-                when the user is created successfully,
-                then it should return HTTP 200.
-            """)
+            Given a group creation process,
+            when the user is created successfully,
+            then it should return HTTP 200.
+        """)
     public void testGroupCreation() throws Exception {
-
-        GroupController groupController = new GroupController(objectMapper, groupService);
-
-        when(groupService.createGroup(group,sudoAuthentication)).thenReturn(true);
-
-        ResponseEntity<?> response = groupController.groupCreation(getJson());
-
+        GroupController groupController = new GroupController(groupService);
+        GroupOperationDTO groupOperationDTO = new GroupOperationDTO();
+        groupOperationDTO.setGroup(group);
+        groupOperationDTO.setSudoAuthentication(sudoAuthentication);
+        when(groupService.createGroup(group, sudoAuthentication)).thenReturn(true);
+        ResponseEntity<?> response = groupController.groupCreation(groupOperationDTO);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     @DisplayName("""
-                Given a process of associating a user to a group,
-                when the user is added successfully,
-                then it should return HTTP 200.
-            """)
+            Given a process of associating a user to a group,
+            when the user is added successfully,
+            then it should return HTTP 200.
+        """)
     public void testAddUserToGroup() throws Exception {
-        Map<String, Object> json = new HashMap<>();
-        json.put(user.getUser(), user);
-        json.put(group.getName(), group);
-        json.put(sudoAuthentication.getSudoPassword(),sudoAuthentication);
-
-        GroupController groupController = new GroupController(objectMapper, groupService);
-
-        when(groupService.addUserToGroup(group, user,sudoAuthentication)).thenReturn(true);
-
-        ResponseEntity<?> response = groupController.addUserToGroup(json);
-
+        AssignUserToGroupDTO assignUserToGroupDTO = new AssignUserToGroupDTO();
+        assignUserToGroupDTO.setUser(user);
+        assignUserToGroupDTO.setGroup(group);
+        assignUserToGroupDTO.setSudoAuthentication(sudoAuthentication);
+        GroupController groupController = new GroupController(groupService);
+        when(groupService.addUserToGroup(group, user, sudoAuthentication)).thenReturn(true);
+        ResponseEntity<?> response = groupController.addUserToGroup(assignUserToGroupDTO);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     @DisplayName("""
-                Given a group creation process,
-                when the user is successfully created,
-                then it should return HTTP 200
-            """)
+            Given a group creation process,
+            when the user is successfully created,
+            then it should return HTTP 200
+        """)
     public void testUserCreation() throws Exception {
-
-        GroupController groupController = new GroupController(objectMapper, groupService);
-
-        when(groupService.deleteGroup(group,sudoAuthentication)).thenReturn(true);
-
-        ResponseEntity<?> response = groupController.deleteGroup(getJson());
-
+        GroupOperationDTO groupOperationDTO = new GroupOperationDTO();
+        groupOperationDTO.setGroup(group);
+        groupOperationDTO.setSudoAuthentication(sudoAuthentication);
+        GroupController groupController = new GroupController(groupService);
+        when(groupService.createGroup(group, sudoAuthentication)).thenReturn(true);
+        ResponseEntity<?> response = groupController.groupCreation(groupOperationDTO);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
